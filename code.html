@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Code IDE - Real Code Execution</title>
+    <title>Pro Code IDE - AI Powered</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Pyodide for Python execution -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     
     <style>
@@ -26,22 +24,16 @@
             --text-primary: #cccccc;
             --text-secondary: #858585;
             --text-bright: #ffffff;
-            --accent: #007acc;
-            --accent-hover: #1c97ea;
-            --accent-dark: #005a9e;
+            --accent: #3794ff;
+            --accent-hover: #4ba3ff;
             --border: #3e3e42;
-            --success: #4ec9b0;
-            --warning: #dcdcaa;
-            --error: #f48771;
-            --gem-color: #ff6ec7;
-            --sidebar-width: 280px;
-            --easy: #4caf50;
-            --medium: #ff9800;
-            --hard: #f44336;
+            --success: #73c991;
+            --warning: #e5c07b;
+            --error: #e06c75;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             height: 100vh;
@@ -50,46 +42,44 @@
             flex-direction: column;
         }
 
-        /* ============= HEADER ============= */
         .header {
-            height: 48px;
+            height: 50px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 15px;
+            padding: 0 20px;
             user-select: none;
-            z-index: 100;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 13px;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 14px;
             color: var(--text-bright);
         }
 
         .logo i {
             color: var(--accent);
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .logo-badge {
-            background: linear-gradient(135deg, #ff6ec7, #ff9a76);
+            background: linear-gradient(135deg, var(--accent), #c678dd);
             color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 9px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
 
         .header-center {
             display: flex;
-            gap: 4px;
+            gap: 8px;
             align-items: center;
         }
 
@@ -97,12 +87,14 @@
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
             outline: none;
             transition: all 0.2s;
+            min-width: 180px;
         }
 
         .language-selector:hover {
@@ -114,13 +106,13 @@
             background: transparent;
             border: none;
             color: var(--text-primary);
-            padding: 6px 12px;
+            padding: 8px 16px;
             cursor: pointer;
-            border-radius: 4px;
-            font-size: 12px;
+            border-radius: 6px;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: all 0.15s;
             font-weight: 500;
         }
@@ -134,12 +126,13 @@
             background: var(--accent);
             color: white;
             font-weight: 600;
+            padding: 8px 20px;
         }
 
         .header-btn.run:hover {
             background: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 122, 204, 0.4);
+            box-shadow: 0 4px 12px rgba(55, 148, 255, 0.4);
         }
 
         .header-btn.run.running {
@@ -150,299 +143,131 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
-        .gem-badge, .exercise-badge {
+        .api-status {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 110, 199, 0.12);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid var(--gem-color);
-            font-weight: 600;
             font-size: 12px;
-            transition: all 0.3s;
-            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(115, 201, 145, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(115, 201, 145, 0.3);
         }
 
-        .gem-badge:hover, .exercise-badge:hover {
-            background: rgba(255, 110, 199, 0.2);
-            transform: scale(1.05);
+        .api-status i {
+            color: var(--success);
         }
 
-        .gem-badge i {
-            color: var(--gem-color);
-            animation: gem-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes gem-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.15); opacity: 0.8; }
-        }
-
-        .exercise-badge {
-            background: rgba(76, 175, 80, 0.12);
-            border-color: var(--easy);
-        }
-
-        .exercise-badge i {
-            color: var(--easy);
-        }
-
-        /* ============= MAIN LAYOUT ============= */
         .main-container {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* ============= SIDEBAR ============= */
         .sidebar {
-            width: var(--sidebar-width);
+            width: 300px;
             background: var(--bg-secondary);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .sidebar.hidden {
-            transform: translateX(-100%);
-        }
-
-        .sidebar-tabs {
-            display: flex;
+        .sidebar-header {
+            padding: 15px 20px;
             border-bottom: 1px solid var(--border);
-            background: var(--bg-tertiary);
-        }
-
-        .sidebar-tab {
-            flex: 1;
-            padding: 10px;
-            background: transparent;
-            border: none;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .sidebar-tab:hover {
-            background: var(--bg-hover);
-            color: var(--text-bright);
-        }
-
-        .sidebar-tab.active {
-            color: var(--accent);
-        }
-
-        .sidebar-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
+            padding: 10px;
         }
 
-        .sidebar-section {
-            display: none;
+        .lang-category {
+            margin-bottom: 20px;
         }
 
-        .sidebar-section.active {
-            display: block;
-        }
-
-        /* File Explorer */
-        .section-header {
-            padding: 12px 15px;
+        .category-title {
             font-size: 11px;
             font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 10px;
+            padding: 0 10px;
         }
 
-        .file-tree {
-            list-style: none;
-            padding: 8px 0;
-        }
-
-        .file-item {
-            padding: 7px 15px;
-            margin: 1px 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            transition: all 0.15s;
-        }
-
-        .file-item:hover {
-            background: var(--bg-hover);
-        }
-
-        .file-item.active {
-            background: var(--accent-dark);
-            color: var(--text-bright);
-        }
-
-        .file-item i {
-            font-size: 14px;
-            width: 16px;
-            text-align: center;
-        }
-
-        .folder { color: #dcb67a; }
-        .file { color: var(--text-secondary); }
-
-        /* Exercise Panel */
-        .exercise-filters {
-            padding: 12px;
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid var(--border);
+        .lang-item {
             background: var(--bg-tertiary);
-        }
-
-        .filter-btn {
-            flex: 1;
-            padding: 6px 10px;
-            background: var(--bg-secondary);
             border: 1px solid var(--border);
-            color: var(--text-primary);
             border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--accent);
-        }
-
-        .filter-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-
-        .filter-btn.easy.active { background: var(--easy); border-color: var(--easy); }
-        .filter-btn.medium.active { background: var(--medium); border-color: var(--medium); }
-        .filter-btn.hard.active { background: var(--hard); border-color: var(--hard); }
-
-        .exercise-list {
-            padding: 8px;
-        }
-
-        .exercise-card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
             padding: 12px;
             margin-bottom: 8px;
             cursor: pointer;
             transition: all 0.2s;
-        }
-
-        .exercise-card:hover {
-            border-color: var(--accent);
-            transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(0, 122, 204, 0.2);
-        }
-
-        .exercise-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
         }
 
-        .exercise-title {
+        .lang-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(55, 148, 255, 0.2);
+        }
+
+        .lang-item.active {
+            border-color: var(--accent);
+            background: rgba(55, 148, 255, 0.1);
+        }
+
+        .lang-name {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-bright);
         }
 
-        .difficulty-badge {
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .difficulty-badge.easy { background: var(--easy); color: white; }
-        .difficulty-badge.medium { background: var(--medium); color: white; }
-        .difficulty-badge.hard { background: var(--hard); color: white; }
-
-        .exercise-desc {
+        .lang-version {
             font-size: 11px;
             color: var(--text-secondary);
-            line-height: 1.4;
         }
 
-        .exercise-stats {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .exercise-stats span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ============= EDITOR AREA ============= */
         .editor-area {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
         }
 
-        .tabs-bar {
+        .editor-tabs {
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            padding: 0 8px;
-            height: 35px;
-            gap: 2px;
+            padding: 0 15px;
+            height: 40px;
         }
 
         .file-tab {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 12px;
+            padding: 8px 16px;
             background: transparent;
             border-radius: 4px 4px 0 0;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.15s;
             color: var(--text-secondary);
-        }
-
-        .file-tab:hover {
-            background: var(--bg-hover);
-            color: var(--text-bright);
+            font-weight: 500;
         }
 
         .file-tab.active {
@@ -451,76 +276,61 @@
             border-top: 2px solid var(--accent);
         }
 
-        .file-tab i {
-            font-size: 12px;
-        }
-
         .editor-container {
             flex: 1;
             display: flex;
-            flex-direction: column;
             background: var(--bg-editor);
             position: relative;
         }
 
-        .editor-wrapper {
-            flex: 1;
-            display: flex;
-            position: relative;
-            overflow: hidden;
-        }
-
         .line-numbers {
-            width: 50px;
+            width: 60px;
             background: var(--bg-secondary);
             color: var(--text-secondary);
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
             line-height: 1.6;
-            padding: 15px 10px;
+            padding: 20px 15px;
             text-align: right;
             user-select: none;
             border-right: 1px solid var(--border);
             overflow: hidden;
         }
 
-        .code-editor {
+        .code-editor-wrapper {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
-            position: relative;
         }
 
-        .code-textarea {
+        .code-editor {
             width: 100%;
             height: 100%;
             min-height: 500px;
             background: transparent;
             border: none;
             color: var(--text-primary);
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
             line-height: 1.6;
             resize: none;
             outline: none;
             tab-size: 4;
         }
 
-        /* ============= BOTTOM PANEL ============= */
         .bottom-panel {
-            height: 200px;
+            height: 250px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            transition: height 0.3s;
         }
 
         .panel-tabs {
             display: flex;
             border-bottom: 1px solid var(--border);
-            gap: 2px;
-            padding: 4px 8px;
+            padding: 8px 15px;
+            gap: 8px;
             background: var(--bg-tertiary);
         }
 
@@ -528,13 +338,13 @@
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            padding: 6px 12px;
+            padding: 8px 16px;
             cursor: pointer;
-            font-size: 12px;
-            border-radius: 4px;
+            font-size: 13px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: all 0.15s;
             font-weight: 500;
         }
@@ -552,17 +362,17 @@
         .panel-content {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 15px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .output-line {
-            margin: 4px 0;
+            margin: 6px 0;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            line-height: 1.5;
+            gap: 10px;
+            line-height: 1.6;
         }
 
         .output-line.success { color: var(--success); }
@@ -570,7 +380,7 @@
         .output-line.info { color: var(--accent); }
         .output-line.warning { color: var(--warning); }
 
-        /* ============= AI ASSISTANT ============= */
+        /* AI Assistant */
         .ai-assistant {
             position: fixed;
             bottom: 20px;
@@ -583,8 +393,8 @@
         }
 
         .ai-chat-panel {
-            width: 380px;
-            height: 500px;
+            width: 400px;
+            height: 550px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -592,7 +402,11 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .ai-chat-panel.open {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
         }
 
         @keyframes slideUp {
@@ -606,25 +420,21 @@
             }
         }
 
-        .ai-chat-panel.open {
-            display: flex;
-        }
-
         .ai-header {
-            padding: 14px 16px;
-            background: linear-gradient(135deg, var(--accent), #0086cc);
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--accent), #4ba3ff);
             color: white;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .ai-header-title {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .ai-close-btn {
@@ -632,8 +442,8 @@
             border: none;
             color: white;
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 6px 10px;
+            border-radius: 6px;
             transition: all 0.2s;
         }
 
@@ -641,10 +451,37 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .ai-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+
+        .quick-action-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
         .ai-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -671,7 +508,7 @@
         }
 
         .ai-message.user {
-            background: linear-gradient(135deg, var(--accent), #0086cc);
+            background: linear-gradient(135deg, var(--accent), #4ba3ff);
             color: white;
             align-self: flex-end;
             border-radius: 12px 12px 2px 12px;
@@ -720,39 +557,10 @@
 
         .ai-action-btn:hover {
             background: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .ai-quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-tertiary);
-        }
-
-        .quick-action-btn {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .quick-action-btn:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            transform: translateY(-1px);
         }
 
         .ai-input-area {
-            padding: 12px 16px;
+            padding: 12px 15px;
             border-top: 1px solid var(--border);
             display: flex;
             gap: 8px;
@@ -773,7 +581,6 @@
 
         .ai-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
         }
 
         .ai-send-btn {
@@ -795,14 +602,10 @@
             transform: scale(1.1);
         }
 
-        .ai-send-btn:active {
-            transform: scale(0.95);
-        }
-
         .ai-avatar {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--accent), #00b4d8);
+            background: linear-gradient(135deg, var(--accent), #4ba3ff);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -810,14 +613,14 @@
             font-size: 26px;
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 122, 204, 0.5);
+            box-shadow: 0 4px 20px rgba(55, 148, 255, 0.5);
             transition: all 0.3s;
             animation: float 3s ease-in-out infinite;
         }
 
         .ai-avatar:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(0, 122, 204, 0.7);
+            box-shadow: 0 6px 30px rgba(55, 148, 255, 0.7);
         }
 
         @keyframes float {
@@ -825,7 +628,7 @@
             50% { transform: translateY(-8px); }
         }
 
-        /* ============= MODALS ============= */
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -854,22 +657,10 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 24px;
+            padding: 25px;
             width: 90%;
             max-width: 500px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            animation: modalSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-30px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
         }
 
         .modal h3 {
@@ -890,28 +681,29 @@
             font-weight: 500;
         }
 
-        .setting-group input, .setting-group textarea {
+        .setting-group input,
+        .setting-group textarea {
             width: 100%;
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 10px 12px;
+            padding: 12px;
             color: var(--text-primary);
             font-size: 13px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+            outline: none;
             transition: all 0.2s;
-            font-family: inherit;
         }
 
         .setting-group textarea {
-            min-height: 100px;
-            resize: vertical;
-            font-family: 'JetBrains Mono', monospace;
+            min-height: 120px;
         }
 
-        .setting-group input:focus, .setting-group textarea:focus {
-            outline: none;
+        .setting-group input:focus,
+        .setting-group textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+            box-shadow: 0 0 0 3px rgba(55, 148, 255, 0.1);
         }
 
         .modal-actions {
@@ -922,12 +714,12 @@
         }
 
         .btn {
-            padding: 9px 18px;
+            padding: 10px 20px;
             border-radius: 6px;
             border: none;
             cursor: pointer;
             font-size: 13px;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.2s;
         }
 
@@ -939,7 +731,6 @@
         .btn-primary:hover {
             background: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.4);
         }
 
         .btn-secondary {
@@ -952,91 +743,13 @@
             background: var(--bg-hover);
         }
 
-        /* Celebration */
-        .celebration-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .celebration-overlay.show {
-            display: flex;
-            animation: fadeIn 0.3s;
-        }
-
-        .reward-card {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border: 2px solid var(--gem-color);
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        @keyframes popIn {
-            from {
-                transform: scale(0) rotate(-180deg);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1) rotate(0);
-                opacity: 1;
-            }
-        }
-
-        .reward-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .reward-card h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--gem-color), #ff9a76);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .claim-btn {
-            background: linear-gradient(135deg, var(--gem-color), #ff9a76);
-            border: none;
-            color: white;
-            padding: 12px 32px;
-            border-radius: 25px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .claim-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 110, 199, 0.5);
-        }
-
-        /* Loading */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 3000;
             display: none;
             align-items: center;
@@ -1068,7 +781,6 @@
             font-weight: 500;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 12px;
             height: 12px;
@@ -1088,7 +800,6 @@
             background: var(--text-secondary);
         }
 
-        /* Tooltip */
         [data-tooltip] {
             position: relative;
         }
@@ -1099,10 +810,10 @@
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            padding: 6px 10px;
+            padding: 6px 12px;
             background: var(--bg-tertiary);
             color: var(--text-bright);
-            font-size: 11px;
+            font-size: 12px;
             border-radius: 6px;
             white-space: nowrap;
             z-index: 1000;
@@ -1112,146 +823,121 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <div class="logo">
-            <i class="fas fa-terminal"></i>
+            <i class="fas fa-code"></i>
             <span>Pro Code IDE</span>
-            <span class="logo-badge">REAL EXEC</span>
+            <span class="logo-badge">AI + 45 LANGS</span>
         </div>
         
         <div class="header-center">
             <select class="language-selector" id="language-selector" onchange="switchLanguage()">
-                <option value="cpp">C++ (Judge0)</option>
-                <option value="python">Python (WASM)</option>
-                <option value="javascript">JavaScript (Native)</option>
-                <option value="java">Java (Judge0)</option>
+                <optgroup label="🔥 Popular">
+                    <option value="python">Python 3.10</option>
+                    <option value="javascript">JavaScript (Node.js)</option>
+                    <option value="cpp">C++ (GCC 10.2)</option>
+                    <option value="c">C (GCC 10.2)</option>
+                    <option value="java">Java (JDK 15)</option>
+                </optgroup>
+                <optgroup label="⚡ System">
+                    <option value="go">Go 1.16</option>
+                    <option value="rust">Rust 1.68</option>
+                    <option value="swift">Swift 5.3</option>
+                    <option value="kotlin">Kotlin 1.8</option>
+                    <option value="bash">Bash 5.1</option>
+                </optgroup>
+                <optgroup label="🌐 Web">
+                    <option value="typescript">TypeScript 5.0</option>
+                    <option value="php">PHP 8.2</option>
+                    <option value="ruby">Ruby 3.1</option>
+                </optgroup>
+                <optgroup label="📊 Data & ML">
+                    <option value="r">R 4.1</option>
+                    <option value="julia">Julia 1.8</option>
+                    <option value="scala">Scala 3.2</option>
+                </optgroup>
+                <optgroup label="🎯 Other">
+                    <option value="csharp">C# (Mono 6.12)</option>
+                    <option value="dart">Dart 2.19</option>
+                    <option value="lua">Lua 5.4</option>
+                    <option value="perl">Perl 5.36</option>
+                    <option value="haskell">Haskell GHC 9.2</option>
+                </optgroup>
             </select>
             
-            <button class="header-btn run" onclick="compileAndRun()" data-tooltip="Ctrl+Enter - Chạy Code THẬT">
+            <button class="header-btn run" onclick="runCode()" data-tooltip="Ctrl+Enter - Run Code">
                 <i class="fas fa-play"></i>
-                <span>Chạy code</span>
+                <span>Run</span>
             </button>
-            <button class="header-btn" onclick="showInputDialog()" data-tooltip="Add Input">
+            <button class="header-btn" onclick="showInputDialog()" data-tooltip="Add Input (cho cin/scanf)">
                 <i class="fas fa-keyboard"></i>
             </button>
-            <button class="header-btn" onclick="saveCode()" data-tooltip="Ctrl+S">
+            <button class="header-btn" onclick="saveCode()" data-tooltip="Ctrl+S - Save">
                 <i class="fas fa-save"></i>
             </button>
-            <button class="header-btn" onclick="formatCode()" data-tooltip="Ctrl+Shift+F">
-                <i class="fas fa-magic"></i>
+            <button class="header-btn" onclick="showSettings()" data-tooltip="Settings (AI API Key)">
+                <i class="fas fa-cog"></i>
             </button>
         </div>
         
         <div class="header-right">
-            <div class="exercise-badge" onclick="switchToExercises()" data-tooltip="Bài tập thực hành">
-                <i class="fas fa-dumbbell"></i>
-                <span id="completed-count">0/20</span>
+            <div class="api-status" id="api-status">
+                <i class="fas fa-circle"></i>
+                <span>Piston API Ready</span>
             </div>
-            <div class="gem-badge" data-tooltip="Gems của bạn">
-                <i class="fas fa-gem"></i>
-                <span id="gem-count">0</span>
-            </div>
-            <button class="header-btn" onclick="toggleSettings()" data-tooltip="Cài đặt">
-                <i class="fas fa-cog"></i>
-            </button>
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-tabs">
-                <button class="sidebar-tab active" onclick="switchSidebarTab('files', this)" data-tooltip="File Explorer">
-                    <i class="fas fa-folder-open"></i>
-                </button>
-                <button class="sidebar-tab" onclick="switchSidebarTab('exercises', this)" data-tooltip="Bài tập">
-                    <i class="fas fa-dumbbell"></i>
-                </button>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-list"></i> Supported Languages
             </div>
-            
-            <div class="sidebar-content">
-                <!-- Files Panel -->
-                <div id="files-panel" class="sidebar-section active">
-                    <div class="section-header">DỰ ÁN CỦA BẠN</div>
-                    <ul class="file-tree">
-                        <li class="file-item active" onclick="openFile('main.cpp')">
-                            <i class="fab fa-cuttlefish file"></i>
-                            <span>main.cpp</span>
-                        </li>
-                        <li class="file-item">
-                            <i class="fas fa-folder folder"></i>
-                            <span>include/</span>
-                        </li>
-                        <li class="file-item">
-                            <i class="fas fa-folder folder"></i>
-                            <span>src/</span>
-                        </li>
-                        <li class="file-item">
-                            <i class="fas fa-file file"></i>
-                            <span>README.md</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Exercises Panel -->
-                <div id="exercises-panel" class="sidebar-section">
-                    <div class="exercise-filters">
-                        <button class="filter-btn active" onclick="filterExercises('all', this)">Tất cả</button>
-                        <button class="filter-btn easy" onclick="filterExercises('easy', this)">Dễ</button>
-                        <button class="filter-btn medium" onclick="filterExercises('medium', this)">TB</button>
-                        <button class="filter-btn hard" onclick="filterExercises('hard', this)">Khó</button>
-                    </div>
-                    <div class="exercise-list" id="exercise-list"></div>
-                </div>
-            </div>
+            <div class="sidebar-content" id="lang-list"></div>
         </div>
 
-        <!-- Editor Area -->
         <div class="editor-area">
-            <div class="tabs-bar">
+            <div class="editor-tabs">
                 <div class="file-tab active">
-                    <i class="fab fa-cuttlefish"></i>
-                    <span id="current-file-name">main.cpp</span>
+                    <i class="fas fa-file-code"></i>
+                    <span id="current-file">main.py</span>
                 </div>
             </div>
             
             <div class="editor-container">
-                <div class="editor-wrapper">
-                    <div class="line-numbers" id="line-numbers">1</div>
-                    <div class="code-editor">
-                        <textarea 
-                            class="code-textarea" 
-                            id="code-editor"
-                            spellcheck="false"
-                            placeholder="// Bắt đầu code của bạn..."
-                        ></textarea>
-                    </div>
+                <div class="line-numbers" id="line-numbers">1</div>
+                <div class="code-editor-wrapper">
+                    <textarea 
+                        class="code-editor" 
+                        id="code-editor"
+                        spellcheck="false"
+                        placeholder="// Start coding..."
+                    ></textarea>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bottom Panel -->
     <div class="bottom-panel">
         <div class="panel-tabs">
-            <button class="panel-tab active" onclick="switchPanelTab('output', this)">
+            <button class="panel-tab active">
                 <i class="fas fa-terminal"></i>
                 Output
             </button>
         </div>
         
-        <div class="panel-content" id="panel-content">
-            <div id="output-panel">
-                <div class="output-line info">
-                    <i class="fas fa-info-circle"></i>
-                    <span>🚀 <strong>Real Code Execution:</strong> Python (Pyodide WASM) | C++/Java (Judge0 API) | JavaScript (Native)</span>
-                </div>
-                <div class="output-line info">
-                    <i class="fas fa-keyboard"></i>
-                    <span>Nhấn <strong>Ctrl+Enter</strong> để chạy code THẬT!</span>
-                </div>
+        <div class="panel-content" id="output-panel">
+            <div class="output-line info">
+                <i class="fas fa-rocket"></i>
+                <span><strong>Engine:</strong> Piston API (45+ langs) | Pyodide WASM (Python offline)</span>
+            </div>
+            <div class="output-line info">
+                <i class="fas fa-keyboard"></i>
+                <span><strong>Input Support:</strong> Click <i class="fas fa-keyboard"></i> button to add stdin for cin/scanf</span>
+            </div>
+            <div class="output-line info">
+                <i class="fas fa-robot"></i>
+                <span><strong>AI Assistant:</strong> Click 🤖 button (bottom-right) for coding help!</span>
             </div>
         </div>
     </div>
@@ -1270,12 +956,6 @@
             </div>
             
             <div class="ai-quick-actions">
-                <button class="quick-action-btn" onclick="aiQuickAction('exercise')">
-                    <i class="fas fa-dumbbell"></i> Bài tập
-                </button>
-                <button class="quick-action-btn" onclick="aiQuickAction('hint')">
-                    <i class="fas fa-lightbulb"></i> Gợi ý
-                </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('explain')">
                     <i class="fas fa-question-circle"></i> Giải thích
                 </button>
@@ -1287,6 +967,9 @@
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('fix')">
                     <i class="fas fa-wrench"></i> Fix lỗi
+                </button>
+                <button class="quick-action-btn" onclick="aiQuickAction('comment')">
+                    <i class="fas fa-comment"></i> Thêm comment
                 </button>
             </div>
             
@@ -1314,417 +997,264 @@
     <!-- Settings Modal -->
     <div class="modal-overlay" id="settings-modal">
         <div class="modal">
-            <h3><i class="fas fa-cog"></i> Cài đặt IDE</h3>
+            <h3><i class="fas fa-cog"></i> Settings</h3>
             
             <div class="setting-group">
-                <label>Gemini API Key (cho AI Assistant) <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent); font-size: 11px; text-decoration: none;">(Miễn phí)</a></label>
-                <input type="password" id="api-key-input" placeholder="Nhập Gemini API key...">
-            </div>
-            
-            <div class="setting-group">
-                <label>RapidAPI Key (cho C++/Java) <a href="https://rapidapi.com/judge0-official/api/judge0-ce/pricing" target="_blank" style="color: var(--accent); font-size: 11px; text-decoration: none;">(Free 50 calls/day)</a></label>
-                <input type="password" id="rapidapi-key-input" placeholder="Nhập RapidAPI key...">
+                <label>Gemini API Key (for AI Assistant) <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent); font-size: 11px;">(Get FREE Key)</a></label>
+                <input type="password" id="api-key-input" placeholder="Enter Gemini API key...">
             </div>
             
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="toggleSettings()">Hủy</button>
-                <button class="btn btn-primary" onclick="saveSettings()">Lưu cài đặt</button>
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
             </div>
         </div>
     </div>
 
-    <!-- Input Dialog -->
+    <!-- Input Modal -->
     <div class="modal-overlay" id="input-modal">
         <div class="modal">
-            <h3><i class="fas fa-keyboard"></i> Input cho chương trình</h3>
+            <h3><i class="fas fa-keyboard"></i> Program Input (stdin)</h3>
             
             <div class="setting-group">
-                <label>Nhập dữ liệu đầu vào (stdin):</label>
-                <textarea id="program-input" placeholder="Ví dụ:
+                <label>Input data for cin/scanf/input() functions:</label>
+                <textarea id="program-input" placeholder="Example for C++ cin:
 5
-1 2 3 4 5"></textarea>
+1 2 3 4 5
+
+Example for Python input():
+John
+25"></textarea>
             </div>
             
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeInputDialog()">Hủy</button>
-                <button class="btn btn-primary" onclick="saveInput()">Lưu Input</button>
+                <button class="btn btn-secondary" onclick="closeInputDialog()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveInput()">Save Input</button>
             </div>
         </div>
     </div>
 
-    <!-- Celebration -->
-    <div class="celebration-overlay" id="celebration">
-        <div class="reward-card">
-            <div class="reward-icon">🏆</div>
-            <h2>XUẤT SẮC!</h2>
-            <p id="reward-message" style="font-size: 16px; margin-bottom: 10px;"></p>
-            <p style="font-size: 14px; color: var(--gem-color); font-weight: 600;">+<span id="reward-gems">10</span> <i class="fas fa-gem"></i> Gems</p>
-            <button class="claim-btn" onclick="closeCelebration()">Nhận thưởng</button>
-        </div>
-    </div>
-
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text" id="loading-text">Đang khởi tạo Python WASM...</div>
+        <div class="loading-text" id="loading-text">Executing code...</div>
     </div>
 
     <script>
-        // ==================== GLOBAL STATE ====================
-        const exercises = [
-            { id: 1, title: 'Hello World', difficulty: 'easy', desc: 'In ra "Hello, World!"', gems: 5, category: 'basic' },
-            { id: 2, title: 'Tính tổng 2 số', difficulty: 'easy', desc: 'Nhập 2 số và tính tổng', gems: 5, category: 'basic' },
-            { id: 3, title: 'Kiểm tra số chẵn lẻ', difficulty: 'easy', desc: 'Kiểm tra một số chẵn hay lẻ', gems: 5, category: 'basic' },
-            { id: 4, title: 'Tìm số lớn nhất', difficulty: 'easy', desc: 'Tìm số lớn nhất trong 3 số', gems: 8, category: 'basic' },
-            { id: 5, title: 'Tính giai thừa', difficulty: 'medium', desc: 'Tính n! (factorial)', gems: 10, category: 'loops' },
-            { id: 6, title: 'Dãy Fibonacci', difficulty: 'medium', desc: 'In ra n số Fibonacci đầu tiên', gems: 12, category: 'loops' },
-            { id: 7, title: 'Số nguyên tố', difficulty: 'medium', desc: 'Kiểm tra số nguyên tố', gems: 12, category: 'algorithms' },
-            { id: 8, title: 'Đảo ngược mảng', difficulty: 'medium', desc: 'Đảo ngược một mảng số', gems: 15, category: 'arrays' },
-            { id: 9, title: 'Sắp xếp Bubble Sort', difficulty: 'medium', desc: 'Sắp xếp mảng bằng Bubble Sort', gems: 15, category: 'sorting' },
-            { id: 10, title: 'Tìm kiếm nhị phân', difficulty: 'hard', desc: 'Implement Binary Search', gems: 20, category: 'algorithms' },
-            { id: 11, title: 'Quick Sort', difficulty: 'hard', desc: 'Sắp xếp bằng Quick Sort', gems: 25, category: 'sorting' },
-            { id: 12, title: 'Cây nhị phân', difficulty: 'hard', desc: 'Implement Binary Tree', gems: 30, category: 'data-structures' },
-            { id: 13, title: 'Đếm ký tự', difficulty: 'easy', desc: 'Đếm số lượng ký tự trong chuỗi', gems: 8, category: 'strings' },
-            { id: 14, title: 'Palindrome', difficulty: 'medium', desc: 'Kiểm tra chuỗi đối xứng', gems: 12, category: 'strings' },
-            { id: 15, title: 'Calculator', difficulty: 'medium', desc: 'Máy tính đơn giản', gems: 15, category: 'basic' },
-            { id: 16, title: 'Ma trận', difficulty: 'hard', desc: 'Phép toán ma trận cơ bản', gems: 25, category: 'arrays' },
-            { id: 17, title: 'Graph BFS', difficulty: 'hard', desc: 'Duyệt đồ thị theo BFS', gems: 30, category: 'algorithms' },
-            { id: 18, title: 'Dynamic Programming', difficulty: 'hard', desc: 'Bài toán DP cơ bản', gems: 35, category: 'algorithms' },
-            { id: 19, title: 'Hash Table', difficulty: 'hard', desc: 'Implement Hash Table', gems: 30, category: 'data-structures' },
-            { id: 20, title: 'Linked List', difficulty: 'medium', desc: 'Implement Linked List', gems: 18, category: 'data-structures' }
-        ];
-
-        const languageTemplates = {
-            cpp: `#include <iostream>
-using namespace std;
-
-int main() {
-    cout << "Hello, World!" << endl;
-    return 0;
-}`,
-            python: `# Python Code (Runs on Pyodide WASM)
-print("Hello, World!")
-`,
-            java: `public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}`,
-            javascript: `// JavaScript Code (Runs Natively)
-console.log("Hello, World!");
-`
+        // ==================== CONFIGURATION ====================
+        const LANGUAGES = {
+            python: { name: 'Python', version: '3.10', piston: 'python', ext: '.py', icon: '🐍' },
+            javascript: { name: 'JavaScript', version: 'Node.js 18', piston: 'javascript', ext: '.js', icon: '⚡' },
+            typescript: { name: 'TypeScript', version: '5.0', piston: 'typescript', ext: '.ts', icon: '💙' },
+            cpp: { name: 'C++', version: 'GCC 10.2', piston: 'c++', ext: '.cpp', icon: '⚙️' },
+            c: { name: 'C', version: 'GCC 10.2', piston: 'c', ext: '.c', icon: '🔧' },
+            java: { name: 'Java', version: 'JDK 15', piston: 'java', ext: '.java', icon: '☕' },
+            go: { name: 'Go', version: '1.16', piston: 'go', ext: '.go', icon: '🐹' },
+            rust: { name: 'Rust', version: '1.68', piston: 'rust', ext: '.rs', icon: '🦀' },
+            ruby: { name: 'Ruby', version: '3.1', piston: 'ruby', ext: '.rb', icon: '💎' },
+            php: { name: 'PHP', version: '8.2', piston: 'php', ext: '.php', icon: '🐘' },
+            swift: { name: 'Swift', version: '5.3', piston: 'swift', ext: '.swift', icon: '🔶' },
+            kotlin: { name: 'Kotlin', version: '1.8', piston: 'kotlin', ext: '.kt', icon: '🟣' },
+            bash: { name: 'Bash', version: '5.1', piston: 'bash', ext: '.sh', icon: '💻' },
+            csharp: { name: 'C#', version: 'Mono 6.12', piston: 'csharp', ext: '.cs', icon: '💚' },
+            dart: { name: 'Dart', version: '2.19', piston: 'dart', ext: '.dart', icon: '🎯' },
+            lua: { name: 'Lua', version: '5.4', piston: 'lua', ext: '.lua', icon: '🌙' },
+            perl: { name: 'Perl', version: '5.36', piston: 'perl', ext: '.pl', icon: '🐪' },
+            r: { name: 'R', version: '4.1', piston: 'r', ext: '.r', icon: '📊' },
+            scala: { name: 'Scala', version: '3.2', piston: 'scala', ext: '.scala', icon: '🔴' },
+            julia: { name: 'Julia', version: '1.8', piston: 'julia', ext: '.jl', icon: '🟣' },
+            haskell: { name: 'Haskell', version: 'GHC 9.2', piston: 'haskell', ext: '.hs', icon: '🎩' }
         };
 
-        let apiKey = '';
-        let rapidApiKey = '';
-        let gems = 0;
-        let completedExercises = new Set();
-        let currentLanguage = 'python';
-        let currentFile = 'main.py';
-        let isCompiling = false;
-        let aiChatOpen = false;
-        let currentFilter = 'all';
+        const TEMPLATES = {
+            python: 'print("Hello, World!")\n',
+            javascript: 'console.log("Hello, World!");\n',
+            typescript: 'console.log("Hello, World!");\n',
+            cpp: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int a;\n    cin >> a;\n    cout << "You entered: " << a << endl;\n    return 0;\n}\n',
+            c: '#include <stdio.h>\n\nint main() {\n    int a;\n    scanf("%d", &a);\n    printf("You entered: %d\\n", a);\n    return 0;\n}\n',
+            java: 'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int a = sc.nextInt();\n        System.out.println("You entered: " + a);\n    }\n}\n',
+            go: 'package main\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}\n',
+            rust: 'fn main() {\n    println!("Hello, World!");\n}\n',
+            ruby: 'puts "Hello, World!"\n',
+            php: '<?php\necho "Hello, World!\\n";\n?>\n',
+            swift: 'print("Hello, World!")\n',
+            kotlin: 'fun main() {\n    println("Hello, World!")\n}\n',
+            bash: 'echo "Hello, World!"\n',
+            csharp: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}\n',
+            dart: 'void main() {\n  print("Hello, World!");\n}\n',
+            lua: 'print("Hello, World!")\n',
+            perl: 'print "Hello, World!\\n";\n',
+            r: 'print("Hello, World!")\n',
+            scala: 'object Main extends App {\n  println("Hello, World!")\n}\n',
+            julia: 'println("Hello, World!")\n',
+            haskell: 'main = putStrLn "Hello, World!"\n'
+        };
+
+        // ==================== STATE ====================
+        let currentLang = 'python';
         let programInput = '';
+        let apiKey = '';
         let pyodide = null;
         let pyodideReady = false;
+        let isRunning = false;
+        let aiChatOpen = false;
 
         // ==================== INITIALIZATION ====================
         window.onload = async function() {
             loadSettings();
             loadCode();
-            loadExercises();
+            renderLanguageList();
             setupKeyboardShortcuts();
             setupLineNumbers();
-            
-            // Initialize Pyodide
-            await initializePyodide();
+            await initPyodide();
             
             setTimeout(() => {
-                addAIMessage('ai', '👋 <strong>Xin chào! Tôi là AI Assistant</strong><br><br>✨ IDE này chạy code THẬT 100%:<br>🐍 <strong>Python:</strong> Pyodide WebAssembly<br>💻 <strong>C++/Java:</strong> Judge0 Cloud API<br>⚡ <strong>JavaScript:</strong> Native Browser<br><br>Tôi có thể:<br>✨ Viết code<br>🛠 Debug & Fix lỗi<br>💡 Giải thích thuật toán<br>✏️ <strong>Sửa code trực tiếp</strong> vào editor<br><br>Hãy hỏi tôi bất cứ điều gì!');
+                addAIMessage('ai', '👋 <strong>Xin chào! Tôi là AI Assistant</strong><br><br>✨ Tôi có thể:<br>• Giải thích code<br>• Debug và fix lỗi<br>• Tối ưu code<br>• Viết code mới<br>• Thêm comment chi tiết<br><br>💡 <strong>Tip:</strong> Nhấn nút <i class="fas fa-keyboard"></i> để thêm input cho cin/scanf/input()!<br><br>Hãy hỏi tôi bất cứ điều gì!');
             }, 500);
         };
 
-        // ==================== PYODIDE INITIALIZATION ====================
-        async function initializePyodide() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            const loadingText = document.getElementById('loading-text');
-            
+        async function initPyodide() {
             try {
-                loadingOverlay.classList.add('show');
-                loadingText.textContent = 'Đang tải Python WASM (Pyodide)...';
-                
+                showLoading('Loading Python WASM...');
                 pyodide = await loadPyodide({
                     indexURL: "https://cdn.jsdelivr.net/pyodide/v0.24.1/full/"
                 });
-                
                 pyodideReady = true;
-                loadingText.textContent = '✅ Python WASM đã sẵn sàng!';
-                
-                setTimeout(() => {
-                    loadingOverlay.classList.remove('show');
-                }, 1000);
-                
-                console.log('✅ Pyodide initialized successfully');
+                hideLoading();
             } catch (error) {
-                console.error('❌ Failed to initialize Pyodide:', error);
-                loadingText.textContent = '❌ Không thể tải Python WASM';
-                setTimeout(() => {
-                    loadingOverlay.classList.remove('show');
-                }, 2000);
+                console.error('Failed to load Pyodide:', error);
+                hideLoading();
             }
         }
 
-        function loadSettings() {
-            apiKey = localStorage.getItem('procode_api_key') || '';
-            rapidApiKey = localStorage.getItem('procode_rapidapi_key') || '';
-            gems = parseInt(localStorage.getItem('procode_gems') || '0');
-            const completed = localStorage.getItem('procode_completed');
-            if (completed) {
-                completedExercises = new Set(JSON.parse(completed));
-            }
-            currentLanguage = localStorage.getItem('procode_language') || 'python';
-            
-            updateGemDisplay();
-            updateExerciseDisplay();
-            
-            if (apiKey) {
-                document.getElementById('api-key-input').value = apiKey;
-            }
-            if (rapidApiKey) {
-                document.getElementById('rapidapi-key-input').value = rapidApiKey;
-            }
-            
-            document.getElementById('language-selector').value = currentLanguage;
-        }
+        function renderLanguageList() {
+            const container = document.getElementById('lang-list');
+            const categories = {
+                'Popular': ['python', 'javascript', 'cpp', 'c', 'java'],
+                'System': ['go', 'rust', 'swift', 'kotlin', 'bash'],
+                'Web': ['typescript', 'php', 'ruby'],
+                'Data & ML': ['r', 'julia', 'scala'],
+                'Other': ['csharp', 'dart', 'lua', 'perl', 'haskell']
+            };
 
-        function loadCode() {
-            const savedCode = localStorage.getItem('procode_current_code');
-            const editor = document.getElementById('code-editor');
-            editor.value = savedCode || languageTemplates[currentLanguage];
-            updateLineNumbers();
-            
-            setInterval(() => {
-                autoSaveCode();
-            }, 30000);
-        }
-
-        function autoSaveCode() {
-            const code = document.getElementById('code-editor').value;
-            localStorage.setItem('procode_current_code', code);
-        }
-
-        function saveCode() {
-            autoSaveCode();
-            showNotification('✅ Code đã được lưu!', 'success');
-        }
-
-        function saveSettings() {
-            apiKey = document.getElementById('api-key-input').value;
-            rapidApiKey = document.getElementById('rapidapi-key-input').value;
-            localStorage.setItem('procode_api_key', apiKey);
-            localStorage.setItem('procode_rapidapi_key', rapidApiKey);
-            toggleSettings();
-            showNotification('✅ Cài đặt đã được lưu!', 'success');
-        }
-
-        function updateGemDisplay() {
-            document.getElementById('gem-count').textContent = gems;
-            localStorage.setItem('procode_gems', gems.toString());
-        }
-
-        function updateExerciseDisplay() {
-            document.getElementById('completed-count').textContent = `${completedExercises.size}/${exercises.length}`;
-            localStorage.setItem('procode_completed', JSON.stringify([...completedExercises]));
-        }
-
-        // ==================== INPUT DIALOG ====================
-        function showInputDialog() {
-            document.getElementById('program-input').value = programInput;
-            document.getElementById('input-modal').classList.add('show');
-        }
-
-        function closeInputDialog() {
-            document.getElementById('input-modal').classList.remove('show');
-        }
-
-        function saveInput() {
-            programInput = document.getElementById('program-input').value;
-            closeInputDialog();
-            showNotification('✅ Input đã được lưu!', 'success');
-        }
-
-        // ==================== LANGUAGE SWITCHING ====================
-        function switchLanguage() {
-            const selector = document.getElementById('language-selector');
-            const newLang = selector.value;
-            
-            if (newLang === currentLanguage) return;
-            
-            if (confirm('Chuyển ngôn ngữ sẽ thay đổi template code. Tiếp tục?')) {
-                currentLanguage = newLang;
-                localStorage.setItem('procode_language', currentLanguage);
+            Object.entries(categories).forEach(([category, langs]) => {
+                const div = document.createElement('div');
+                div.className = 'lang-category';
+                div.innerHTML = `<div class="category-title">${category}</div>`;
                 
-                const editor = document.getElementById('code-editor');
-                editor.value = languageTemplates[currentLanguage];
-                updateLineNumbers();
+                langs.forEach(lang => {
+                    const config = LANGUAGES[lang];
+                    const item = document.createElement('div');
+                    item.className = `lang-item ${lang === currentLang ? 'active' : ''}`;
+                    item.innerHTML = `
+                        <div>
+                            <div class="lang-name">${config.icon} ${config.name}</div>
+                            <div class="lang-version">${config.version}</div>
+                        </div>
+                    `;
+                    item.onclick = () => selectLanguage(lang);
+                    div.appendChild(item);
+                });
                 
-                const extensions = {
-                    cpp: '.cpp',
-                    python: '.py',
-                    java: '.java',
-                    javascript: '.js'
-                };
-                
-                currentFile = 'main' + extensions[currentLanguage];
-                document.getElementById('current-file-name').textContent = currentFile;
-                
-                showNotification(`✅ Đã chuyển sang ${selector.options[selector.selectedIndex].text}`, 'success');
-            } else {
-                selector.value = currentLanguage;
-            }
-        }
-
-        // ==================== EXERCISES ====================
-        function loadExercises() {
-            const container = document.getElementById('exercise-list');
-            container.innerHTML = '';
-            
-            exercises.forEach(exercise => {
-                if (currentFilter !== 'all' && exercise.difficulty !== currentFilter) return;
-                
-                const isCompleted = completedExercises.has(exercise.id);
-                const card = document.createElement('div');
-                card.className = 'exercise-card';
-                card.style.opacity = isCompleted ? '0.6' : '1';
-                card.innerHTML = `
-                    <div class="exercise-header">
-                        <div class="exercise-title">${isCompleted ? '✅ ' : ''}${exercise.title}</div>
-                        <div class="difficulty-badge ${exercise.difficulty}">${exercise.difficulty === 'easy' ? 'Dễ' : exercise.difficulty === 'medium' ? 'TB' : 'Khó'}</div>
-                    </div>
-                    <div class="exercise-desc">${exercise.desc}</div>
-                    <div class="exercise-stats">
-                        <span><i class="fas fa-gem"></i> +${exercise.gems}</span>
-                        <span><i class="fas fa-tag"></i> ${exercise.category}</span>
-                    </div>
-                `;
-                
-                card.onclick = () => loadExercise(exercise);
-                container.appendChild(card);
+                container.appendChild(div);
             });
         }
 
-        function loadExercise(exercise) {
-            addAIMessage('ai', `📝 <strong>Bài tập: ${exercise.title}</strong><br><br>${exercise.desc}<br><br>Độ khó: <strong>${exercise.difficulty === 'easy' ? 'Dễ' : exercise.difficulty === 'medium' ? 'Trung bình' : 'Khó'}</strong><br>Phần thưởng: <strong>+${exercise.gems} gems</strong><br><br>Hãy bắt đầu code và nhấn "Chạy code" khi hoàn thành!`);
+        function selectLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('language-selector').value = lang;
             
-            if (!aiChatOpen) {
-                toggleAI();
-            }
+            document.querySelectorAll('.lang-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.lang-item').classList.add('active');
+            
+            const config = LANGUAGES[lang];
+            document.getElementById('current-file').textContent = 'main' + config.ext;
+            
+            const savedCode = localStorage.getItem(`code_${lang}`);
+            document.getElementById('code-editor').value = savedCode || TEMPLATES[lang];
+            
+            updateLineNumbers();
+            showNotification(`Switched to ${config.name}`, 'info');
         }
 
-        function filterExercises(difficulty, btn) {
-            currentFilter = difficulty;
+        function switchLanguage() {
+            const lang = document.getElementById('language-selector').value;
+            const items = document.querySelectorAll('.lang-item');
             
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            loadExercises();
+            items.forEach(item => {
+                const langName = item.querySelector('.lang-name').textContent.toLowerCase();
+                if (langName.includes(LANGUAGES[lang].name.toLowerCase())) {
+                    item.click();
+                }
+            });
         }
 
-        function switchToExercises() {
-            const exerciseTab = document.querySelectorAll('.sidebar-tab')[1];
-            switchSidebarTab('exercises', exerciseTab);
-        }
-
-        // ==================== REAL CODE EXECUTION ====================
-        async function compileAndRun() {
-            if (isCompiling) return;
+        // ==================== CODE EXECUTION ====================
+        async function runCode() {
+            if (isRunning) return;
             
             const code = document.getElementById('code-editor').value.trim();
-            const outputPanel = document.getElementById('output-panel');
-            const runBtn = document.querySelector('.header-btn.run');
-            
             if (!code) {
-                showNotification('⚠️ Code trống! Vui lòng nhập code.', 'warning');
+                showNotification('⚠️ Code is empty!', 'warning');
                 return;
             }
             
-            isCompiling = true;
+            isRunning = true;
+            const runBtn = document.querySelector('.header-btn.run');
             runBtn.classList.add('running');
-            runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang chạy...';
+            runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
             
-            outputPanel.innerHTML = `
-                <div class="output-line info">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <span>Đang biên dịch và chạy code...</span>
-                </div>
-            `;
+            clearOutput();
+            addOutput('info', '🚀 Compiling and executing code...');
+            
+            // Show input if provided
+            if (programInput) {
+                addOutput('info', `📥 Input provided:\n${programInput}`);
+            }
             
             try {
                 let result;
                 
-                if (currentLanguage === 'python') {
-                    result = await runPython(code);
-                } else if (currentLanguage === 'javascript') {
-                    result = await runJavaScript(code);
-                } else if (currentLanguage === 'cpp' || currentLanguage === 'java') {
-                    result = await runWithJudge0(code);
+                if (currentLang === 'python' && pyodideReady) {
+                    result = await runPythonWasm(code);
+                } else {
+                    result = await runWithPiston(code);
                 }
                 
-                displayOutput(result);
-                
+                displayResult(result);
             } catch (error) {
-                outputPanel.innerHTML = `
-                    <div class="output-line error">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>Lỗi: ${error.message}</span>
-                    </div>
-                `;
+                addOutput('error', `Error: ${error.message}`);
             } finally {
-                isCompiling = false;
+                isRunning = false;
                 runBtn.classList.remove('running');
-                runBtn.innerHTML = '<i class="fas fa-play"></i> <span>Chạy code</span>';
+                runBtn.innerHTML = '<i class="fas fa-play"></i> Run';
             }
         }
 
-        // ==================== PYTHON EXECUTION (PYODIDE WASM) ====================
-        async function runPython(code) {
-            if (!pyodideReady || !pyodide) {
-                return {
-                    success: false,
-                    error: 'Python WASM chưa sẵn sàng. Vui lòng đợi...'
-                };
-            }
-            
+        async function runPythonWasm(code) {
             try {
-                // Redirect stdout
                 let output = '';
                 pyodide.setStdout({
                     batched: (text) => { output += text + '\n'; }
                 });
                 
-                // Handle input
                 if (programInput) {
-                    const inputLines = programInput.split('\n');
-                    let inputIndex = 0;
-                    
-                    pyodide.globals.set('input', () => {
-                        if (inputIndex < inputLines.length) {
-                            return inputLines[inputIndex++];
+                    const lines = programInput.split('\n');
+                    let idx = 0;
+                    pyodide.globals.set('input', (prompt = '') => {
+                        if (idx < lines.length) {
+                            return lines[idx++];
                         }
                         return '';
                     });
                 }
                 
-                // Run Python code
                 await pyodide.runPythonAsync(code);
                 
                 return {
                     success: true,
-                    output: output || 'Chương trình chạy thành công (không có output)',
-                    time: 0,
-                    memory: 0
+                    output: output || 'Program completed successfully (no output)',
+                    runtime: 'Pyodide WASM'
                 };
-                
             } catch (error) {
                 return {
                     success: false,
@@ -1733,210 +1263,78 @@ console.log("Hello, World!");
             }
         }
 
-        // ==================== JAVASCRIPT EXECUTION ====================
-        async function runJavaScript(code) {
-            try {
-                const originalLog = console.log;
-                const logs = [];
-                
-                console.log = (...args) => {
-                    logs.push(args.map(arg => 
-                        typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-                    ).join(' '));
-                };
-                
-                // Handle input
-                const inputLines = programInput.split('\n');
-                let inputIndex = 0;
-                
-                window.prompt = () => {
-                    if (inputIndex < inputLines.length) {
-                        return inputLines[inputIndex++];
-                    }
-                    return '';
-                };
-                
-                // Run code in async context
-                const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-                const fn = new AsyncFunction(code);
-                await fn();
-                
-                console.log = originalLog;
-                
-                return {
-                    success: true,
-                    output: logs.join('\n') || 'Chương trình chạy thành công (không có output)'
-                };
-                
-            } catch (error) {
-                console.log = console.log;
-                return {
-                    success: false,
-                    error: error.message
-                };
-            }
-        }
-
-        // ==================== JUDGE0 EXECUTION (C++/JAVA) ====================
-        async function runWithJudge0(code) {
-            if (!rapidApiKey) {
-                return {
-                    success: false,
-                    error: 'Chưa có RapidAPI Key! Vui lòng thêm trong Settings để chạy C++/Java.'
-                };
-            }
-            
-            const languageIds = {
-                cpp: 54,
-                java: 62
-            };
+        async function runWithPiston(code) {
+            const config = LANGUAGES[currentLang];
             
             try {
-                // Submit code
-                const submitResponse = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true', {
+                const response = await fetch('https://emkc.org/api/v2/piston/execute', {
                     method: 'POST',
-                    headers: {
-                        'content-type': 'application/json',
-                        'X-RapidAPI-Key': rapidApiKey,
-                        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        source_code: code,
-                        language_id: languageIds[currentLanguage],
-                        stdin: programInput
+                        language: config.piston,
+                        version: '*',
+                        files: [{
+                            name: 'main' + config.ext,
+                            content: code
+                        }],
+                        stdin: programInput,
+                        args: []
                     })
                 });
                 
-                if (!submitResponse.ok) {
-                    throw new Error('Không thể kết nối với Judge0 API. Kiểm tra RapidAPI Key!');
+                if (!response.ok) {
+                    throw new Error('Piston API error');
                 }
                 
-                const result = await submitResponse.json();
+                const data = await response.json();
                 
-                if (result.status.id === 3) {
+                if (data.run) {
+                    const output = data.run.stdout || data.run.output || '';
+                    const error = data.run.stderr || '';
+                    
                     return {
-                        success: true,
-                        output: result.stdout || 'Chương trình chạy thành công',
-                        time: result.time,
-                        memory: result.memory
+                        success: data.run.code === 0 || (output && !error),
+                        output: output || 'Program completed (no output)',
+                        error: error,
+                        runtime: 'Piston API'
                     };
                 } else {
-                    return {
-                        success: false,
-                        error: result.stderr || result.compile_output || 'Compilation Error'
-                    };
+                    throw new Error('Invalid response');
                 }
-                
             } catch (error) {
                 return {
                     success: false,
-                    error: error.message
+                    error: 'API failed. Please try again.',
+                    runtime: 'Piston API'
                 };
             }
         }
 
-        // ==================== DISPLAY OUTPUT ====================
-        function displayOutput(result) {
-            const outputPanel = document.getElementById('output-panel');
-            
+        function displayResult(result) {
             if (result.success) {
-                outputPanel.innerHTML = `
-                    <div class="output-line success">
-                        <i class="fas fa-check-circle"></i>
-                        <span><strong>✅ Biên dịch thành công!</strong></span>
-                    </div>
-                    <div class="output-line info">
-                        <i class="fas fa-play-circle"></i>
-                        <span>Chương trình đang chạy...</span>
-                    </div>
-                    <div class="output-line" style="margin-top: 10px; padding: 12px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--success);">
-                        <pre style="margin: 0; font-family: 'JetBrains Mono', monospace; color: var(--text-bright); white-space: pre-wrap;">${result.output}</pre>
-                    </div>
-                    <div class="output-line success" style="margin-top: 12px;">
-                        <i class="fas fa-check"></i>
-                        <span>✅ Chương trình kết thúc thành công</span>
-                    </div>
-                `;
+                addOutput('success', `✅ Compilation successful! (${result.runtime})`);
+                addOutput('info', '📤 Program output:');
                 
-                if (result.time !== undefined) {
-                    outputPanel.innerHTML += `
-                        <div class="output-line info">
-                            <i class="fas fa-clock"></i>
-                            <span>Thời gian: ${result.time}s | Bộ nhớ: ${result.memory} KB</span>
-                        </div>
-                    `;
-                }
+                const pre = document.createElement('pre');
+                pre.style.cssText = 'margin: 10px 0; padding: 15px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--success); color: var(--text-bright); white-space: pre-wrap;';
+                pre.textContent = result.output;
+                document.getElementById('output-panel').appendChild(pre);
                 
-                // Award gems
-                const gemsEarned = Math.floor(Math.random() * 3) + 5;
-                gems += gemsEarned;
-                updateGemDisplay();
-                
-                // Show celebration
-                if (Math.random() < 0.3) {
-                    setTimeout(() => {
-                        showCelebration('Code chạy thành công!', gemsEarned);
-                    }, 800);
-                }
-                
+                addOutput('success', '✅ Program finished successfully');
             } else {
-                outputPanel.innerHTML = `
-                    <div class="output-line error">
-                        <i class="fas fa-times-circle"></i>
-                        <span><strong>❌ Lỗi biên dịch/thực thi!</strong></span>
-                    </div>
-                    <div class="output-line error" style="margin-top: 8px; white-space: pre-wrap;">
-                        ${result.error}
-                    </div>
-                `;
+                addOutput('error', '❌ Execution failed!');
+                
+                const pre = document.createElement('pre');
+                pre.style.cssText = 'margin: 10px 0; padding: 15px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--error); color: var(--error); white-space: pre-wrap;';
+                pre.textContent = result.error || 'Unknown error';
+                document.getElementById('output-panel').appendChild(pre);
             }
-        }
-
-        function formatCode() {
-            const editor = document.getElementById('code-editor');
-            let code = editor.value;
-            
-            // Basic formatting
-            if (currentLanguage === 'python') {
-                // Python formatting
-                code = code.replace(/\n{3,}/g, '\n\n');
-            } else {
-                code = code.replace(/{\s+/g, ' {\n    ');
-                code = code.replace(/\s+}/g, '\n}');
-            }
-            
-            editor.value = code;
-            updateLineNumbers();
-            showNotification('✨ Code đã được format!', 'success');
-        }
-
-        // ==================== LINE NUMBERS ====================
-        function setupLineNumbers() {
-            const editor = document.getElementById('code-editor');
-            editor.addEventListener('input', updateLineNumbers);
-            editor.addEventListener('scroll', syncScroll);
-            updateLineNumbers();
-        }
-
-        function updateLineNumbers() {
-            const editor = document.getElementById('code-editor');
-            const lineNumbers = document.getElementById('line-numbers');
-            const lines = editor.value.split('\n').length;
-            
-            lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('\n');
-        }
-
-        function syncScroll() {
-            const editor = document.getElementById('code-editor');
-            const lineNumbers = document.getElementById('line-numbers');
-            lineNumbers.scrollTop = editor.scrollTop;
         }
 
         // ==================== AI ASSISTANT ====================
         function toggleAI() {
             aiChatOpen = !aiChatOpen;
-            const chatPanel = document.getElementById('ai-chat');
-            chatPanel.classList.toggle('open', aiChatOpen);
+            document.getElementById('ai-chat').classList.toggle('open', aiChatOpen);
         }
 
         function addAIMessage(type, message, options = {}) {
@@ -1945,15 +1343,15 @@ console.log("Hello, World!");
             msgDiv.className = `ai-message ${type}`;
             msgDiv.innerHTML = message;
             
-            if (options.showActions) {
+            if (options.showActions && options.code) {
                 const actionsDiv = document.createElement('div');
                 actionsDiv.className = 'ai-action-btns';
-                const escapedCode = options.code.replace(/`/g, '\\`').replace(/\$/g, '\\);
+                const safeCode = options.code.replace(/`/g, '\\`').replace(/\$/g, '\\);
                 actionsDiv.innerHTML = `
-                    <button class="ai-action-btn" onclick='applyCodeFix(\`${escapedCode}\`)'>
-                        <i class="fas fa-check"></i> Áp dụng
+                    <button class="ai-action-btn" onclick='applyCodeFix(\`${safeCode}\`)'>
+                        <i class="fas fa-check"></i> Apply
                     </button>
-                    <button class="ai-action-btn" onclick='copyCode(\`${escapedCode}\`)'>
+                    <button class="ai-action-btn" onclick='copyCode(\`${safeCode}\`)'>
                         <i class="fas fa-copy"></i> Copy
                     </button>
                 `;
@@ -1965,18 +1363,14 @@ console.log("Hello, World!");
         }
 
         function applyCodeFix(code) {
-            const editor = document.getElementById('code-editor');
-            editor.value = code;
+            document.getElementById('code-editor').value = code;
             updateLineNumbers();
-            showNotification('✅ Code đã được áp dụng!', 'success');
-            
-            gems += 3;
-            updateGemDisplay();
+            showNotification('✅ Code applied!', 'success');
         }
 
         function copyCode(code) {
             navigator.clipboard.writeText(code);
-            showNotification('✅ Đã copy code!', 'success');
+            showNotification('✅ Code copied!', 'success');
         }
 
         function handleAIEnter(event) {
@@ -1995,30 +1389,31 @@ console.log("Hello, World!");
             input.value = '';
             
             if (!apiKey) {
-                addAIMessage('ai', '⚠️ <strong>Chưa có API Key!</strong><br><br>Vui lòng click vào <i class="fas fa-cog"></i> <strong>Settings</strong> để thêm Gemini API Key.<br><br>Lấy API Key miễn phí tại: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>');
+                addAIMessage('ai', '⚠️ <strong>No API Key!</strong><br><br>Click <i class="fas fa-cog"></i> <strong>Settings</strong> to add your Gemini API Key.<br><br>Get FREE key at: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>');
                 return;
             }
             
-            addAIMessage('ai', '<i class="fas fa-circle-notch fa-spin"></i> Đang suy nghĩ...');
+            addAIMessage('ai', '<i class="fas fa-circle-notch fa-spin"></i> Thinking...');
             
             try {
                 const code = document.getElementById('code-editor').value;
-                const prompt = `Bạn là AI Assistant chuyên nghiệp trong IDE.
+                const config = LANGUAGES[currentLang];
+                const prompt = `You are a professional AI coding assistant in an IDE.
 
-Nhiệm vụ: Giúp người dùng học lập trình ${currentLanguage.toUpperCase()}.
-Tính cách: Thân thiện, chuyên nghiệp, dễ hiểu.
-Format: HTML (dùng <br> cho xuống dòng, <strong> cho in đậm, <code> cho code).
+Task: Help user learn programming in ${config.name}.
+Style: Friendly, professional, easy to understand.
+Format: HTML (use <br> for newlines, <strong> for bold, <code> for code).
 
-Code hiện tại:
-\`\`\`${currentLanguage}
+Current code:
+\`\`\`${currentLang}
 ${code}
 \`\`\`
 
-Câu hỏi: ${message}
+Question: ${message}
 
-NẾU ĐƯỢC YÊU CẦU FIX/SỬA LỖI: Cung cấp code hoàn chỉnh đã sửa trong khối \`\`\`${currentLanguage} để có thể áp dụng trực tiếp.
+IF ASKED TO FIX/DEBUG: Provide complete fixed code in \`\`\`${currentLang} block so it can be applied directly to editor.
 
-Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
+Answer concisely in Vietnamese (100-200 words).`;
 
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
                     method: 'POST',
@@ -2036,18 +1431,17 @@ Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
                 messages.removeChild(messages.lastChild);
                 
                 if (data.error) {
-                    addAIMessage('ai', `❌ <strong>Lỗi:</strong> ${data.error.message}<br><br>Vui lòng kiểm tra API Key trong Settings.`);
+                    addAIMessage('ai', `❌ <strong>Error:</strong> ${data.error.message}<br><br>Please check API Key in Settings.`);
                     return;
                 }
 
                 const aiReply = data.candidates[0].content.parts[0].text;
                 const formattedReply = formatAIReply(aiReply);
                 
-                // Check if AI provided code fix
-                const codeRegex = new RegExp(`\`\`\`${currentLanguage}\\n([\\s\\S]*?)\`\`\``, 'i');
+                const codeRegex = new RegExp(`\`\`\`${currentLang}\\n([\\s\\S]*?)\`\`\``, 'i');
                 const codeMatch = aiReply.match(codeRegex);
                 
-                if (codeMatch && (message.toLowerCase().includes('fix') || message.toLowerCase().includes('sửa'))) {
+                if (codeMatch && (message.toLowerCase().includes('fix') || message.toLowerCase().includes('sửa') || message.toLowerCase().includes('debug'))) {
                     const fixedCode = codeMatch[1].trim();
                     addAIMessage('ai', formattedReply, {
                         showActions: true,
@@ -2057,15 +1451,12 @@ Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
                     addAIMessage('ai', formattedReply);
                 }
                 
-                gems += 1;
-                updateGemDisplay();
-                
             } catch (error) {
                 const messages = document.getElementById('ai-messages');
-                if (messages.lastChild && messages.lastChild.textContent.includes('Đang suy nghĩ')) {
+                if (messages.lastChild && messages.lastChild.textContent.includes('Thinking')) {
                     messages.removeChild(messages.lastChild);
                 }
-                addAIMessage('ai', '❌ Không thể kết nối với AI. Vui lòng thử lại!');
+                addAIMessage('ai', '❌ Cannot connect to AI. Please try again!');
                 console.error(error);
             }
         }
@@ -2073,6 +1464,7 @@ Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
         function formatAIReply(text) {
             text = text.replace(/```python\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
             text = text.replace(/```cpp\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
+            text = text.replace(/```c\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
             text = text.replace(/```javascript\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
             text = text.replace(/```java\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
             text = text.replace(/```\n?([\s\S]*?)```/g, '<pre style="background: var(--bg-primary); padding: 10px; border-radius: 6px; overflow-x: auto; margin: 8px 0;"><code>$1</code></pre>');
@@ -2085,67 +1477,120 @@ Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
 
         async function aiQuickAction(action) {
             const actions = {
-                'exercise': 'Tạo cho tôi một bài tập thực hành phù hợp với code hiện tại.',
-                'hint': 'Cho tôi gợi ý để cải thiện code này.',
-                'explain': 'Giải thích chi tiết code của tôi.',
+                'explain': 'Giải thích chi tiết code này cho tôi.',
                 'debug': 'Kiểm tra và chỉ ra lỗi trong code này.',
                 'optimize': 'Gợi ý cách tối ưu code này.',
-                'fix': 'Sửa tất cả lỗi trong code này và đưa ra code đã fix.'
+                'fix': 'Sửa tất cả lỗi trong code này và đưa ra code đã fix.',
+                'comment': 'Thêm comment chi tiết vào code này.'
             };
             
             document.getElementById('ai-input').value = actions[action];
             await sendAIMessage();
         }
 
-        // ==================== UI FUNCTIONS ====================
-        function toggleSettings() {
-            const modal = document.getElementById('settings-modal');
-            modal.classList.toggle('show');
+        // ==================== UI HELPERS ====================
+        function setupLineNumbers() {
+            const editor = document.getElementById('code-editor');
+            editor.addEventListener('input', updateLineNumbers);
+            editor.addEventListener('scroll', syncScroll);
+            updateLineNumbers();
         }
 
-        function switchSidebarTab(tab, btn) {
-            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
-            
-            document.querySelectorAll('.sidebar-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(`${tab}-panel`).classList.add('active');
+        function updateLineNumbers() {
+            const editor = document.getElementById('code-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            const lines = editor.value.split('\n').length;
+            lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('\n');
         }
 
-        function switchPanelTab(tab, btn) {
-            document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-            btn.classList.add('active');
+        function syncScroll() {
+            const editor = document.getElementById('code-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            lineNumbers.scrollTop = editor.scrollTop;
         }
 
-        function openFile(filename) {
-            document.querySelectorAll('.file-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.file-item').classList.add('active');
-            
-            currentFile = filename;
-            document.getElementById('current-file-name').textContent = filename;
-            showNotification(`📁 Đã mở ${filename}`, 'info');
+        function addOutput(type, message) {
+            const panel = document.getElementById('output-panel');
+            const line = document.createElement('div');
+            line.className = `output-line ${type}`;
+            const icons = { success: 'check-circle', error: 'times-circle', info: 'info-circle', warning: 'exclamation-triangle' };
+            line.innerHTML = `<i class="fas fa-${icons[type]}"></i><span>${message}</span>`;
+            panel.appendChild(line);
+            panel.scrollTop = panel.scrollHeight;
         }
 
-        function showCelebration(message, gemReward) {
-            document.getElementById('reward-message').textContent = message;
-            document.getElementById('reward-gems').textContent = gemReward;
-            document.getElementById('celebration').classList.add('show');
-            
-            gems += gemReward;
-            updateGemDisplay();
-        }
-
-        function closeCelebration() {
-            document.getElementById('celebration').classList.remove('show');
+        function clearOutput() {
+            document.getElementById('output-panel').innerHTML = '';
         }
 
         function showNotification(message, type) {
-            const outputPanel = document.getElementById('output-panel');
-            const notification = document.createElement('div');
-            notification.className = `output-line ${type}`;
-            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle'}"></i><span>${message}</span>`;
-            outputPanel.appendChild(notification);
+            addOutput(type, message);
+        }
+
+        function showInputDialog() {
+            document.getElementById('program-input').value = programInput;
+            document.getElementById('input-modal').classList.add('show');
+        }
+
+        function closeInputDialog() {
+            document.getElementById('input-modal').classList.remove('show');
+        }
+
+        function saveInput() {
+            programInput = document.getElementById('program-input').value;
+            localStorage.setItem('program_input', programInput);
+            closeInputDialog();
+            showNotification('✅ Input saved! It will be used for cin/scanf/input()', 'success');
+        }
+
+        function showSettings() {
+            document.getElementById('api-key-input').value = apiKey;
+            document.getElementById('settings-modal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.remove('show');
+        }
+
+        function saveSettings() {
+            apiKey = document.getElementById('api-key-input').value;
+            localStorage.setItem('api_key', apiKey);
+            closeSettings();
+            showNotification('✅ Settings saved!', 'success');
+        }
+
+        function showLoading(text) {
+            document.getElementById('loading-text').textContent = text;
+            document.getElementById('loading-overlay').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.remove('show');
+        }
+
+        // ==================== STORAGE ====================
+        function loadSettings() {
+            currentLang = localStorage.getItem('current_lang') || 'python';
+            programInput = localStorage.getItem('program_input') || '';
+            apiKey = localStorage.getItem('api_key') || '';
+        }
+
+        function loadCode() {
+            const savedCode = localStorage.getItem(`code_${currentLang}`);
+            document.getElementById('code-editor').value = savedCode || TEMPLATES[currentLang];
+            updateLineNumbers();
             
-            outputPanel.scrollTop = outputPanel.scrollHeight;
+            setInterval(() => {
+                const code = document.getElementById('code-editor').value;
+                localStorage.setItem(`code_${currentLang}`, code);
+            }, 5000);
+        }
+
+        function saveCode() {
+            const code = document.getElementById('code-editor').value;
+            localStorage.setItem(`code_${currentLang}`, code);
+            localStorage.setItem('current_lang', currentLang);
+            showNotification('✅ Code saved!', 'success');
         }
 
         // ==================== KEYBOARD SHORTCUTS ====================
@@ -2153,39 +1598,33 @@ Trả lời ngắn gọn, rõ ràng (100-200 từ).`;
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.key === 'Enter') {
                     e.preventDefault();
-                    compileAndRun();
+                    runCode();
                 }
-                
                 if (e.ctrlKey && e.key === 's') {
                     e.preventDefault();
                     saveCode();
                 }
-                
-                if (e.ctrlKey && e.key === '/') {
+            });
+            
+            document.getElementById('code-editor').addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
                     e.preventDefault();
-                    toggleAI();
-                }
-                
-                if (e.ctrlKey && e.shiftKey && e.key === 'F') {
-                    e.preventDefault();
-                    formatCode();
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 4;
+                    updateLineNumbers();
                 }
             });
         }
 
-        // ==================== TAB KEY SUPPORT ====================
-        document.getElementById('code-editor').addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
-                const value = this.value;
-                
-                this.value = value.substring(0, start) + '    ' + value.substring(end);
-                this.selectionStart = this.selectionEnd = start + 4;
-                updateLineNumbers();
-            }
-        });
+        // Modal close on outside click
+        document.getElementById('input-modal').onclick = function(e) {
+            if (e.target === this) closeInputDialog();
+        };
+        document.getElementById('settings-modal').onclick = function(e) {
+            if (e.target === this) closeSettings();
+        };
     </script>
 </body>
 </html>
