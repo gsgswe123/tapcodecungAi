@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -16,18 +16,18 @@
         }
 
         :root {
-            --bg-primary: #1e1e1e;
-            --bg-secondary: #252526;
-            --bg-tertiary: #2d2d30;
-            --bg-hover: #37373d;
-            --bg-editor: #1e1e1e;
-            --text-primary: #cccccc;
-            --text-secondary: #858585;
-            --text-bright: #ffffff;
-            --accent: #3794ff;
-            --accent-hover: #4ba3ff;
-            --border: #3e3e42;
-            --success: #73c991;
+            --bg-primary: #2b2b2b;
+            --bg-secondary: #333333;
+            --bg-tertiary: #3a3a3a;
+            --bg-hover: #444444;
+            --bg-editor: #2b2b2b;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b3b3b3;
+            --text-bright: #f4f4f4;
+            --accent: #d7ba7d;
+            --accent-hover: #e3c98a;
+            --border: #3f3f3f;
+            --success: #98c379;
             --warning: #e5c07b;
             --error: #e06c75;
         }
@@ -82,6 +82,83 @@
             gap: 8px;
             align-items: center;
         }
+
+        .exercise-control {
+            position: relative;
+        }
+
+        .exercises-dropdown {
+            position: absolute;
+            top: 44px;
+            left: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            width: 320px;
+            display: none;
+            flex-direction: column;
+            z-index: 1200;
+            padding: 12px;
+            gap: 10px;
+        }
+
+        .exercises-dropdown.open { display: flex; }
+
+        .exercise-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-bright);
+        }
+
+        .exercise-filter {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .exercise-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .exercise-desc {
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .exercise-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-hover);
+        }
+
+        .exercise-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .badge.easy { background: rgba(115, 201, 145, 0.15); color: var(--success); }
+        .badge.medium { background: rgba(231, 195, 123, 0.15); color: var(--warning); }
+        .badge.hard { background: rgba(224, 108, 117, 0.15); color: var(--error); }
 
         .language-selector {
             background: var(--bg-tertiary);
@@ -173,6 +250,13 @@
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            width: 0;
+            border: none;
         }
 
         .sidebar-header {
@@ -301,6 +385,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            position: relative;
         }
 
         .code-editor {
@@ -309,21 +394,26 @@
             min-height: 500px;
             background: transparent;
             border: none;
-            color: var(--text-primary);
+            color: #e2d3a8;
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             line-height: 1.6;
             resize: none;
             outline: none;
             tab-size: 4;
+            caret-color: var(--accent);
         }
 
         .bottom-panel {
-            height: 250px;
+            height: 260px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
             display: flex;
             flex-direction: column;
+            position: relative;
+            min-height: 180px;
+            resize: vertical;
+            overflow: hidden;
         }
 
         .panel-tabs {
@@ -332,6 +422,68 @@
             padding: 8px 15px;
             gap: 8px;
             background: var(--bg-tertiary);
+        }
+
+        .panel-resize-handle {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            cursor: row-resize;
+            background: transparent;
+            z-index: 5;
+        }
+
+        .panel-resize-handle:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .panel-resize-handle.side {
+            top: 0;
+            bottom: 0;
+            right: -4px;
+            width: 8px;
+            left: auto;
+            cursor: col-resize;
+        }
+
+        .panel-input {
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .panel-input label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .stdin-field {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 70px;
+            outline: none;
+        }
+
+        .stdin-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(55, 148, 255, 0.1);
+        }
+
+        .stdin-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         .panel-tab {
@@ -365,6 +517,16 @@
             padding: 15px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
+        }
+
+        .resizable-output {
+            flex: 1;
+            position: relative;
+            overflow: auto;
+            resize: both;
+            min-height: 150px;
+            min-width: 320px;
+            border-top: 1px solid var(--border);
         }
 
         .output-line {
@@ -628,6 +790,49 @@
             50% { transform: translateY(-8px); }
         }
 
+        /* Autocomplete */
+        .autocomplete {
+            position: absolute;
+            background: #1f1f1f;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            min-width: 220px;
+            max-width: 320px;
+            max-height: 220px;
+            overflow-y: auto;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            z-index: 1200;
+            color: var(--text-primary);
+            display: none;
+        }
+
+        .autocomplete.visible { display: block; }
+
+        .autocomplete-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .autocomplete-item span {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .autocomplete-item.active {
+            background: var(--bg-hover);
+            color: var(--text-bright);
+        }
+
+        .autocomplete-item:hover {
+            background: var(--bg-hover);
+        }
+
         /* Modals */
         .modal-overlay {
             position: fixed;
@@ -864,6 +1069,24 @@
                     <option value="haskell">Haskell GHC 9.2</option>
                 </optgroup>
             </select>
+            <div class="exercise-control">
+                <button class="header-btn" id="exercise-btn" onclick="toggleExercisesDropdown(event)" data-tooltip="Chọn bài tập theo ngôn ngữ">
+                    <i class="fas fa-list-check"></i>
+                    <span>Bài tập</span>
+                </button>
+                <div class="exercises-dropdown" id="exercise-dropdown">
+                    <div class="exercise-title">Chọn ngôn ngữ</div>
+                    <select class="exercise-filter" id="exercise-lang-select" onchange="changeExerciseLang()">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="cpp">C++</option>
+                        <option value="c">C</option>
+                        <option value="java">Java</option>
+                    </select>
+                    <div class="exercise-title">Bài tập (dễ → khó)</div>
+                    <div id="exercise-list"></div>
+                </div>
+            </div>
             
             <button class="header-btn run" onclick="runCode()" data-tooltip="Ctrl+Enter - Run Code">
                 <i class="fas fa-play"></i>
@@ -875,8 +1098,26 @@
             <button class="header-btn" onclick="saveCode()" data-tooltip="Ctrl+S - Save">
                 <i class="fas fa-save"></i>
             </button>
+            <button class="header-btn" onclick="formatCode()" data-tooltip="Format Code">
+                <i class="fas fa-magic"></i>
+            </button>
+            <button class="header-btn" onclick="downloadCode()" data-tooltip="Download Code">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="header-btn" onclick="copyCodeToClipboard()" data-tooltip="Copy Code">
+                <i class="fas fa-copy"></i>
+            </button>
+            <button class="header-btn" onclick="newFile()" data-tooltip="New File">
+                <i class="fas fa-file"></i>
+            </button>
+            <button class="header-btn" onclick="clearOutput()" data-tooltip="Clear Output">
+                <i class="fas fa-trash"></i>
+            </button>
             <button class="header-btn" onclick="showSettings()" data-tooltip="Settings (AI API Key)">
                 <i class="fas fa-cog"></i>
+            </button>
+            <button class="header-btn" onclick="toggleSidebar()" data-tooltip="Toggle Sidebar">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
         
@@ -913,32 +1154,45 @@
                         spellcheck="false"
                         placeholder="// Start coding..."
                     ></textarea>
+                    <div id="autocomplete" class="autocomplete"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="bottom-panel">
+    <div class="bottom-panel" id="bottom-panel">
+        <div class="panel-resize-handle" onmousedown="startPanelResize(event)"></div>
         <div class="panel-tabs">
             <button class="panel-tab active">
                 <i class="fas fa-terminal"></i>
                 Output
             </button>
         </div>
-        
-        <div class="panel-content" id="output-panel">
-            <div class="output-line info">
-                <i class="fas fa-rocket"></i>
-                <span><strong>Engine:</strong> Piston API (45+ langs) | Pyodide WASM (Python offline)</span>
+        <div class="panel-input">
+            <label for="quick-stdin">Program Input (stdin)</label>
+            <textarea id="quick-stdin" class="stdin-field" placeholder="Nhập dữ liệu cho cin/scanf/input()..."></textarea>
+            <div class="stdin-hint">Nội dung này sẽ được gửi vào stdin khi chạy code (mọi ngôn ngữ).</div>
+        </div>
+        <div class="resizable-output" id="output-wrapper">
+            <div class="panel-content" id="output-panel">
+                <div class="output-line info">
+                    <i class="fas fa-rocket"></i>
+                    <span><strong>Engine:</strong> Piston API (45+ langs) | Pyodide WASM (Python offline)</span>
+                </div>
+                <div class="output-line info">
+                    <i class="fas fa-keyboard"></i>
+                    <span><strong>Shortcuts:</strong> Ctrl+Enter (Run) | Ctrl+S (Save) | Ctrl+N (New) | Ctrl+Shift+F (Format) | Ctrl+K (Clear) | Ctrl+B (Toggle Sidebar) | Ctrl+/ (AI)</span>
+                </div>
+                <div class="output-line info">
+                    <i class="fas fa-info-circle"></i>
+                    <span><strong>Input:</strong> Click <i class="fas fa-keyboard"></i> to add stdin for cin/scanf/input()</span>
+                </div>
+                <div class="output-line info">
+                    <i class="fas fa-robot"></i>
+                    <span><strong>AI:</strong> Click 🤖 (bottom-right) for coding help! Get FREE Gemini API key in Settings</span>
+                </div>
             </div>
-            <div class="output-line info">
-                <i class="fas fa-keyboard"></i>
-                <span><strong>Input Support:</strong> Click <i class="fas fa-keyboard"></i> button to add stdin for cin/scanf</span>
-            </div>
-            <div class="output-line info">
-                <i class="fas fa-robot"></i>
-                <span><strong>AI Assistant:</strong> Click 🤖 button (bottom-right) for coding help!</span>
-            </div>
+            <div class="panel-resize-handle side" onmousedown="startPanelWidthResize(event)"></div>
         </div>
     </div>
 
@@ -1089,6 +1343,467 @@ John
             haskell: 'main = putStrLn "Hello, World!"\n'
         };
 
+        const EXERCISES = {
+            python: [
+                {
+                    id: 'py-easy-1',
+                    title: 'Tính tổng mảng',
+                    difficulty: 'easy',
+                    description: 'Đọc n rồi n số nguyên, in ra tổng của chúng.',
+                    starter: 'def solve():\n    n = int(input())\n    nums = list(map(int, input().split()))\n    print(sum(nums))\n\nif __name__ == \"__main__\":\n    solve()\n'
+                },
+                {
+                    id: 'py-med-1',
+                    title: 'Đếm ký tự',
+                    difficulty: 'medium',
+                    description: 'Đếm số lần xuất hiện của mỗi ký tự trong chuỗi và in theo thứ tự ký tự.',
+                    starter: 'from collections import Counter\n\ndef solve():\n    s = input().strip()\n    freq = Counter(s)\n    for ch in sorted(freq):\n        print(f\"{ch}: {freq[ch]}\")\n\nif __name__ == \"__main__\":\n    solve()\n'
+                },
+                {
+                    id: 'py-hard-1',
+                    title: 'Dãy con tăng dài nhất',
+                    difficulty: 'hard',
+                    description: 'Cho mảng n phần tử, tìm độ dài LIS (Longest Increasing Subsequence).',
+                    starter: 'import bisect\n\ndef solve():\n    n = int(input())\n    arr = list(map(int, input().split()))\n    lis = []\n    for x in arr:\n        i = bisect.bisect_left(lis, x)\n        if i == len(lis):\n            lis.append(x)\n        else:\n            lis[i] = x\n    print(len(lis))\n\nif __name__ == \"__main__\":\n    solve()\n'
+                }
+            ],
+            javascript: [
+                {
+                    id: 'js-easy-1',
+                    title: 'Đảo chuỗi',
+                    difficulty: 'easy',
+                    description: 'Nhập một chuỗi, in ra chuỗi đảo ngược.',
+                    starter: 'function solve() {\n  const s = require(\"fs\").readFileSync(0, \"utf8\").trim();\n  console.log(s.split(\"\").reverse().join(\"\"));\n}\nsolve();\n'
+                },
+                {
+                    id: 'js-med-1',
+                    title: 'Tần suất số',
+                    difficulty: 'medium',
+                    description: 'Đếm tần suất các số trong mảng và in theo thứ tự tăng dần của số.',
+                    starter: 'function solve() {\n  const data = require(\"fs\").readFileSync(0, \"utf8\").trim().split(/\\s+/).map(Number);\n  const n = data[0];\n  const nums = data.slice(1, 1 + n);\n  const freq = new Map();\n  for (const x of nums) freq.set(x, (freq.get(x) || 0) + 1);\n  [...freq.entries()].sort((a, b) => a[0] - b[0]).forEach(([k, v]) => {\n    console.log(`${k}: ${v}`);\n  });\n}\nsolve();\n'
+                },
+                {
+                    id: 'js-hard-1',
+                    title: 'Hai tổng gần nhất 0',
+                    difficulty: 'hard',
+                    description: 'Cho mảng, tìm hai số có tổng gần 0 nhất (two sum closest to zero).',
+                    starter: 'function solve() {\n  const data = require(\"fs\").readFileSync(0, \"utf8\").trim().split(/\\s+/).map(Number);\n  const n = data[0];\n  const arr = data.slice(1, 1 + n).sort((a, b) => a - b);\n  let l = 0, r = arr.length - 1;\n  let best = [arr[l], arr[r]];\n  while (l < r) {\n    const sum = arr[l] + arr[r];\n    if (Math.abs(sum) < Math.abs(best[0] + best[1])) best = [arr[l], arr[r]];\n    if (sum === 0) break;\n    if (sum < 0) l++; else r--;\n  }\n  console.log(best[0] + " " + best[1]);\n}\nsolve();\n'
+                }
+            ],
+                        cpp: [
+                {
+                    id: 'cpp-01-e',
+                    title: 'Nh?p/Xu?t c? b?n',
+                    difficulty: 'easy',
+                    description: '??c m?t s? ho?c chu?i v? in ra y h?t.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??c m?t s? ho?c chu?i v? in ra y h?t.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-02-e',
+                    title: 'T?ng d?y',
+                    difficulty: 'easy',
+                    description: '??c n v? t?nh t?ng n s? nguy?n.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??c n v? t?nh t?ng n s? nguy?n.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-03-e',
+                    title: 'Gi? tr? l?n nh?t',
+                    difficulty: 'easy',
+                    description: 'T?m ph?n t? l?n nh?t trong m?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m ph?n t? l?n nh?t trong m?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-04-e',
+                    title: 'Gi? tr? nh? nh?t',
+                    difficulty: 'easy',
+                    description: 'T?m ph?n t? nh? nh?t trong m?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m ph?n t? nh? nh?t trong m?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-05-e',
+                    title: '??m ch?n l?',
+                    difficulty: 'easy',
+                    description: '??m bao nhi?u s? ch?n v? l? trong m?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m bao nhi?u s? ch?n v? l? trong m?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-06-e',
+                    title: 'T?ng ch? s?',
+                    difficulty: 'easy',
+                    description: 'T?nh t?ng c?c ch? s? c?a s? nguy?n d??ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh t?ng c?c ch? s? c?a s? nguy?n d??ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-07-e',
+                    title: 'Giai th?a',
+                    difficulty: 'easy',
+                    description: 'T?nh n! v?i n nh? (n <= 12).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh n! v?i n nh? (n <= 12).\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-08-e',
+                    title: 'D?y Fibonacci',
+                    difficulty: 'easy',
+                    description: 'In n s? Fibonacci ??u ti?n.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: In n s? Fibonacci ??u ti?n.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-09-e',
+                    title: 'Chu?i palindrome',
+                    difficulty: 'easy',
+                    description: 'Ki?m tra xem chu?i c? ph?i palindrome.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Ki?m tra xem chu?i c? ph?i palindrome.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-10-e',
+                    title: '??o m?ng',
+                    difficulty: 'easy',
+                    description: '??o ng??c th? t? ph?n t? m?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??o ng??c th? t? ph?n t? m?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-11-e',
+                    title: 'UCLN & BCNN',
+                    difficulty: 'easy',
+                    description: 'T?nh gcd v? lcm c?a hai s?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh gcd v? lcm c?a hai s?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-12-e',
+                    title: 'Ki?m tra nguy?n t?',
+                    difficulty: 'easy',
+                    description: 'In YES n?u n l? s? nguy?n t?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: In YES n?u n l? s? nguy?n t?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-13-e',
+                    title: 'S?p x?p t?ng d?n',
+                    difficulty: 'easy',
+                    description: 'S?p x?p m?ng theo th? t? t?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: S?p x?p m?ng theo th? t? t?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-14-e',
+                    title: 'T?m ki?m nh? ph?n',
+                    difficulty: 'easy',
+                    description: 'Ki?m tra x c? trong m?ng ?? s?p x?p.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Ki?m tra x c? trong m?ng ?? s?p x?p.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-15-e',
+                    title: '??m t?n su?t',
+                    difficulty: 'easy',
+                    description: '??m s? l?n xu?t hi?n c?a m?i ph?n t?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? l?n xu?t hi?n c?a m?i ph?n t?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-16-e',
+                    title: 'Trung b?nh c?ng',
+                    difficulty: 'easy',
+                    description: 'T?nh trung b?nh c?ng c?a d?y s?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh trung b?nh c?ng c?a d?y s?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-17-e',
+                    title: '??i c? s?',
+                    difficulty: 'easy',
+                    description: 'Chuy?n s? nh? ph?n sang th?p ph?n.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Chuy?n s? nh? ph?n sang th?p ph?n.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-18-e',
+                    title: 'T?ng hai ???ng ch?o',
+                    difficulty: 'easy',
+                    description: 'T?nh t?ng ???ng ch?o ch?nh v? ph? c?a ma tr?n vu?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh t?ng ???ng ch?o ch?nh v? ph? c?a ma tr?n vu?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-19-m',
+                    title: 'C?a s? tr??t t?i ?a',
+                    difficulty: 'medium',
+                    description: 'T?m gi? tr? l?n nh?t c?a m?i c?a s? ?? d?i k.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m gi? tr? l?n nh?t c?a m?i c?a s? ?? d?i k.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-20-m',
+                    title: 'Hai con tr? <= k',
+                    difficulty: 'medium',
+                    description: '??m s? c?p c? t?ng kh?ng v??t qu? k.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? c?p c? t?ng kh?ng v??t qu? k.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-21-m',
+                    title: 'Prefix sum query',
+                    difficulty: 'medium',
+                    description: 'Tr? l?i q truy v?n t?ng ?o?n l..r.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Tr? l?i q truy v?n t?ng ?o?n l..r.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-22-m',
+                    title: 'G?p ?o?n',
+                    difficulty: 'medium',
+                    description: 'G?p c?c ?o?n giao nhau th?nh ?o?n l?n nh?t.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: G?p c?c ?o?n giao nhau th?nh ?o?n l?n nh?t.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-23-m',
+                    title: 'Josephus',
+                    difficulty: 'medium',
+                    description: 'T?m ng??i cu?i c?ng c?n l?i trong b?i to?n Josephus.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m ng??i cu?i c?ng c?n l?i trong b?i to?n Josephus.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-24-m',
+                    title: 'Ki?m tra d?u ngo?c',
+                    difficulty: 'medium',
+                    description: 'X?c ??nh chu?i ngo?c c? h?p l? kh?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: X?c ??nh chu?i ngo?c c? h?p l? kh?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-25-m',
+                    title: 'BFS l??i',
+                    difficulty: 'medium',
+                    description: 'T?m ???ng ?i ng?n nh?t tr?n l??i tr?nh ? #.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m ???ng ?i ng?n nh?t tr?n l??i tr?nh ? #.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-26-m',
+                    title: 'DSU th?nh ph?n',
+                    difficulty: 'medium',
+                    description: '??m s? th?nh ph?n li?n th?ng trong ?? th? v? h??ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? th?nh ph?n li?n th?ng trong ?? th? v? h??ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-27-m',
+                    title: 'S?p x?p theo t?n su?t',
+                    difficulty: 'medium',
+                    description: 'S?p x?p m?ng theo t?n su?t gi?m d?n, r?i gi? tr? t?ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: S?p x?p m?ng theo t?n su?t gi?m d?n, r?i gi? tr? t?ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-28-m',
+                    title: 'Topo DAG',
+                    difficulty: 'medium',
+                    description: 'In th? t? topo c?a ?? th? c? h??ng kh?ng chu tr?nh.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: In th? t? topo c?a ?? th? c? h??ng kh?ng chu tr?nh.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-29-m',
+                    title: 'Chi?u d?i LIS',
+                    difficulty: 'medium',
+                    description: 'T?nh ?? d?i d?y con t?ng d?i nh?t.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh ?? d?i d?y con t?ng d?i nh?t.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-30-m',
+                    title: 'Subarray sum = k',
+                    difficulty: 'medium',
+                    description: '??m s? m?ng con c? t?ng b?ng k.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? m?ng con c? t?ng b?ng k.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-31-m',
+                    title: 'Xoay ma tr?n',
+                    difficulty: 'medium',
+                    description: 'Xoay ma tr?n vu?ng 90 ?? theo chi?u kim ??ng h?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Xoay ma tr?n vu?ng 90 ?? theo chi?u kim ??ng h?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-32-m',
+                    title: 'K-th nh? nh?t',
+                    difficulty: 'medium',
+                    description: 'T?m ph?n t? nh? th? k trong m?ng (d?ng heap/sort).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m ph?n t? nh? th? k trong m?ng (d?ng heap/sort).\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-33-m',
+                    title: 'C?p g?n nh?t',
+                    difficulty: 'medium',
+                    description: 'T?m c?p s? c? ch?nh l?ch nh? nh?t sau khi s?p x?p.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m c?p s? c? ch?nh l?ch nh? nh?t sau khi s?p x?p.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-34-m',
+                    title: 'T?m ki?m ??p ?n',
+                    difficulty: 'medium',
+                    description: 'D?ng binary search tr?n ??p ?n ?? t?m gi? tr? t?i ?u.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: D?ng binary search tr?n ??p ?n ?? t?m gi? tr? t?i ?u.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-35-m',
+                    title: 'Chu?i kh?ng l?p',
+                    difficulty: 'medium',
+                    description: '?? d?i chu?i con kh?ng c? k? t? l?p l?i.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ?? d?i chu?i con kh?ng c? k? t? l?p l?i.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-36-h',
+                    title: 'Dijkstra',
+                    difficulty: 'hard',
+                    description: '???ng ?i ng?n nh?t tr?n ?? th? tr?ng s? d??ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ???ng ?i ng?n nh?t tr?n ?? th? tr?ng s? d??ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-37-h',
+                    title: 'Kruskal MST',
+                    difficulty: 'hard',
+                    description: 'T?nh t?ng tr?ng s? c?y khung nh? nh?t.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh t?ng tr?ng s? c?y khung nh? nh?t.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-38-h',
+                    title: 'Bellman-Ford',
+                    difficulty: 'hard',
+                    description: 'Ph?t hi?n v? t?nh ???ng ?i v?i c?nh ?m, ki?m tra chu tr?nh ?m.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Ph?t hi?n v? t?nh ???ng ?i v?i c?nh ?m, ki?m tra chu tr?nh ?m.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-39-h',
+                    title: 'Floyd-Warshall',
+                    difficulty: 'hard',
+                    description: 'Ma tr?n kho?ng c?ch ng?n nh?t gi?a m?i c?p ??nh.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Ma tr?n kho?ng c?ch ng?n nh?t gi?a m?i c?p ??nh.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-40-h',
+                    title: 'Segment Tree',
+                    difficulty: 'hard',
+                    description: 'X? l? truy v?n max ho?c sum tr?n ?o?n.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: X? l? truy v?n max ho?c sum tr?n ?o?n.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-41-h',
+                    title: 'Fenwick Tree',
+                    difficulty: 'hard',
+                    description: 'Truy v?n/ c?p nh?t prefix sum O(log n).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Truy v?n/ c?p nh?t prefix sum O(log n).\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-42-h',
+                    title: 'LCA',
+                    difficulty: 'hard',
+                    description: 'T?m t? ti?n chung g?n nh?t b?ng binary lifting.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?m t? ti?n chung g?n nh?t b?ng binary lifting.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-43-h',
+                    title: 'Knapsack 0/1',
+                    difficulty: 'hard',
+                    description: 'T?i ?u gi? tr? v?i gi?i h?n tr?ng l??ng.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?i ?u gi? tr? v?i gi?i h?n tr?ng l??ng.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-44-h',
+                    title: 'Coin Change',
+                    difficulty: 'hard',
+                    description: '??m s? c?ch ??i ti?n theo m?nh gi? cho tr??c.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? c?ch ??i ti?n theo m?nh gi? cho tr??c.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-45-h',
+                    title: 'TSP Bitmask',
+                    difficulty: 'hard',
+                    description: 'H?nh tr?nh ng?n nh?t qua t?t c? ??nh (n <= 15).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: H?nh tr?nh ng?n nh?t qua t?t c? ??nh (n <= 15).\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-46-h',
+                    title: 'Suffix Array',
+                    difficulty: 'hard',
+                    description: 'Sinh suffix array cho chu?i v? in th? t?.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Sinh suffix array cho chu?i v? in th? t?.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-47-h',
+                    title: 'Trie Prefix',
+                    difficulty: 'hard',
+                    description: '??m s? t? c? ti?n t? cho tr??c.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: ??m s? t? c? ti?n t? cho tr??c.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-48-h',
+                    title: 'DP L??i',
+                    difficulty: 'hard',
+                    description: 'S? ???ng ?i t? (0,0) t?i (n-1,m-1) mod 1e9+7.',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: S? ???ng ?i t? (0,0) t?i (n-1,m-1) mod 1e9+7.\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-49-h',
+                    title: 'Max Flow',
+                    difficulty: 'hard',
+                    description: 'T?nh l?u l??ng c?c ??i (Edmonds-Karp/ Dinic).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: T?nh l?u l??ng c?c ??i (Edmonds-Karp/ Dinic).\n    return 0;\n}\n'
+                },
+                {
+                    id: 'cpp-50-h',
+                    title: 'Sparse Table',
+                    difficulty: 'hard',
+                    description: 'Tr? l?i RMQ (min/max) O(1) sau O(n log n).',
+                    starter: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false);\n    cin.tie(nullptr);\n    // TODO: Tr? l?i RMQ (min/max) O(1) sau O(n log n).\n    return 0;\n}\n'
+                },
+            ],
+            c: [
+                {
+                    id: 'c-easy-1',
+                    title: 'Tổng chữ số',
+                    difficulty: 'easy',
+                    description: 'Tính tổng các chữ số của một số nguyên dương.',
+                    starter: '#include <stdio.h>\n\nint main(){\n    int n; if(scanf(\"%d\", &n)!=1) return 0;\n    int sum=0; while(n){ sum += n%10; n/=10; }\n    printf(\"%d\\n\", sum);\n    return 0;\n}\n'
+                },
+                {
+                    id: 'c-med-1',
+                    title: 'Ma trận chuyển vị',
+                    difficulty: 'medium',
+                    description: 'Đọc ma trận n x m, in ra ma trận chuyển vị.',
+                    starter: '#include <stdio.h>\n\nint main(){\n    int n,m; if(scanf(\"%d %d\", &n, &m)!=2) return 0;\n    int a[105][105];\n    for(int i=0;i<n;i++) for(int j=0;j<m;j++) scanf(\"%d\", &a[i][j]);\n    for(int j=0;j<m;j++){\n        for(int i=0;i<n;i++){\n            printf(\"%d%s\", a[i][j], i==n-1?\"\\n\":\" \");\n        }\n    }\n    return 0;\n}\n'
+                },
+                {
+                    id: 'c-hard-1',
+                    title: 'TSP tham lam',
+                    difficulty: 'hard',
+                    description: 'Cho ma trận trọng số hoàn chỉnh, tìm tổng chi phí hành trình tham lam từ đỉnh 0.',
+                    starter: '#include <stdio.h>\n#include <limits.h>\n\nint main(){\n    int n; if(scanf(\"%d\", &n)!=1) return 0;\n    int w[25][25];\n    for(int i=0;i<n;i++) for(int j=0;j<n;j++) scanf(\"%d\", &w[i][j]);\n    int used[25]={0}, cur=0; used[0]=1; int cost=0;\n    for(int step=1; step<n; step++){\n        int next=-1, best=INT_MAX;\n        for(int v=0; v<n; v++) if(!used[v] && w[cur][v]<best){ best=w[cur][v]; next=v; }\n        used[next]=1; cost+=best; cur=next;\n    }\n    cost += w[cur][0];\n    printf(\"%d\\n\", cost);\n    return 0;\n}\n'
+                }
+            ],
+            java: [
+                {
+                    id: 'java-easy-1',
+                    title: 'Đếm từ',
+                    difficulty: 'easy',
+                    description: 'Đếm số từ trong một dòng văn bản.',
+                    starter: 'import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextLine()) return;\n        String line = sc.nextLine().trim();\n        if (line.isEmpty()) { System.out.println(0); return; }\n        System.out.println(line.split(\"\\\\s+\").length);\n    }\n}\n'
+                },
+                {
+                    id: 'java-med-1',
+                    title: 'Cặp số gần nhau',
+                    difficulty: 'medium',
+                    description: 'Tìm chênh lệch nhỏ nhất giữa hai phần tử bất kỳ trong mảng.',
+                    starter: 'import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.hasNextInt() ? sc.nextInt() : 0;\n        int[] a = new int[n];\n        for (int i = 0; i < n; i++) a[i] = sc.nextInt();\n        Arrays.sort(a);\n        int best = Integer.MAX_VALUE;\n        for (int i = 1; i < n; i++) best = Math.min(best, a[i] - a[i-1]);\n        System.out.println(best);\n    }\n}\n'
+                },
+                {
+                    id: 'java-hard-1',
+                    title: 'BFS trên đồ thị',
+                    difficulty: 'hard',
+                    description: 'In khoảng cách ngắn nhất từ đỉnh 1 tới mọi đỉnh (đồ thị vô hướng, không trọng số).',
+                    starter: 'import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.hasNextInt() ? sc.nextInt() : 0;\n        int m = sc.hasNextInt() ? sc.nextInt() : 0;\n        List<List<Integer>> g = new ArrayList<>();\n        for (int i = 0; i <= n; i++) g.add(new ArrayList<>());\n        for (int i = 0; i < m; i++) {\n            int u = sc.nextInt(), v = sc.nextInt();\n            g.get(u).add(v); g.get(v).add(u);\n        }\n        int[] dist = new int[n+1];\n        Arrays.fill(dist, -1);\n        Queue<Integer> q = new ArrayDeque<>();\n        q.add(1); dist[1] = 0;\n        while (!q.isEmpty()) {\n            int u = q.poll();\n            for (int v : g.get(u)) if (dist[v] == -1) {\n                dist[v] = dist[u] + 1;\n                q.add(v);\n            }\n        }\n        for (int i = 1; i <= n; i++) System.out.print(dist[i] + (i==n ? \"\\n\" : \" \"));\n    }\n}\n'
+                }
+            ],
+            default: []
+        };
+        const COMPLETIONS = {
+            cpp: [
+                '#include <iostream>', '#include <vector>', '#include <string>', 'using namespace std;',
+                'std::cout', 'std::cin', 'std::endl', 'std::string', 'std::vector', 'std::map', 'std::set',
+                'int main()', 'return 0;', 'for (int i = 0; i < n; i++) {', 'while (', 'if (', 'else', 'switch (', 'case ', 'struct ', 'class '
+            ],
+            c: ['#include <stdio.h>', 'scanf("%d", &var);', 'printf("%d\\n", var);', 'int main()', 'return 0;', 'for (int i = 0; i < n; i++) {', 'while (', 'if (', 'else', 'switch (', 'case '],
+            python: ['print()', 'input()', 'range()', 'for i in range():', 'while ', 'def ', 'class ', 'import ', 'from ', 'if __name__ == "__main__":', 'return ', 'len()', 'list()', 'dict()'],
+            javascript: ['console.log()', 'function ', 'const ', 'let ', 'var ', 'return ', 'import ', 'export ', 'class ', 'async ', 'await ', 'Promise', 'JSON.parse', 'JSON.stringify'],
+            java: ['public static void main(String[] args)', 'System.out.println()', 'import java.util.*;', 'class ', 'public ', 'private ', 'protected ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
+            csharp: ['using System;', 'Console.WriteLine();', 'static void Main(string[] args)', 'class ', 'public ', 'private ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
+            default: ['for (', 'while (', 'if (', 'else', 'return ', 'class ', 'import ', 'function ']
+        };
+
         // ==================== STATE ====================
         let currentLang = 'python';
         let programInput = '';
@@ -1097,6 +1812,10 @@ John
         let pyodideReady = false;
         let isRunning = false;
         let aiChatOpen = false;
+        let completionIndex = -1;
+        let completionItems = [];
+        let outputPanelHeight = parseInt(localStorage.getItem('output_panel_height') || '260', 10);
+        let outputPanelWidth = parseInt(localStorage.getItem('output_panel_width') || '0', 10);
 
         // ==================== INITIALIZATION ====================
         window.onload = async function() {
@@ -1105,6 +1824,14 @@ John
             renderLanguageList();
             setupKeyboardShortcuts();
             setupLineNumbers();
+            setupAutocomplete();
+            initInputSync();
+            syncInputFields();
+            renderExercises(currentLang);
+            const exerciseSelect = document.getElementById('exercise-lang-select');
+            if (exerciseSelect) exerciseSelect.value = currentLang;
+            applyOutputPanelSize();
+            setupResizablePanel();
             await initPyodide();
             
             setTimeout(() => {
@@ -1128,6 +1855,7 @@ John
 
         function renderLanguageList() {
             const container = document.getElementById('lang-list');
+            container.innerHTML = '';
             const categories = {
                 'Popular': ['python', 'javascript', 'cpp', 'c', 'java'],
                 'System': ['go', 'rust', 'swift', 'kotlin', 'bash'],
@@ -1151,7 +1879,8 @@ John
                             <div class="lang-version">${config.version}</div>
                         </div>
                     `;
-                    item.onclick = () => selectLanguage(lang);
+                    item.dataset.lang = lang;
+                    item.addEventListener('click', () => selectLanguage(lang));
                     div.appendChild(item);
                 });
                 
@@ -1159,15 +1888,79 @@ John
             });
         }
 
+        function toggleExercisesDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('exercise-dropdown');
+            dropdown.classList.toggle('open');
+            const select = document.getElementById('exercise-lang-select');
+            if (select) select.value = currentLang;
+            renderExercises(currentLang);
+        }
+
+        function changeExerciseLang() {
+            const lang = document.getElementById('exercise-lang-select').value;
+            selectLanguage(lang);
+            renderExercises(lang);
+        }
+
+        function renderExercises(lang) {
+            const list = (EXERCISES[lang] && EXERCISES[lang].length) ? EXERCISES[lang] : EXERCISES.default;
+            const container = document.getElementById('exercise-list');
+            if (!container) return;
+            if (!list || !list.length) {
+                container.innerHTML = '<div class="exercise-item">Chưa có bài tập cho ngôn ngữ này.</div>';
+                return;
+            }
+            container.innerHTML = list.map(ex => `
+                <div class="exercise-item" data-lang="${lang}" data-id="${ex.id}">
+                    <div class="exercise-meta">
+                        <span>${ex.title}</span>
+                        <span class="badge ${ex.difficulty}">${ex.difficulty}</span>
+                    </div>
+                    <div class="exercise-desc">${ex.description}</div>
+                </div>
+            `).join('');
+            container.querySelectorAll('.exercise-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    chooseExercise(item.dataset.lang, item.dataset.id);
+                });
+            });
+        }
+
+        function chooseExercise(lang, id) {
+            const list = (EXERCISES[lang] && EXERCISES[lang].length) ? EXERCISES[lang] : EXERCISES.default;
+            const ex = list.find(e => e.id === id) || list[0];
+            if (!ex) return;
+            if (currentLang !== lang) {
+                selectLanguage(lang);
+            }
+            const editor = document.getElementById('code-editor');
+            editor.value = ex.starter;
+            updateLineNumbers();
+            clearOutput();
+            addOutput('info', `Bài tập: ${ex.title} (${ex.difficulty})`);
+            addOutput('info', ex.description);
+            const dropdown = document.getElementById('exercise-dropdown');
+            dropdown.classList.remove('open');
+        }
+
         function selectLanguage(lang) {
+            const selector = document.getElementById('language-selector');
             currentLang = lang;
-            document.getElementById('language-selector').value = lang;
+            if (selector && selector.value !== lang) {
+                selector.value = lang;
+            }
             
-            document.querySelectorAll('.lang-item').forEach(item => item.classList.remove('active'));
-            event.target.closest('.lang-item').classList.add('active');
+            document.querySelectorAll('.lang-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.lang === lang);
+            });
             
             const config = LANGUAGES[lang];
             document.getElementById('current-file').textContent = 'main' + config.ext;
+            const exerciseSelect = document.getElementById('exercise-lang-select');
+            if (exerciseSelect) {
+                exerciseSelect.value = lang;
+            }
             
             const savedCode = localStorage.getItem(`code_${lang}`);
             document.getElementById('code-editor').value = savedCode || TEMPLATES[lang];
@@ -1178,14 +1971,7 @@ John
 
         function switchLanguage() {
             const lang = document.getElementById('language-selector').value;
-            const items = document.querySelectorAll('.lang-item');
-            
-            items.forEach(item => {
-                const langName = item.querySelector('.lang-name').textContent.toLowerCase();
-                if (langName.includes(LANGUAGES[lang].name.toLowerCase())) {
-                    item.click();
-                }
-            });
+            selectLanguage(lang);
         }
 
         // ==================== CODE EXECUTION ====================
@@ -1196,6 +1982,12 @@ John
             if (!code) {
                 showNotification('⚠️ Code is empty!', 'warning');
                 return;
+            }
+
+            const quickInput = document.getElementById('quick-stdin');
+            if (quickInput) {
+                programInput = quickInput.value;
+                localStorage.setItem('program_input', programInput);
             }
             
             isRunning = true;
@@ -1214,10 +2006,10 @@ John
             try {
                 let result;
                 
-                if (currentLang === 'python' && pyodideReady) {
+                // Prefer real execution via Piston; fallback to Pyodide for Python only if Piston fails
+                result = await runWithPiston(code);
+                if (!result.success && currentLang === 'python' && pyodideReady && result.error === 'API failed. Please try again.') {
                     result = await runPythonWasm(code);
-                } else {
-                    result = await runWithPiston(code);
                 }
                 
                 displayResult(result);
@@ -1346,7 +2138,10 @@ John
             if (options.showActions && options.code) {
                 const actionsDiv = document.createElement('div');
                 actionsDiv.className = 'ai-action-btns';
-                const safeCode = options.code.replace(/`/g, '\\`').replace(/\$/g, '\\);
+                const safeCode = options.code
+                    .replace(/\\/g, '\\\\')
+                    .replace(/`/g, '\\`')
+                    .replace(/\$/g, '\\$');
                 actionsDiv.innerHTML = `
                     <button class="ai-action-btn" onclick='applyCodeFix(\`${safeCode}\`)'>
                         <i class="fas fa-check"></i> Apply
@@ -1488,6 +2283,208 @@ Answer concisely in Vietnamese (100-200 words).`;
             await sendAIMessage();
         }
 
+        // ==================== AUTOCOMPLETE ====================
+        function getCurrentWordRange() {
+            const editor = document.getElementById('code-editor');
+            const pos = editor.selectionStart;
+            const value = editor.value;
+            let start = pos;
+            let end = pos;
+            while (start > 0 && /[\\w:]/.test(value[start - 1])) start--;
+            while (end < value.length && /[\\w:]/.test(value[end])) end++;
+            return { word: value.slice(start, end), start, end };
+        }
+
+        function buildCompletionList(word) {
+            const list = COMPLETIONS[currentLang] || COMPLETIONS.default;
+            if (!word) return list.slice(0, 8);
+            return list.filter(item => item.toLowerCase().includes(word.toLowerCase())).slice(0, 8);
+        }
+
+        function getCaretCoordinates(textarea) {
+            const div = document.createElement('div');
+            const style = window.getComputedStyle(textarea);
+            div.style.position = 'absolute';
+            div.style.whiteSpace = 'pre-wrap';
+            div.style.wordWrap = 'break-word';
+            div.style.visibility = 'hidden';
+            div.style.pointerEvents = 'none';
+            div.style.padding = style.padding;
+            div.style.border = style.border;
+            div.style.font = style.font;
+            div.style.lineHeight = style.lineHeight;
+            div.style.width = textarea.clientWidth + 'px';
+            const textBefore = textarea.value.substring(0, textarea.selectionStart);
+            const formatted = textBefore
+                .replace(/\n/g, '\n')
+                .replace(/ /g, '\u00a0');
+            const span = document.createElement('span');
+            span.textContent = '\u200b';
+            div.textContent = formatted;
+            div.appendChild(span);
+            document.body.appendChild(div);
+            const top = span.offsetTop - textarea.scrollTop;
+            const left = span.offsetLeft - textarea.scrollLeft;
+            document.body.removeChild(div);
+            return { top, left };
+        }
+
+        function showCompletions(word) {
+            const list = buildCompletionList(word);
+            const box = document.getElementById('autocomplete');
+            if (!list.length) {
+                hideCompletions();
+                return;
+            }
+            completionItems = list;
+            completionIndex = 0;
+            const editor = document.getElementById('code-editor');
+            const coords = getCaretCoordinates(editor);
+            box.innerHTML = list.map((item, idx) => `
+                <div class="autocomplete-item ${idx === 0 ? 'active' : ''}" data-index="${idx}">${item}<span>${currentLang.toUpperCase()}</span></div>
+            `).join('');
+            box.style.left = `${Math.min(coords.left + 20, editor.clientWidth - 240)}px`;
+            box.style.top = `${coords.top + 28}px`;
+            box.classList.add('visible');
+            Array.from(box.children).forEach(el => {
+                el.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    const idx = parseInt(e.currentTarget.dataset.index, 10);
+                    chooseCompletion(idx);
+                });
+            });
+        }
+
+        function hideCompletions() {
+            const box = document.getElementById('autocomplete');
+            box.classList.remove('visible');
+            box.innerHTML = '';
+            completionIndex = -1;
+            completionItems = [];
+        }
+
+        function highlightCompletion(nextIndex) {
+            const box = document.getElementById('autocomplete');
+            if (!box.classList.contains('visible')) return;
+            const items = box.querySelectorAll('.autocomplete-item');
+            items.forEach(item => item.classList.remove('active'));
+            completionIndex = (nextIndex + items.length) % items.length;
+            items[completionIndex].classList.add('active');
+        }
+
+        function chooseCompletion(index) {
+            const list = completionItems;
+            if (!list.length) return;
+            const text = list[index] || list[0];
+            insertCompletion(text);
+            hideCompletions();
+        }
+
+        function insertCompletion(text) {
+            const editor = document.getElementById('code-editor');
+            const { start, end } = getCurrentWordRange();
+            const value = editor.value;
+            const before = value.slice(0, start);
+            const after = value.slice(end);
+            editor.value = before + text + after;
+            const cursor = before.length + text.length;
+            editor.selectionStart = editor.selectionEnd = cursor;
+            updateLineNumbers();
+            editor.focus();
+        }
+
+        function setupAutocomplete() {
+            const editor = document.getElementById('code-editor');
+            editor.addEventListener('input', () => {
+                const { word } = getCurrentWordRange();
+                if (word && word.length >= 2) {
+                    showCompletions(word);
+                } else {
+                    hideCompletions();
+                }
+            });
+            editor.addEventListener('click', hideCompletions);
+            editor.addEventListener('scroll', hideCompletions);
+            document.addEventListener('click', (e) => {
+                const box = document.getElementById('autocomplete');
+                if (!box.contains(e.target) && e.target !== editor) {
+                    hideCompletions();
+                }
+                const dropdown = document.getElementById('exercise-dropdown');
+                const btn = document.getElementById('exercise-btn');
+                if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && e.target !== btn) {
+                    dropdown.classList.remove('open');
+                }
+            });
+        }
+
+        // ==================== OUTPUT RESIZE ====================
+        function applyOutputPanelSize() {
+            const panel = document.getElementById('bottom-panel');
+            if (panel) {
+                panel.style.height = `${outputPanelHeight}px`;
+            }
+            const wrapper = document.getElementById('output-wrapper');
+            if (wrapper && outputPanelWidth > 0) {
+                wrapper.style.width = `${outputPanelWidth}px`;
+            }
+        }
+
+        function setupResizablePanel() {
+            const wrapper = document.getElementById('output-wrapper');
+            if (wrapper) {
+                wrapper.addEventListener('mouseup', () => {
+                    const w = parseInt(getComputedStyle(wrapper).width, 10);
+                    outputPanelWidth = w;
+                    localStorage.setItem('output_panel_width', outputPanelWidth);
+                });
+            }
+        }
+
+        function startPanelResize(e) {
+            e.preventDefault();
+            const panel = document.getElementById('bottom-panel');
+            const startY = e.clientY;
+            const startH = panel.offsetHeight;
+            const minH = 180;
+            const maxH = Math.max(220, window.innerHeight - 160);
+            const onMove = (ev) => {
+                const dy = startY - ev.clientY;
+                const next = Math.min(Math.max(startH + dy, minH), maxH);
+                outputPanelHeight = next;
+                panel.style.height = `${next}px`;
+            };
+            const onUp = () => {
+                localStorage.setItem('output_panel_height', outputPanelHeight);
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        }
+
+        function startPanelWidthResize(e) {
+            e.preventDefault();
+            const wrapper = document.getElementById('output-wrapper');
+            const startX = e.clientX;
+            const startW = wrapper.offsetWidth;
+            const minW = 320;
+            const maxW = Math.min(window.innerWidth - 80, 1600);
+            const onMove = (ev) => {
+                const dx = ev.clientX - startX;
+                const next = Math.min(Math.max(startW + dx, minW), maxW);
+                wrapper.style.width = `${next}px`;
+                outputPanelWidth = next;
+            };
+            const onUp = () => {
+                localStorage.setItem('output_panel_width', outputPanelWidth);
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+            };
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        }
+
         // ==================== UI HELPERS ====================
         function setupLineNumbers() {
             const editor = document.getElementById('code-editor');
@@ -1521,10 +2518,103 @@ Answer concisely in Vietnamese (100-200 words).`;
 
         function clearOutput() {
             document.getElementById('output-panel').innerHTML = '';
+            addOutput('info', '🗑️ Output cleared');
+        }
+
+        function formatCode() {
+            const editor = document.getElementById('code-editor');
+            let code = editor.value;
+            
+            // Basic formatting based on language
+            if (currentLang === 'python') {
+                // Remove excessive blank lines
+                code = code.replace(/\n{3,}/g, '\n\n');
+            } else if (currentLang === 'cpp' || currentLang === 'c' || currentLang === 'java' || currentLang === 'javascript' || currentLang === 'csharp') {
+                // Format braces
+                code = code.replace(/{\s+/g, ' {\n    ');
+                code = code.replace(/\s+}/g, '\n}');
+                code = code.replace(/\n{3,}/g, '\n\n');
+            }
+            
+            editor.value = code;
+            updateLineNumbers();
+            showNotification('✨ Code formatted!', 'success');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+
+        function downloadCode() {
+            const code = document.getElementById('code-editor').value;
+            const config = LANGUAGES[currentLang];
+            const filename = 'main' + config.ext;
+            
+            const blob = new Blob([code], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification(`✅ Downloaded ${filename}`, 'success');
+        }
+
+        function copyCodeToClipboard() {
+            const code = document.getElementById('code-editor').value;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('✅ Code copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('❌ Failed to copy code', 'error');
+            });
+        }
+
+        function newFile() {
+            if (confirm('Create new file? Current unsaved changes will be lost.')) {
+                document.getElementById('code-editor').value = TEMPLATES[currentLang];
+                updateLineNumbers();
+                clearOutput();
+                showNotification('✅ New file created', 'success');
+            }
         }
 
         function showNotification(message, type) {
             addOutput(type, message);
+        }
+
+        function syncInputFields() {
+            const modalInput = document.getElementById('program-input');
+            const quickInput = document.getElementById('quick-stdin');
+            if (modalInput && modalInput.value !== programInput) {
+                modalInput.value = programInput;
+            }
+            if (quickInput && quickInput.value !== programInput) {
+                quickInput.value = programInput;
+            }
+        }
+
+        function initInputSync() {
+            const modalInput = document.getElementById('program-input');
+            const quickInput = document.getElementById('quick-stdin');
+            const update = (value, source) => {
+                programInput = value;
+                localStorage.setItem('program_input', programInput);
+                if (source === 'modal' && quickInput && quickInput.value !== value) {
+                    quickInput.value = value;
+                }
+                if (source === 'quick' && modalInput && modalInput.value !== value) {
+                    modalInput.value = value;
+                }
+            };
+            
+            if (modalInput) {
+                modalInput.addEventListener('input', (e) => update(e.target.value, 'modal'));
+            }
+            if (quickInput) {
+                quickInput.addEventListener('input', (e) => update(e.target.value, 'quick'));
+            }
         }
 
         function showInputDialog() {
@@ -1539,6 +2629,7 @@ Answer concisely in Vietnamese (100-200 words).`;
         function saveInput() {
             programInput = document.getElementById('program-input').value;
             localStorage.setItem('program_input', programInput);
+            syncInputFields();
             closeInputDialog();
             showNotification('✅ Input saved! It will be used for cin/scanf/input()', 'success');
         }
@@ -1579,6 +2670,11 @@ Answer concisely in Vietnamese (100-200 words).`;
             const savedCode = localStorage.getItem(`code_${currentLang}`);
             document.getElementById('code-editor').value = savedCode || TEMPLATES[currentLang];
             updateLineNumbers();
+            document.getElementById('current-file').textContent = 'main' + LANGUAGES[currentLang].ext;
+            const selector = document.getElementById('language-selector');
+            if (selector && selector.value !== currentLang) {
+                selector.value = currentLang;
+            }
             
             setInterval(() => {
                 const code = document.getElementById('code-editor').value;
@@ -1596,13 +2692,70 @@ Answer concisely in Vietnamese (100-200 words).`;
         // ==================== KEYBOARD SHORTCUTS ====================
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', (e) => {
+                const hasCompletion = document.getElementById('autocomplete').classList.contains('visible');
+                
+                if (hasCompletion) {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        highlightCompletion(completionIndex + 1);
+                        return;
+                    }
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        highlightCompletion(completionIndex - 1);
+                        return;
+                    }
+                    if (!e.ctrlKey && e.key === 'Enter') {
+                        e.preventDefault();
+                        chooseCompletion(completionIndex >= 0 ? completionIndex : 0);
+                        return;
+                    }
+                    if (e.key === 'Escape') {
+                        hideCompletions();
+                        return;
+                    }
+                }
+                
+                if (e.ctrlKey && e.key === ' ') {
+                    e.preventDefault();
+                    const { word } = getCurrentWordRange();
+                    showCompletions(word);
+                    return;
+                }
+                // Ctrl+Enter - Run code
                 if (e.ctrlKey && e.key === 'Enter') {
                     e.preventDefault();
                     runCode();
                 }
+                // Ctrl+S - Save
                 if (e.ctrlKey && e.key === 's') {
                     e.preventDefault();
                     saveCode();
+                }
+                // Ctrl+Shift+F - Format
+                if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+                    e.preventDefault();
+                    formatCode();
+                }
+                // Ctrl+N - New file
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    newFile();
+                }
+                // Ctrl+K - Clear output
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    clearOutput();
+                }
+                // Ctrl+/ - Toggle AI
+                if (e.ctrlKey && e.key === '/') {
+                    e.preventDefault();
+                    toggleAI();
+                }
+                // Ctrl+B - Toggle sidebar
+                if (e.ctrlKey && e.key === 'b') {
+                    e.preventDefault();
+                    toggleSidebar();
                 }
             });
             
@@ -1628,3 +2781,4 @@ Answer concisely in Vietnamese (100-200 words).`;
     </script>
 </body>
 </html>
+
