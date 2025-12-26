@@ -2005,6 +2005,7 @@ John
         const exercisePageByLang = {};
         const OUTPUT_TRUNCATE = 100000;
         const AUTOSAVE_MS = 5000;
+        let aiRateLimitedUntil = 0;
 
         // ==================== INITIALIZATION ====================
         window.onload = async function() {
@@ -2456,6 +2457,12 @@ John
             const message = input.value.trim();
             
             if (!message) return;
+
+            if (Date.now() < aiRateLimitedUntil) {
+                const waitSec = Math.ceil((aiRateLimitedUntil - Date.now()) / 1000);
+                addAIMessage('ai', `⚠️ Bạn đang bị rate limit. Thử lại sau ${waitSec}s.`);
+                return;
+            }
             
             addAIMessage('user', message);
             input.value = '';
@@ -2499,6 +2506,19 @@ Answer concisely in Vietnamese (100-200 words).`;
                         }]
                     })
                 });
+
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        aiRateLimitedUntil = Date.now() + 60000;
+                        const messages = document.getElementById('ai-messages');
+                        if (messages.lastChild && messages.lastChild.textContent.includes('Thinking')) {
+                            messages.removeChild(messages.lastChild);
+                        }
+                        addAIMessage('ai', '⚠️ Bạn đã vượt quota API (429). Vui lòng chờ một lát hoặc kiểm tra gói/quota.');
+                        return;
+                    }
+                    throw new Error(`AI request failed (${response.status})`);
+                }
 
                 const data = await response.json();
                 
