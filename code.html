@@ -461,6 +461,7 @@
             user-select: none;
             border-right: 1px solid var(--border);
             overflow: hidden;
+            white-space: pre;
         }
 
         .code-editor-wrapper {
@@ -2821,7 +2822,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             const lineNumbers = document.getElementById('line-numbers');
             if (!editor || !lineNumbers) return;
             const lines = editor.value.split('\n').length;
-            lineNumbers.innerHTML = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+            lineNumbers.textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
         }
 
         function syncScroll() {
