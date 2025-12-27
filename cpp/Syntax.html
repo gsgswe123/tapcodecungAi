@@ -138,7 +138,7 @@
             transform: translateY(-2px);
         }
 
-        .sidebar {
+        .sidebar{
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
@@ -146,7 +146,7 @@
             height: fit-content;
             position: sticky;
             top: 80px;
-        }
+        ;max-height:calc(100vh - 120px);overflow-y:auto}
 
         .sidebar h3 {
             color: var(--primary-color);
@@ -186,7 +186,7 @@
             list-style: none;
             padding-left: 20px;
             margin-top: 5px;
-            display: none;
+            display:block;
         }
 
         .sidebar-submenu.active {
@@ -335,12 +335,13 @@
             .page-header h1 {
                 font-size: 2rem;
             }
-            .sidebar {
+            .sidebar{
                 position: static;
                 margin-bottom: 25px;
-            }
+            ;max-height:calc(100vh - 120px);overflow-y:auto}
         }
-    </style>
+    @media (max-width:768px){.sidebar{max-height:none;overflow-y:visible;}}
+.try-yourself{margin-top:10px;display:flex;justify-content:flex-end}.try-btn{background:var(--primary-color);color:white;border:none;padding:8px 14px;border-radius:var(--border-radius);font-size:.9rem;font-weight:600;cursor:pointer;transition:background .3s,transform .2s}.try-btn:hover{background:var(--primary-darker);transform:translateY(-2px)}</style>
 </head>
 <body>
     <header>
@@ -373,15 +374,15 @@
             <h3>C++ Tutorial</h3>
             <ul class="sidebar-menu">
                 <li>
-                    <a href="syntax.html" class="active">C++ Syntax</a>
+                    <a href="Syntax.html" class="active">C++ Syntax</a>
                     <ul class="sidebar-submenu active">
-                        <li><a href="syntax.html" class="active">Syntax</a></li>
-                        <li><a href="statements.html">Statements</a></li>
-                        <li><a href="comments.html">Comments</a></li>
+                        <li><a href="Syntax.html" class="active">Syntax</a></li>
+                        <li><a href="Statements.html">Statements</a></li>
+                        <li><a href="Comments.html">Comments</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a href="output.html">C++ Output</a>
+                    <a href="print_text.html">C++ Output</a>
                     <ul class="sidebar-submenu">
                         <li><a href="print_text.html">Print Text</a></li>
                         <li><a href="print_numbers.html">Print Numbers</a></li>
@@ -400,6 +401,9 @@
                 </li>
                 <li>
                     <a href="user_input.html">C++ User Input</a>
+                </li>
+                <li>
+                    <a href="data_types.html">C++ Data Types</a>
                 </li>
             </ul>
         </div>
@@ -446,7 +450,7 @@
             
             <div style="margin-top: 30px; display: flex; justify-content: space-between;">
                 <a href="../cpp.html" class="btn">← Back to Tutorial</a>
-                <a href="statements.html" class="btn">Next: Statements →</a>
+                <a href="Statements.html" class="btn">Next: Statements →</a>
             </div>
         </div>
     </main>
@@ -463,15 +467,28 @@
     </footer>
 
     <script>
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            document.getElementById('menu').classList.toggle('active');
+(function(){
+    const blocks=document.querySelectorAll(".code-example");
+    blocks.forEach(block=>{
+        if(block.querySelector(".try-yourself")) return;
+        const codeEl=block.querySelector(".code");
+        if(!codeEl) return;
+        const wrap=document.createElement("div");
+        wrap.className="try-yourself";
+        const btn=document.createElement("button");
+        btn.type="button";
+        btn.className="try-btn";
+        btn.textContent="Try Yourself Code";
+        btn.addEventListener("click",()=>{
+            const raw=codeEl.innerText||codeEl.textContent||"";
+            const code=raw.replace(/\u00a0/g," ").trimEnd();
+            localStorage.setItem("current_lang","cpp");
+            localStorage.setItem("code_cpp",code);
+            window.location.href="../code.html";
         });
-
-        document.querySelectorAll('.menu a').forEach(link => {
-            link.addEventListener('click', function() {
-                document.getElementById('menu').classList.remove('active');
-            });
-        });
-    </script>
-</body>
+        wrap.appendChild(btn);
+        block.appendChild(wrap);
+    });
+})();
+</script></body>
 </html>
