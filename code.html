@@ -1146,31 +1146,33 @@
         
         <div class="header-center">
             <select class="language-selector" id="language-selector" onchange="switchLanguage()">
-                <optgroup label="🔥 Popular">
+                <optgroup label=" Popular">
                     <option value="python">Python 3.10</option>
                     <option value="javascript">JavaScript (Node.js)</option>
                     <option value="cpp">C++ (GCC 10.2)</option>
                     <option value="c">C (GCC 10.2)</option>
                     <option value="java">Java (JDK 15)</option>
                 </optgroup>
-                <optgroup label="⚡ System">
+                <optgroup label=" System">
                     <option value="go">Go 1.16</option>
                     <option value="rust">Rust 1.68</option>
                     <option value="swift">Swift 5.3</option>
                     <option value="kotlin">Kotlin 1.8</option>
                     <option value="bash">Bash 5.1</option>
                 </optgroup>
-                <optgroup label="🌐 Web">
+                <optgroup label=" Web">
+                    <option value="html">HTML (Live Server)</option>
+                    <option value="css">CSS (Live Server)</option>
                     <option value="typescript">TypeScript 5.0</option>
                     <option value="php">PHP 8.2</option>
                     <option value="ruby">Ruby 3.1</option>
                 </optgroup>
-                <optgroup label="📊 Data & ML">
+                <optgroup label=" Data & ML">
                     <option value="r">R 4.1</option>
                     <option value="julia">Julia 1.8</option>
                     <option value="scala">Scala 3.2</option>
                 </optgroup>
-                <optgroup label="🎯 Other">
+                <optgroup label=" Other">
                     <option value="csharp">C# (Mono 6.12)</option>
                     <option value="dart">Dart 2.19</option>
                     <option value="lua">Lua 5.4</option>
@@ -1179,12 +1181,12 @@
                 </optgroup>
             </select>
             <div class="exercise-control">
-                <button class="header-btn" id="exercise-btn" onclick="toggleExercisesDropdown(event)" data-tooltip="Chọn bài tập theo ngôn ngữ">
+                <button class="header-btn" id="exercise-btn" onclick="toggleExercisesDropdown(event)" data-tooltip="Chn bi tp theo ngn ng">
                     <i class="fas fa-list-check"></i>
-                    <span>Bài tập</span>
+                    <span>Bi tp</span>
                 </button>
                 <div class="exercises-dropdown" id="exercise-dropdown">
-                    <div class="exercise-title">Chọn ngôn ngữ</div>
+                    <div class="exercise-title">Chn ngn ng</div>
                     <select class="exercise-filter" id="exercise-lang-select" onchange="changeExerciseLang()">
                         <option value="python">Python</option>
                         <option value="javascript">JavaScript</option>
@@ -1192,7 +1194,7 @@
                         <option value="c">C</option>
                         <option value="java">Java</option>
                     </select>
-                    <div class="exercise-title">Bài tập (dễ → khó)</div>
+                    <div class="exercise-title">Bi tp (d  kh)</div>
                     <div id="exercise-list"></div>
                     <div class="exercise-pagination" id="exercise-pagination"></div>
                 </div>
@@ -1292,7 +1294,7 @@
                 <div class="panel-content" id="output-panel">
                     <div class="output-line info">
                         <i class="fas fa-rocket"></i>
-                        <span id="engine-info"><strong>Engine:</strong> Piston API (21 langs) | Pyodide WASM (Python offline)</span>
+                        <span id="engine-info"><strong>Engine:</strong> Piston API | Pyodide WASM (Python offline) | Live Server (HTML/CSS)</span>
                     </div>
                     <div class="output-line info">
                         <i class="fas fa-keyboard"></i>
@@ -1304,13 +1306,13 @@
                     </div>
                     <div class="output-line info">
                         <i class="fas fa-robot"></i>
-                        <span><strong>AI:</strong> Click 🤖 (bottom-right) for coding help! Get FREE Gemini API key in Settings</span>
+                        <span><strong>AI:</strong> Click  (bottom-right) for coding help! Get FREE Gemini API key in Settings</span>
                     </div>
                 </div>
                 <div class="panel-resize-handle side" onmousedown="startPanelWidthResize(event)"></div>
             </div>
             <div class="live-stdin">
-                <input id="live-stdin-input" type="text" placeholder="Nhập một dòng stdin và Enter để chạy tiếp...">
+                <input id="live-stdin-input" type="text" placeholder="Nhp mt dng stdin v Enter  chy tip...">
                 <button onclick="appendInputAndRun()">Send & Run</button>
             </div>
         </div>
@@ -1319,8 +1321,8 @@
             <div class="panel-input">
                 <div class="stdin-bar">input</div>
                 <label for="quick-stdin">Program Input (stdin)</label>
-                <textarea id="quick-stdin" class="stdin-field" placeholder="Nhập dữ liệu cho cin/scanf/input()..."></textarea>
-                <div class="stdin-hint">Nội dung này sẽ được gửi vào stdin khi chạy code (mọi ngôn ngữ).</div>
+                <textarea id="quick-stdin" class="stdin-field" placeholder="Nhp d liu cho cin/scanf/input()..."></textarea>
+                <div class="stdin-hint">Ni dung ny s c gi vo stdin khi chy code (mi ngn ng).</div>
                 <div class="stdin-presets">
                     <div class="preset-row">
                         <select id="preset-select"></select>
@@ -1328,7 +1330,7 @@
                         <button class="secondary" onclick="deleteInputPreset()">Delete</button>
                     </div>
                     <div class="preset-row">
-                        <input id="preset-name" type="text" placeholder="Tên preset input...">
+                        <input id="preset-name" type="text" placeholder="Tn preset input...">
                         <button onclick="saveInputPreset()">Save current</button>
                     </div>
                 </div>
@@ -1337,10 +1339,10 @@
 
         <div class="tab-section" id="info-section">
             <div class="panel-input" style="border-bottom: none;">
-                <div class="output-line info"><i class="fas fa-rocket"></i><span><strong>Engine:</strong> Piston API (21 langs) | Pyodide WASM (Python offline)</span></div>
+                <div class="output-line info"><i class="fas fa-rocket"></i><span id="engine-info-secondary"><strong>Engine:</strong> Piston API | Pyodide WASM (Python offline) | Live Server (HTML/CSS)</span></div>
                 <div class="output-line info"><i class="fas fa-keyboard"></i><span><strong>Shortcuts:</strong> Ctrl+Enter (Run) | Ctrl+S (Save) | Ctrl+N (New) | Ctrl+Shift+F (Format) | Ctrl+K (Clear) | Ctrl+B (Toggle Sidebar) | Ctrl+/ (AI)</span></div>
-                <div class="output-line info"><i class="fas fa-lightbulb"></i><span><strong>Tip:</strong> Dùng preset input để test nhanh nhiều bộ dữ liệu.</span></div>
-                <div class="output-line info"><i class="fas fa-magic"></i><span><strong>UI:</strong> Kéo mép panel để đổi kích thước chiều cao/rộng.</span></div>
+                <div class="output-line info"><i class="fas fa-lightbulb"></i><span><strong>Tip:</strong> Dng preset input  test nhanh nhiu b d liu.</span></div>
+                <div class="output-line info"><i class="fas fa-magic"></i><span><strong>UI:</strong> Ko mp panel  i kch thc chiu cao/rng.</span></div>
             </div>
         </div>
     </div>
@@ -1360,19 +1362,19 @@
             
             <div class="ai-quick-actions">
                 <button class="quick-action-btn" onclick="aiQuickAction('explain')">
-                    <i class="fas fa-question-circle"></i> Giải thích
+                    <i class="fas fa-question-circle"></i> Gii thch
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('debug')">
                     <i class="fas fa-bug"></i> Debug
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('optimize')">
-                    <i class="fas fa-tachometer-alt"></i> Tối ưu
+                    <i class="fas fa-tachometer-alt"></i> Ti u
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('fix')">
-                    <i class="fas fa-wrench"></i> Fix lỗi
+                    <i class="fas fa-wrench"></i> Fix li
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('comment')">
-                    <i class="fas fa-comment"></i> Thêm comment
+                    <i class="fas fa-comment"></i> Thm comment
                 </button>
             </div>
             
@@ -1383,7 +1385,7 @@
                     type="text" 
                     class="ai-input" 
                     id="ai-input" 
-                    placeholder="Hỏi AI bất cứ điều gì..."
+                    placeholder="Hi AI bt c iu g..."
                     onkeypress="handleAIEnter(event)"
                 >
                 <button class="ai-send-btn" onclick="sendAIMessage()">
@@ -1445,45 +1447,80 @@ John
     <script>
         // ==================== CONFIGURATION ====================
         const LANGUAGES = {
-            python: { name: 'Python', version: '3.10', piston: 'python', ext: '.py', icon: '🐍' },
-            javascript: { name: 'JavaScript', version: 'Node.js 18', piston: 'javascript', ext: '.js', icon: '⚡' },
-            typescript: { name: 'TypeScript', version: '5.0', piston: 'typescript', ext: '.ts', icon: '💙' },
-            cpp: { name: 'C++', version: 'GCC 10.2', piston: 'c++', ext: '.cpp', icon: '⚙️' },
-            c: { name: 'C', version: 'GCC 10.2', piston: 'c', ext: '.c', icon: '🔧' },
-            java: { name: 'Java', version: 'JDK 15', piston: 'java', ext: '.java', icon: '☕' },
-            go: { name: 'Go', version: '1.16', piston: 'go', ext: '.go', icon: '🐹' },
-            rust: { name: 'Rust', version: '1.68', piston: 'rust', ext: '.rs', icon: '🦀' },
-            ruby: { name: 'Ruby', version: '3.1', piston: 'ruby', ext: '.rb', icon: '💎' },
-            php: { name: 'PHP', version: '8.2', piston: 'php', ext: '.php', icon: '🐘' },
-            swift: { name: 'Swift', version: '5.3', piston: 'swift', ext: '.swift', icon: '🔶' },
-            kotlin: { name: 'Kotlin', version: '1.8', piston: 'kotlin', ext: '.kt', icon: '🟣' },
-            bash: { name: 'Bash', version: '5.1', piston: 'bash', ext: '.sh', icon: '💻' },
-            csharp: { name: 'C#', version: 'Mono 6.12', piston: 'csharp', ext: '.cs', icon: '💚' },
-            dart: { name: 'Dart', version: '2.19', piston: 'dart', ext: '.dart', icon: '🎯' },
-            lua: { name: 'Lua', version: '5.4', piston: 'lua', ext: '.lua', icon: '🌙' },
-            perl: { name: 'Perl', version: '5.36', piston: 'perl', ext: '.pl', icon: '🐪' },
-            r: { name: 'R', version: '4.1', piston: 'r', ext: '.r', icon: '📊' },
-            scala: { name: 'Scala', version: '3.2', piston: 'scala', ext: '.scala', icon: '🔴' },
-            julia: { name: 'Julia', version: '1.8', piston: 'julia', ext: '.jl', icon: '🟣' },
-            haskell: { name: 'Haskell', version: 'GHC 9.2', piston: 'haskell', ext: '.hs', icon: '🎩' }
+            python: { name: 'Python', version: '3.10', piston: 'python', ext: '.py', icon: '\uD83D\uDC0D' },
+            javascript: { name: 'JavaScript', version: 'Node.js 18', piston: 'javascript', ext: '.js', icon: '\u26A1' },
+            typescript: { name: 'TypeScript', version: '5.0', piston: 'typescript', ext: '.ts', icon: '\uD83D\uDC99' },
+            html: { name: 'HTML', version: 'Live Server', piston: null, ext: '.html', icon: '\uD83C\uDF10', runtime: 'preview' },
+            css: { name: 'CSS', version: 'Live Server', piston: null, ext: '.css', icon: '\uD83C\uDFA8', runtime: 'preview' },
+            cpp: { name: 'C++', version: 'GCC 10.2', piston: 'c++', ext: '.cpp', icon: '\u2699' },
+            c: { name: 'C', version: 'GCC 10.2', piston: 'c', ext: '.c', icon: '\uD83D\uDD27' },
+            java: { name: 'Java', version: 'JDK 15', piston: 'java', ext: '.java', icon: '\u2615' },
+            go: { name: 'Go', version: '1.16', piston: 'go', ext: '.go', icon: '\uD83D\uDC39' },
+            rust: { name: 'Rust', version: '1.68', piston: 'rust', ext: '.rs', icon: '\uD83E\uDD80' },
+            ruby: { name: 'Ruby', version: '3.1', piston: 'ruby', ext: '.rb', icon: '\uD83D\uDC8E' },
+            php: { name: 'PHP', version: '8.2', piston: 'php', ext: '.php', icon: '\uD83D\uDC18' },
+            swift: { name: 'Swift', version: '5.3', piston: 'swift', ext: '.swift', icon: '\uD83D\uDD36' },
+            kotlin: { name: 'Kotlin', version: '1.8', piston: 'kotlin', ext: '.kt', icon: '\uD83D\uDFE3' },
+            bash: { name: 'Bash', version: '5.1', piston: 'bash', ext: '.sh', icon: '\uD83D\uDCBB' },
+            csharp: { name: 'C#', version: 'Mono 6.12', piston: 'csharp', ext: '.cs', icon: '\uD83D\uDC9A' },
+            dart: { name: 'Dart', version: '2.19', piston: 'dart', ext: '.dart', icon: '\uD83C\uDFAF' },
+            lua: { name: 'Lua', version: '5.4', piston: 'lua', ext: '.lua', icon: '\uD83C\uDF19' },
+            perl: { name: 'Perl', version: '5.36', piston: 'perl', ext: '.pl', icon: '\uD83D\uDC2A' },
+            r: { name: 'R', version: '4.1', piston: 'r', ext: '.r', icon: '\uD83D\uDCCA' },
+            scala: { name: 'Scala', version: '3.2', piston: 'scala', ext: '.scala', icon: '\uD83D\uDD34' },
+            julia: { name: 'Julia', version: '1.8', piston: 'julia', ext: '.jl', icon: '\uD83D\uDFE3' },
+            haskell: { name: 'Haskell', version: 'GHC 9.2', piston: 'haskell', ext: '.hs', icon: '\uD83C\uDFA9' }
         };
 
         const TEMPLATES = {
             python: 'print("Hello, World!")\n',
             javascript: 'console.log("Hello, World!");\n',
             typescript: 'console.log("Hello, World!");\n',
+            html: [
+                '<!DOCTYPE html>',
+                '<html lang="vi">',
+                '<head>',
+                '  <meta charset="UTF-8">',
+                '  <meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                '  <title>Live Server Preview</title>',
+                '  <style>',
+                '    body { font-family: Arial, sans-serif; padding: 20px; }',
+                '  </style>',
+                '</head>',
+                '<body>',
+                '  <h1>Hello, HTML</h1>',
+                '  <p>Edit this HTML to see changes.</p>',
+                '</body>',
+                '</html>',
+                ''
+            ].join('\n'),
+            css: [
+                '/* Live Server CSS */',
+                'body {',
+                '  font-family: Arial, sans-serif;',
+                '  background: #f5f5f5;',
+                '  color: #222;',
+                '}',
+                '',
+                'h1 {',
+                '  color: #2c3e50;',
+                '}',
+                ''
+            ].join('\n'),
             cpp: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int a;\n    cin >> a;\n    cout << "You entered: " << a << endl;\n    return 0;\n}\n',
             c: '#include <stdio.h>\n\nint main() {\n    int a;\n    scanf("%d", &a);\n    printf("You entered: %d\\n", a);\n    return 0;\n}\n',
             java: 'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int a = sc.nextInt();\n        System.out.println("You entered: " + a);\n    }\n}\n',
             go: 'package main\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}\n',
             rust: 'fn main() {\n    println!("Hello, World!");\n}\n',
             ruby: 'puts "Hello, World!"\n',
-            php: '<?php\necho "Hello, World!\\n";\n?>\n',
+            php: '<' + '?php\n' +
+                'echo "Hello, World!\\n";\n' +
+                '?' + '>\n',
             swift: 'print("Hello, World!")\n',
             kotlin: 'fun main() {\n    println("Hello, World!")\n}\n',
             bash: 'echo "Hello, World!"\n',
             csharp: 'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}\n',
-            dart: 'void main() {\n  print("Hello, World!");\n}\n',
+            dart: 'void main() {\n  print("Hello, World!")\n}\n',
             lua: 'print("Hello, World!")\n',
             perl: 'print "Hello, World!\\n";\n',
             r: 'print("Hello, World!")\n',
@@ -1495,15 +1532,8 @@ John
         const EXERCISES = {
             python: [
                 {
-                    id: 'py-easy-1',
-                    title: 'Array Sum',
-                    difficulty: 'easy',
-                    description: 'Read n then n integers and print their sum.',
-                    starter: `def solve():\n    n = int(input())\n    nums = list(map(int, input().split()))\n    print(sum(nums))\n\nif __name__ == \"__main__\":\n    solve()`
-                },
-                {
                     id: 'py-med-1',
-                    title: 'Char Frequency',
+                    title: 'Character Frequency',
                     difficulty: 'medium',
                     description: 'Count frequency of each character and print sorted.',
                     starter: `from collections import Counter\n\ndef solve():\n    s = input().strip()\n    freq = Counter(s)\n    for ch in sorted(freq):\n        print(f\"{ch}: {freq[ch]}\")\n\nif __name__ == \"__main__\":\n    solve()`
@@ -1550,7 +1580,7 @@ John
                     title: 'Number Frequency',
                     difficulty: 'medium',
                     description: 'Count frequency of numbers and print ascending.',
-                    starter: `function solve() {\n  const data = require(\"fs\").readFileSync(0, \"utf8\").trim().split(/\\s+/).map(Number);\n  const n = data[0];\n  const nums = data.slice(1, 1 + n);\n  const freq = new Map();\n  for (const x of nums) freq.set(x, (freq.get(x) || 0) + 1);\n  [...freq.entries()].sort((a, b) => a[0] - b[0]).forEach(([k, v]) => {\n    console.log(\`\${k}: \${v}\`);\n  });\n}\nsolve();`
+                    starter: `function solve() {\n  const data = require(\"fs\").readFileSync(0, \"utf8\").trim().split(/\\s+/).map(Number);\n  const n = data[0];\n  const nums = data.slice(1, 1 + n);\n  const freq = new Map();\n  for (const x of nums) freq.set(x, (freq.get(x) || 0) + 1);\n  [...freq.entries()].sort((a, b) => a[0] - b[0]).forEach(([k, v]) => {\n    console.log(k + \": \" + v);\n  });\n}\nsolve();`
                 },
                 {
                     id: 'js-hard-1',
@@ -1970,7 +2000,7 @@ John
                     id: 'sample-sum',
                     title: 'Sum 2 numbers',
                     difficulty: 'easy',
-                    description: 'Đọc a, b và in tổng.',
+                    description: 'c a, b v in tng.',
                     starter: `a,b = map(int, input().split())\nprint(a+b)`
                 }
             ]
@@ -1984,6 +2014,8 @@ John
             c: ['#include <stdio.h>', 'scanf("%d", &var);', 'printf("%d\\n", var);', 'int main()', 'return 0;', 'for (int i = 0; i < n; i++) {', 'while (', 'if (', 'else', 'switch (', 'case '],
             python: ['print()', 'input()', 'range()', 'for i in range():', 'while ', 'def ', 'class ', 'import ', 'from ', 'if __name__ == "__main__":', 'return ', 'len()', 'list()', 'dict()'],
             javascript: ['console.log()', 'function ', 'const ', 'let ', 'var ', 'return ', 'import ', 'export ', 'class ', 'async ', 'await ', 'Promise', 'JSON.parse', 'JSON.stringify'],
+            html: ['<!DOCTYPE html>', '<html>', '<head>', '<body>', '<div>', '<span>', '<h1>', '<p>', '<a href="">', '<img src="" alt="">', '<ul>', '<li>', '<script>', '<style>'],
+            css: ['body {', 'color: ', 'background: ', 'display: flex;', 'margin: 0;', 'padding: 0;', '.class {', '#id {', 'font-family: ', 'font-size: ', 'align-items: center;', 'justify-content: center;'],
             java: ['public static void main(String[] args)', 'System.out.println()', 'import java.util.*;', 'class ', 'public ', 'private ', 'protected ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
             csharp: ['using System;', 'Console.WriteLine();', 'static void Main(string[] args)', 'class ', 'public ', 'private ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
             default: ['for (', 'while (', 'if (', 'else', 'return ', 'class ', 'import ', 'function ']
@@ -2010,6 +2042,10 @@ John
 
         // ==================== INITIALIZATION ====================
         window.onload = async function() {
+            cleanupCorruptedStorage();
+            resetOutputPanel();
+            cleanupLeakedDump();
+            startLeakGuard();
             loadSettings();
             loadInputPresets();
             loadCode();
@@ -2035,9 +2071,16 @@ John
             }
             
             setTimeout(() => {
-                addAIMessage('ai', '👋 <strong>Xin chào! Tôi là AI Assistant</strong><br><br>✨ Tôi có thể:<br>• Giải thích code<br>• Debug và fix lỗi<br>• Tối ưu code<br>• Viết code mới<br>• Thêm comment chi tiết<br><br>💡 <strong>Tip:</strong> Nhấn nút <i class="fas fa-keyboard"></i> để thêm input cho cin/scanf/input()!<br><br>Hãy hỏi tôi bất cứ điều gì!');
+                addAIMessage('ai', ' <strong>Xin cho! Ti l AI Assistant</strong><br><br> Ti c th:<br> Gii thch code<br> Debug v fix li<br> Ti u code<br> Vit code mi<br> Thm comment chi tit<br><br> <strong>Tip:</strong> Nhn nt <i class="fas fa-keyboard"></i>  thm input cho cin/scanf/input()!<br><br>Hy hi ti bt c iu g!');
             }, 500);
         };
+
+        window.addEventListener('pageshow', (e) => {
+            if (e && e.persisted) {
+                resetOutputPanel();
+                cleanupLeakedDump();
+            }
+        });
 
         async function initPyodide() {
             try {
@@ -2050,17 +2093,25 @@ John
             } catch (error) {
                 console.error('Failed to load Pyodide:', error);
                 hideLoading();
-                showNotification('❌ Không tải được Pyodide (Python offline). Chỉ chạy qua Piston.', 'error');
+                showNotification(' Khng ti c Pyodide (Python offline). Ch chy qua Piston.', 'error');
             }
         }
 
         function updateLanguageCount() {
             const badge = document.getElementById('lang-count-badge');
             const total = Object.keys(LANGUAGES).length;
+            const pistonCount = Object.values(LANGUAGES).filter(lang => lang.piston).length;
+            const previewCount = Object.values(LANGUAGES).filter(lang => lang.runtime === 'preview').length;
             if (badge) badge.textContent = `AI + ${total} LANGS`;
+            const engineText = `<strong>Engine:</strong> Piston API (${pistonCount} langs) | Pyodide WASM (Python offline)` +
+                (previewCount ? ` | Live Server (${previewCount} langs)` : '');
             const engineInfo = document.getElementById('engine-info');
             if (engineInfo) {
-                engineInfo.innerHTML = `<strong>Engine:</strong> Piston API (${total} langs) | Pyodide WASM (Python offline)`;
+                engineInfo.innerHTML = engineText;
+            }
+            const engineInfoSecondary = document.getElementById('engine-info-secondary');
+            if (engineInfoSecondary) {
+                engineInfoSecondary.innerHTML = engineText;
             }
         }
 
@@ -2070,7 +2121,7 @@ John
             const categories = {
                 'Popular': ['python', 'javascript', 'cpp', 'c', 'java'],
                 'System': ['go', 'rust', 'swift', 'kotlin', 'bash'],
-                'Web': ['typescript', 'php', 'ruby'],
+                'Web': ['html', 'css', 'typescript', 'php', 'ruby'],
                 'Data & ML': ['r', 'julia', 'scala'],
                 'Other': ['csharp', 'dart', 'lua', 'perl', 'haskell']
             };
@@ -2121,7 +2172,7 @@ John
             const pager = document.getElementById('exercise-pagination');
             if (!container) return;
             if (!list || !list.length) {
-                container.innerHTML = '<div class="exercise-item">Chưa có bài tập cho ngôn ngữ này.</div>';
+                container.innerHTML = '<div class="exercise-item">Cha c bi tp cho ngn ng ny.</div>';
                 if (pager) pager.innerHTML = '';
                 return;
             }
@@ -2184,7 +2235,7 @@ John
             editor.value = ex.starter;
             updateLineNumbers();
             clearOutput();
-            addOutput('info', `Bài tập: ${ex.title} (${ex.difficulty})`);
+            addOutput('info', `Bi tp: ${ex.title} (${ex.difficulty})`);
             addOutput('info', ex.description);
             const dropdown = document.getElementById('exercise-dropdown');
             dropdown.classList.remove('open');
@@ -2209,7 +2260,11 @@ John
             }
             
             const savedCode = localStorage.getItem(`code_${lang}`);
-            document.getElementById('code-editor').value = savedCode || TEMPLATES[lang];
+            const useSaved = savedCode && !looksLikeAppSource(savedCode);
+            document.getElementById('code-editor').value = useSaved ? savedCode : TEMPLATES[lang];
+            if (savedCode && !useSaved) {
+                localStorage.removeItem(`code_${lang}`);
+            }
             
             updateLineNumbers();
             showNotification(`Switched to ${config.name}`, 'info');
@@ -2229,7 +2284,7 @@ John
             
             const code = document.getElementById('code-editor').value.trim();
             if (!code) {
-                showNotification('⚠️ Code is empty!', 'warning');
+                showNotification(' Code is empty!', 'warning');
                 isRunning = false;
                 return;
             }
@@ -2245,20 +2300,25 @@ John
             runBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
             
             clearOutput();
-            addOutput('info', '🚀 Compiling and executing code...');
+            addOutput('info', ' Compiling and executing code...');
             
             // Show input if provided
             if (programInput) {
-                addOutput('info', `📥 Input provided:\n${programInput}`);
+                addOutput('info', ` Input provided:\n${programInput}`);
             }
             
             try {
                 let result;
                 
-                // Prefer real execution via Piston; fallback to Pyodide for Python only if Piston fails
-                result = await runWithPiston(code);
-                if (!result.success && currentLang === 'python' && pyodideReady && result.error === 'API failed. Please try again.') {
-                    result = await runPythonWasm(code);
+                const config = LANGUAGES[currentLang];
+                if (config && config.runtime === 'preview') {
+                    result = runLivePreview(code, currentLang);
+                } else {
+                    // Prefer real execution via Piston; fallback to Pyodide for Python only if Piston fails
+                    result = await runWithPiston(code);
+                    if (!result.success && currentLang === 'python' && pyodideReady && result.error === 'API failed. Please try again.') {
+                        result = await runPythonWasm(code);
+                    }
                 }
                 
                 displayResult(result);
@@ -2273,44 +2333,115 @@ John
 
         async function runPythonWasm(code) {
             try {
-                let output = '';
-                pyodide.setStdout({
-                    batched: (text) => { output += text + '\\n'; }
-                });
-                
-                if (programInput) {
-                    const lines = programInput.split('\n');
-                    let idx = 0;
-            pyodide.globals.set('input', (prompt = '') => {
-                if (idx < lines.length) {
-                    return lines[idx++];
+                if (!pyodide) {
+                    return { success: false, error: 'Pyodide not ready.', runtime: 'Pyodide WASM' };
                 }
-                throw new Error('EOF');
-            });
-                }
-                
+                let stdout = '';
+                let stderr = '';
+                pyodide.setStdout({ batched: (text) => { stdout += text; } });
+                pyodide.setStderr({ batched: (text) => { stderr += text; } });
+
+                const stdinText = String(programInput || '');
+                pyodide.globals.set('STDIN_TEXT', stdinText);
+                pyodide.runPython(`
+import sys, io
+OLD_STDIN = sys.stdin
+sys.stdin = io.StringIO(STDIN_TEXT)
+`);
+
                 await pyodide.runPythonAsync(code);
-                
+
+                const out = String(stdout || '').trim();
+                const err = String(stderr || '').trim();
                 return {
                     success: true,
-                    output: output || 'Program completed successfully (no output)',
+                    output: out || 'Program completed successfully (no output)',
+                    error: err,
                     runtime: 'Pyodide WASM'
                 };
             } catch (error) {
                 return {
                     success: false,
-                    error: error.message
+                    error: error && error.message ? String(error.message) : String(error),
+                    runtime: 'Pyodide WASM'
+                };
+            } finally {
+                try {
+                    pyodide.runPython(`
+import sys
+try:
+    sys.stdin = OLD_STDIN
+except Exception:
+    pass
+try:
+    del OLD_STDIN
+except Exception:
+    pass
+try:
+    del STDIN_TEXT
+except Exception:
+    pass
+`);
+                } catch (_) {}
+                try { pyodide.setStdout(); } catch (_) {}
+                try { pyodide.setStderr(); } catch (_) {}
+                try { pyodide.globals.delete('STDIN_TEXT'); } catch (_) {}
+            }
+        }
+
+        function buildPreviewHtml(code, lang) {
+            if (lang === 'html') return String(code || '');
+            if (lang === 'css') {
+                const safeCss = String(code || '').replace(/<\/style>/gi, '<\/style>');
+                return `<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Live Server Preview</title>\n  <style>\n${safeCss}\n  </style>\n</head>\n<body>\n  <h1>CSS Preview</h1>\n  <p>Edit CSS to style this page.</p>\n</body>\n</html>`;
+            }
+            return String(code || '');
+        }
+
+        function runLivePreview(code, lang) {
+            const html = buildPreviewHtml(code, lang);
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const opened = window.open(url, '_blank', 'noopener');
+            if (!opened) {
+                URL.revokeObjectURL(url);
+                return {
+                    success: false,
+                    error: 'Popup blocked. Please allow popups to open the live preview.',
+                    runtime: 'Live Server'
                 };
             }
+            setTimeout(() => URL.revokeObjectURL(url), 60000);
+            return {
+                success: true,
+                output: 'Live preview opened in a new tab.',
+                runtime: 'Live Server'
+            };
+        }
+
+        function pickText() {
+            for (let i = 0; i < arguments.length; i++) {
+                const v = arguments[i];
+                if (v === null || v === undefined) continue;
+                const s = String(v);
+                if (s.trim() !== '') return s;
+            }
+            return '';
         }
 
         async function runWithPiston(code) {
             const config = LANGUAGES[currentLang];
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 15000);
+            if (!config || !config.piston) {
+                return { success: false, error: 'Language not supported for remote execution.', runtime: 'Piston API' };
+            }
+            const canAbort = typeof AbortController !== 'undefined';
+            const controller = canAbort ? new AbortController() : null;
+            let aborted = false;
+            const timeoutLimit = 15000;
+            let timeout;
             
             try {
-                const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+                const fetchPromise = fetch('https://emkc.org/api/v2/piston/execute', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2320,56 +2451,99 @@ John
                             name: 'main' + config.ext,
                             content: code
                         }],
-                        stdin: programInput,
+                        stdin: programInput || '',
                         args: []
                     }),
-                    signal: controller.signal
+                    ...(controller ? { signal: controller.signal } : {})
                 });
-                clearTimeout(timeout);
+
+                if (canAbort) {
+                    timeout = setTimeout(() => {
+                        aborted = true;
+                        controller.abort();
+                    }, timeoutLimit);
+                }
+
+                const response = canAbort ? await fetchPromise : await Promise.race([
+                    fetchPromise,
+                    new Promise((_, reject) => {
+                        timeout = setTimeout(() => {
+                            aborted = true;
+                            reject(new Error('Execution timed out.'));
+                        }, timeoutLimit);
+                    })
+                ]);
                 
                 if (!response.ok) {
-                    throw new Error('Piston API error');
+                    const detail = await response.text().catch(() => '');
+                    const message = detail ? `Piston API error (${response.status}): ${detail}` : `Piston API error (${response.status})`;
+                    throw new Error(message);
                 }
                 
                 const data = await response.json();
-                
-                if (data.run) {
-                    const output = data.run.stdout || data.run.output || '';
-                    const error = data.run.stderr || '';
-                    
+
+                const compile = data && data.compile;
+                if (compile && typeof compile.code === 'number' && compile.code !== 0) {
+                    const cOut = pickText(compile.stdout, compile.output, '');
+                    const cErr = pickText(compile.stderr, '');
                     return {
-                        success: data.run.code === 0,
-                        output: output || 'Program completed (no output)',
-                        error: error,
-                        runtime: 'Piston API'
+                        success: false,
+                        output: cOut,
+                        error: cErr || cOut || 'Compile error',
+                        runtime: 'Piston API (compile)'
                     };
-                } else {
-                    throw new Error('Invalid response');
                 }
-            } catch (error) {
+
+                const run = data && data.run;
+                if (!run) {
+                    throw new Error('Invalid Piston response: missing run');
+                }
+
+                const output = pickText(run.stdout, run.output, '');
+                const error = pickText(run.stderr, '');
+                    
                 return {
-                    success: false,
-                    error: 'API failed. Please try again.',
+                    success: run.code === 0,
+                    output: output || (run.code === 0 ? 'Program completed (no output)' : ''),
+                    error: error,
                     runtime: 'Piston API'
                 };
+            } catch (error) {
+                const message = aborted ? 'Execution timed out.' : (error && error.message ? error.message : 'API failed. Please try again.');
+                return {
+                    success: false,
+                    error: message,
+                    runtime: 'Piston API'
+                };
+            } finally {
+                if (timeout) clearTimeout(timeout);
             }
         }
 
         function displayResult(result) {
+            const isPreview = result && result.runtime === 'Live Server';
             if (result.success) {
-                addOutput('success', `✅ Compilation successful! (${result.runtime})`);
-                addOutput('info', '📤 Program output:');
-                
-                const pre = document.createElement('pre');
-                pre.style.cssText = 'margin: 10px 0; padding: 15px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--success); color: var(--text-bright); white-space: pre-wrap;';
-                const text = (result.output || '').toString();
-                pre.textContent = text.length > OUTPUT_TRUNCATE ? text.slice(0, OUTPUT_TRUNCATE) + '\n...[truncated]' : text;
-                document.getElementById('output-panel').appendChild(pre);
-                
-                addOutput('success', '✅ Program finished successfully');
+                const title = isPreview ? 'Live preview opened.' : `Compilation successful! (${result.runtime})`;
+                addOutput('success', title);
+
+                if (result.output) {
+                    const label = isPreview ? 'Preview info:' : 'Program output:';
+                    addOutput('info', label);
+
+                    const pre = document.createElement('pre');
+                    pre.style.cssText = 'margin: 10px 0; padding: 15px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--success); color: var(--text-bright); white-space: pre-wrap;';
+                    const text = (result.output || '').toString();
+                    pre.textContent = text.length > OUTPUT_TRUNCATE ? text.slice(0, OUTPUT_TRUNCATE) + '\n...[truncated]' : text;
+                    document.getElementById('output-panel').appendChild(pre);
+                }
+
+                if (!isPreview) {
+                    addOutput('success', 'Program finished successfully');
+                }
             } else {
-                addOutput('error', '❌ Execution failed!');
-                
+                const title = isPreview ? 'Live preview failed.' : 'Execution failed!';
+                addOutput('error', title);
+
                 const pre = document.createElement('pre');
                 pre.style.cssText = 'margin: 10px 0; padding: 15px; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid var(--error); color: var(--error); white-space: pre-wrap;';
                 pre.textContent = result.error || 'Unknown error';
@@ -2377,7 +2551,7 @@ John
             }
         }
 
-        // ==================== AI ASSISTANT ====================
+// ==================== AI ASSISTANT ====================
         function toggleAI() {
             aiChatOpen = !aiChatOpen;
             const panel = document.getElementById('ai-chat');
@@ -2426,12 +2600,12 @@ John
         function applyCodeFix(code) {
             document.getElementById('code-editor').value = code;
             updateLineNumbers();
-            showNotification('✅ Code applied!', 'success');
+            showNotification(' Code applied!', 'success');
         }
 
         function copyCode(code) {
             navigator.clipboard.writeText(code);
-            showNotification('✅ Code copied!', 'success');
+            showNotification(' Code copied!', 'success');
         }
 
         function insertAtCursor(code) {
@@ -2444,7 +2618,7 @@ John
             editor.selectionStart = editor.selectionEnd = pos;
             updateLineNumbers();
             editor.focus();
-            showNotification('✅ Code inserted at cursor', 'success');
+            showNotification(' Code inserted at cursor', 'success');
         }
 
         function handleAIEnter(event) {
@@ -2461,7 +2635,7 @@ John
 
             if (Date.now() < aiRateLimitedUntil) {
                 const waitSec = Math.ceil((aiRateLimitedUntil - Date.now()) / 1000);
-                addAIMessage('ai', `⚠️ Bạn đang bị rate limit. Thử lại sau ${waitSec}s.`);
+                addAIMessage('ai', ` Bn ang b rate limit. Th li sau ${waitSec}s.`);
                 return;
             }
             
@@ -2469,7 +2643,7 @@ John
             input.value = '';
             
             if (!apiKey) {
-                addAIMessage('ai', '⚠️ <strong>No API Key!</strong><br><br>Click <i class="fas fa-cog"></i> <strong>Settings</strong> to add your Gemini API Key.<br><br>Get FREE key at: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>');
+                addAIMessage('ai', ' <strong>No API Key!</strong><br><br>Click <i class="fas fa-cog"></i> <strong>Settings</strong> to add your Gemini API Key.<br><br>Get FREE key at: <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent);">Google AI Studio</a>');
                 return;
             }
             
@@ -2515,7 +2689,7 @@ Answer concisely in Vietnamese (100-200 words).`;
                         if (messages.lastChild && messages.lastChild.textContent.includes('Thinking')) {
                             messages.removeChild(messages.lastChild);
                         }
-                        addAIMessage('ai', '⚠️ Bạn đã vượt quota API (429). Vui lòng chờ một lát hoặc kiểm tra gói/quota.');
+                        addAIMessage('ai', ' Bn  vt quota API (429). Vui lng ch mt lt hoc kim tra gi/quota.');
                         return;
                     }
                     throw new Error(`AI request failed (${response.status})`);
@@ -2527,7 +2701,7 @@ Answer concisely in Vietnamese (100-200 words).`;
                 messages.removeChild(messages.lastChild);
                 
                 if (data.error) {
-                    addAIMessage('ai', `❌ <strong>Error:</strong> ${data.error.message}<br><br>Please check API Key in Settings.`);
+                    addAIMessage('ai', ` <strong>Error:</strong> ${data.error.message}<br><br>Please check API Key in Settings.`);
                     return;
                 }
 
@@ -2537,7 +2711,7 @@ Answer concisely in Vietnamese (100-200 words).`;
                 const codeRegex = new RegExp(`\`\`\`${currentLang}\\n([\\s\\S]*?)\`\`\``, 'i');
                 const codeMatch = aiReply.match(codeRegex);
                 
-                if (codeMatch && (message.toLowerCase().includes('fix') || message.toLowerCase().includes('sửa') || message.toLowerCase().includes('debug'))) {
+                if (codeMatch && (message.toLowerCase().includes('fix') || message.toLowerCase().includes('sa') || message.toLowerCase().includes('debug'))) {
                     const fixedCode = codeMatch[1].trim();
                     addAIMessage('ai', formattedReply, {
                         showActions: true,
@@ -2552,7 +2726,7 @@ Answer concisely in Vietnamese (100-200 words).`;
                 if (messages.lastChild && messages.lastChild.textContent.includes('Thinking')) {
                     messages.removeChild(messages.lastChild);
                 }
-                addAIMessage('ai', '❌ Cannot connect to AI. Please try again!');
+                addAIMessage('ai', ' Cannot connect to AI. Please try again!');
                 console.error(error);
             }
         }
@@ -2576,11 +2750,11 @@ Answer concisely in Vietnamese (100-200 words).`;
 
         async function aiQuickAction(action) {
             const actions = {
-                'explain': 'Giải thích chi tiết code này cho tôi.',
-                'debug': 'Kiểm tra và chỉ ra lỗi trong code này.',
-                'optimize': 'Gợi ý cách tối ưu code này.',
-                'fix': 'Sửa tất cả lỗi trong code này và đưa ra code đã fix.',
-                'comment': 'Thêm comment chi tiết vào code này.'
+                'explain': 'Gii thch chi tit code ny cho ti.',
+                'debug': 'Kim tra v ch ra li trong code ny.',
+                'optimize': 'Gi  cch ti u code ny.',
+                'fix': 'Sa tt c li trong code ny v a ra code  fix.',
+                'comment': 'Thm comment chi tit vo code ny.'
             };
             
             document.getElementById('ai-input').value = actions[action];
@@ -2834,6 +3008,7 @@ Answer concisely in Vietnamese (100-200 words).`;
         function addOutput(type, message) {
             const panel = document.getElementById('output-panel');
             if (!panel) return;
+            if (looksLikeAppSource(String(message || ''))) return;
             const line = document.createElement('div');
             line.className = `output-line ${type}`;
             const icons = { success: 'check-circle', error: 'times-circle', info: 'info-circle', warning: 'exclamation-triangle' };
@@ -2844,7 +3019,7 @@ Answer concisely in Vietnamese (100-200 words).`;
 
         function clearOutput() {
             document.getElementById('output-panel').innerHTML = '';
-            addOutput('info', '🗑️ Output cleared');
+            addOutput('info', ' Output cleared');
         }
 
         function formatCode() {
@@ -2864,7 +3039,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             
             editor.value = code;
             updateLineNumbers();
-            showNotification('✨ Code formatted!', 'success');
+            showNotification(' Code formatted!', 'success');
         }
 
         function toggleSidebar() {
@@ -2886,15 +3061,15 @@ Answer concisely in Vietnamese (100-200 words).`;
             a.click();
             URL.revokeObjectURL(url);
             
-            showNotification(`✅ Downloaded ${filename}`, 'success');
+            showNotification(` Downloaded ${filename}`, 'success');
         }
 
         function copyCodeToClipboard() {
             const code = document.getElementById('code-editor').value;
             navigator.clipboard.writeText(code).then(() => {
-                showNotification('✅ Code copied to clipboard!', 'success');
+                showNotification(' Code copied to clipboard!', 'success');
             }).catch(() => {
-                showNotification('❌ Failed to copy code', 'error');
+                showNotification(' Failed to copy code', 'error');
             });
         }
 
@@ -2903,7 +3078,7 @@ Answer concisely in Vietnamese (100-200 words).`;
                 document.getElementById('code-editor').value = TEMPLATES[currentLang];
                 updateLineNumbers();
                 clearOutput();
-                showNotification('✅ New file created', 'success');
+                showNotification(' New file created', 'success');
             }
         }
 
@@ -2974,7 +3149,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             if (!select) return;
             select.innerHTML = inputPresets.length
                 ? inputPresets.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('')
-                : '<option value="">(Chưa có preset)</option>';
+                : '<option value="">(Cha c preset)</option>';
         }
 
         function saveInputPreset() {
@@ -2983,40 +3158,40 @@ Answer concisely in Vietnamese (100-200 words).`;
             const name = ((nameInput && nameInput.value) || '').trim() || `Preset ${inputPresets.length + 1}`;
             const value = (quickInput && quickInput.value) || '';
             if (!value) {
-                showNotification('⚠️ Không có dữ liệu để lưu preset.', 'warning');
+                showNotification(' Khng c d liu  lu preset.', 'warning');
                 return;
             }
             inputPresets.push({ name, value });
             localStorage.setItem('input_presets', JSON.stringify(inputPresets));
             renderInputPresets();
-            showNotification(`✅ Đã lưu preset "${name}"`, 'success');
+            showNotification(`  lu preset "${name}"`, 'success');
         }
 
         function applyInputPreset() {
             const select = document.getElementById('preset-select');
             const idx = parseInt(select && select.value ? select.value : '-1', 10);
             if (Number.isNaN(idx) || !inputPresets[idx]) {
-                showNotification('⚠️ Chọn preset hợp lệ trước khi áp dụng.', 'warning');
+                showNotification(' Chn preset hp l trc khi p dng.', 'warning');
                 return;
             }
             const value = inputPresets[idx].value;
             programInput = value;
             localStorage.setItem('program_input', programInput);
             syncInputFields();
-            showNotification(`✅ Đã áp dụng preset "${inputPresets[idx].name}"`, 'success');
+            showNotification(`  p dng preset "${inputPresets[idx].name}"`, 'success');
         }
 
         function deleteInputPreset() {
             const select = document.getElementById('preset-select');
             const idx = parseInt(select && select.value ? select.value : '-1', 10);
             if (Number.isNaN(idx) || !inputPresets[idx]) {
-                showNotification('⚠️ Không có preset để xóa.', 'warning');
+                showNotification(' Khng c preset  xa.', 'warning');
                 return;
             }
             const [removed] = inputPresets.splice(idx, 1);
             localStorage.setItem('input_presets', JSON.stringify(inputPresets));
             renderInputPresets();
-            showNotification(`🗑️ Đã xóa preset "${removed.name}"`, 'success');
+            showNotification(`  xa preset "${removed.name}"`, 'success');
         }
 
         function showInputDialog() {
@@ -3033,7 +3208,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             localStorage.setItem('program_input', programInput);
             syncInputFields();
             closeInputDialog();
-            showNotification('✅ Input saved! It will be used for cin/scanf/input()', 'success');
+            showNotification(' Input saved! It will be used for cin/scanf/input()', 'success');
         }
 
         function appendInputAndRun() {
@@ -3041,7 +3216,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             if (!live) return;
             const line = live.value.trimEnd();
             if (!line) {
-                showNotification('⚠️ Nhập một dòng trước khi chạy.', 'warning');
+                showNotification(' Nhp mt dng trc khi chy.', 'warning');
                 return;
             }
             programInput = (programInput ? programInput + '\n' : '') + line;
@@ -3064,7 +3239,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             apiKey = document.getElementById('api-key-input').value;
             localStorage.setItem('api_key', apiKey);
             closeSettings();
-            showNotification('✅ Settings saved!', 'success');
+            showNotification(' Settings saved!', 'success');
         }
 
         function showLoading(text) {
@@ -3081,6 +3256,10 @@ Answer concisely in Vietnamese (100-200 words).`;
             const savedLang = localStorage.getItem('current_lang') || 'python';
             currentLang = LANGUAGES[savedLang] ? savedLang : 'python';
             programInput = localStorage.getItem('program_input') || '';
+            if (looksLikeAppSource(programInput)) {
+                programInput = '';
+                localStorage.removeItem('program_input');
+            }
             apiKey = localStorage.getItem('api_key') || '';
             try {
                 Object.assign(exercisePageByLang, JSON.parse(localStorage.getItem('exercise_pages') || '{}'));
@@ -3089,9 +3268,108 @@ Answer concisely in Vietnamese (100-200 words).`;
             }
         }
 
+        const OUTPUT_PANEL_TEMPLATE = (() => {
+            const panel = document.getElementById('output-panel');
+            return panel ? panel.innerHTML : '';
+        })();
+
+        const APP_SOURCE_MARKERS = [
+            'const LANGUAGES',
+            'const TEMPLATES',
+            'const EXERCISES',
+            "css: '/* Live Server CSS */",
+            'cpp: \'#include'
+        ];
+
+        function looksLikeAppSource(code) {
+            if (!code) return false;
+            return APP_SOURCE_MARKERS.some(marker => code.includes(marker));
+        }
+
+        function resetOutputPanel() {
+            const panel = document.getElementById('output-panel');
+            if (!panel || !OUTPUT_PANEL_TEMPLATE) return;
+            panel.innerHTML = OUTPUT_PANEL_TEMPLATE;
+        }
+
+        function removeLeakTextNodes(root) {
+            if (!root) return;
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+            const toRemove = [];
+            while (walker.nextNode()) {
+                const node = walker.currentNode;
+                const nodeText = node && node.textContent ? node.textContent : '';
+                if (looksLikeAppSource(nodeText)) {
+                    toRemove.push(node);
+                }
+            }
+            toRemove.forEach((node) => {
+                if (node.parentNode) node.parentNode.removeChild(node);
+            });
+        }
+
+        function cleanupCorruptedStorage() {
+            try {
+                const keys = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key) keys.push(key);
+                }
+                keys.forEach((key) => {
+                    const value = localStorage.getItem(key);
+                    if (looksLikeAppSource(value)) {
+                        localStorage.removeItem(key);
+                    }
+                });
+            } catch (_) {}
+        }
+
+        function cleanupLeakedDump() {
+            const body = document.body;
+            if (!body) return;
+            const text = body.textContent || '';
+            if (!looksLikeAppSource(text)) return;
+
+            resetOutputPanel();
+
+            removeLeakTextNodes(body);
+        }
+
+        function startLeakGuard() {
+            const body = document.body;
+            if (!body || typeof MutationObserver === 'undefined') return;
+            const observer = new MutationObserver((mutations) => {
+                let cleaned = false;
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            if (looksLikeAppSource(node.textContent || '')) {
+                                if (node.parentNode) node.parentNode.removeChild(node);
+                                cleaned = true;
+                            }
+                            return;
+                        }
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            const text = node.textContent || '';
+                            if (looksLikeAppSource(text)) {
+                                removeLeakTextNodes(node);
+                                cleaned = true;
+                            }
+                        }
+                    });
+                });
+                if (cleaned) resetOutputPanel();
+            });
+            observer.observe(body, { childList: true, subtree: true });
+        }
+
         function loadCode() {
             const savedCode = localStorage.getItem(`code_${currentLang}`);
-            document.getElementById('code-editor').value = savedCode || TEMPLATES[currentLang];
+            const useSaved = savedCode && !looksLikeAppSource(savedCode);
+            document.getElementById('code-editor').value = useSaved ? savedCode : TEMPLATES[currentLang];
+            if (savedCode && !useSaved) {
+                localStorage.removeItem(`code_${currentLang}`);
+            }
             updateLineNumbers();
             document.getElementById('current-file').textContent = 'main' + LANGUAGES[currentLang].ext;
             const selector = document.getElementById('language-selector');
@@ -3110,7 +3388,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             const code = document.getElementById('code-editor').value;
             localStorage.setItem(`code_${currentLang}`, code);
             localStorage.setItem('current_lang', currentLang);
-            showNotification('✅ Code saved!', 'success');
+            showNotification(' Code saved!', 'success');
         }
 
         // ==================== KEYBOARD SHORTCUTS ====================
