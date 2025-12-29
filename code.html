@@ -6,6 +6,9 @@
     <title>Pro Code IDE - AI Powered</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     
     <style>
@@ -107,6 +110,49 @@
         }
 
         .exercises-dropdown.open { display: flex; }
+
+        .snippets-dropdown {
+            position: absolute;
+            top: 44px;
+            left: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            width: 260px;
+            display: none;
+            flex-direction: column;
+            z-index: 1200;
+            padding: 10px;
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .snippets-dropdown.open { display: flex; }
+
+        .snippet-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        .snippet-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .snippet-empty {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 6px 4px;
+        }
 
         .exercise-title {
             font-size: 13px;
@@ -214,6 +260,11 @@
             background: var(--bg-tertiary);
         }
 
+        .live-stdin.active {
+            border-top-color: var(--accent);
+            box-shadow: inset 0 1px 0 rgba(55, 148, 255, 0.35);
+        }
+
         .live-stdin input {
             flex: 1;
             background: var(--bg-secondary);
@@ -318,6 +369,19 @@
             color: var(--success);
         }
 
+        .collab-status {
+            cursor: pointer;
+        }
+
+        .collab-status.off {
+            background: rgba(224, 108, 117, 0.1);
+            border-color: rgba(224, 108, 117, 0.3);
+        }
+
+        .collab-status.off i {
+            color: var(--error);
+        }
+
         .main-container {
             display: flex;
             flex: 1;
@@ -420,6 +484,15 @@
             align-items: center;
             padding: 0 15px;
             height: 40px;
+            gap: 8px;
+        }
+
+        .tabs-list {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            flex: 1;
         }
 
         .file-tab {
@@ -436,6 +509,19 @@
             font-weight: 500;
         }
 
+        .file-tab .close-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0 2px;
+        }
+
+        .file-tab .close-tab:hover {
+            color: var(--error);
+        }
+
         .file-tab.active {
             background: var(--bg-editor);
             color: var(--text-bright);
@@ -449,6 +535,41 @@
             position: relative;
         }
 
+        .debug-controls {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            display: none;
+            gap: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            z-index: 10;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .debug-controls.show {
+            display: flex;
+        }
+
+        .debug-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .debug-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            color: var(--text-bright);
+        }
+
         .line-numbers {
             width: 60px;
             background: var(--bg-secondary);
@@ -456,12 +577,37 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
             line-height: 1.6;
-            padding: 20px 15px;
+            padding: 20px 12px;
             text-align: right;
             user-select: none;
             border-right: 1px solid var(--border);
             overflow: hidden;
-            white-space: pre;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .line-number {
+            position: relative;
+            padding-right: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: right;
+        }
+
+        .line-number.breakpoint::before {
+            content: '●';
+            position: absolute;
+            left: -10px;
+            top: 4px;
+            font-size: 8px;
+            color: var(--error);
+        }
+
+        .line-number.current {
+            background: rgba(55, 148, 255, 0.2);
+            color: var(--text-bright);
+            border-radius: 4px;
         }
 
         .code-editor-wrapper {
@@ -485,6 +631,52 @@
             outline: none;
             tab-size: 4;
             caret-color: var(--accent);
+            position: relative;
+            z-index: 2;
+        }
+
+        .code-editor::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .code-editor-wrapper.syntax-active .code-editor {
+            color: transparent;
+        }
+
+        .code-editor-wrapper.syntax-active .code-editor::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .code-editor-wrapper.syntax-active .code-editor::selection {
+            background: rgba(55, 148, 255, 0.25);
+        }
+
+        .code-highlight {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 20px;
+            margin: 0;
+            pointer-events: none;
+            z-index: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow: hidden;
+            tab-size: 4;
+        }
+
+        .code-highlight code {
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background: transparent;
+            tab-size: 4;
         }
 
         .bottom-panel {
@@ -650,6 +842,9 @@
         .output-line.error { color: var(--error); }
         .output-line.info { color: var(--accent); }
         .output-line.warning { color: var(--warning); }
+        .output-line.debug { color: #74c0fc; }
+        .terminal-line.warning { color: #ffa94d; }
+        .terminal-line.debug { color: #74c0fc; }
 
         /* AI Assistant */
         .ai-assistant {
@@ -928,9 +1123,39 @@
             font-size: 13px;
         }
 
-        .autocomplete-item span {
+        .autocomplete-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .autocomplete-icon {
+            font-size: 14px;
+        }
+
+        .autocomplete-icon.empty {
+            opacity: 0.4;
+        }
+
+        .autocomplete-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             color: var(--text-secondary);
             font-size: 11px;
+        }
+
+        .autocomplete-text {
+            color: var(--text-bright);
+        }
+
+        .autocomplete-type {
+            padding: 2px 6px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
         }
 
         .autocomplete-item.active {
@@ -1181,12 +1406,12 @@
                 </optgroup>
             </select>
             <div class="exercise-control">
-                <button class="header-btn" id="exercise-btn" onclick="toggleExercisesDropdown(event)" data-tooltip="Chn bi tp theo ngn ng">
+                <button class="header-btn" id="exercise-btn" onclick="toggleExercisesDropdown(event)" data-tooltip="Chọn bài tập theo ngôn ngữ">
                     <i class="fas fa-list-check"></i>
-                    <span>Bi tp</span>
+                    <span>Bài tập</span>
                 </button>
                 <div class="exercises-dropdown" id="exercise-dropdown">
-                    <div class="exercise-title">Chn ngn ng</div>
+                    <div class="exercise-title">Chọn ngôn ngữ</div>
                     <select class="exercise-filter" id="exercise-lang-select" onchange="changeExerciseLang()">
                         <option value="python">Python</option>
                         <option value="javascript">JavaScript</option>
@@ -1194,15 +1419,32 @@
                         <option value="c">C</option>
                         <option value="java">Java</option>
                     </select>
-                    <div class="exercise-title">Bi tp (d  kh)</div>
+                    <div class="exercise-title">Bài tập (dễ đến khó)</div>
                     <div id="exercise-list"></div>
                     <div class="exercise-pagination" id="exercise-pagination"></div>
+                </div>
+            </div>
+
+            <div class="exercise-control">
+                <button class="header-btn" id="snippets-btn" onclick="toggleSnippetsDropdown(event)" data-tooltip="Thư viện snippet">
+                    <i class="fas fa-scissors"></i>
+                    <span>Snippets</span>
+                </button>
+                <div class="snippets-dropdown" id="snippets-dropdown">
+                    <div class="exercise-title">Snippet cho ngôn ngữ hiện tại</div>
+                    <div id="snippet-list"></div>
                 </div>
             </div>
             
             <button class="header-btn run" onclick="runCode()" data-tooltip="Ctrl+Enter - Run Code">
                 <i class="fas fa-play"></i>
                 <span>Run</span>
+            </button>
+            <button class="header-btn" onclick="runInteractive()" data-tooltip="Interactive Run (chờ input trước khi chạy)">
+                <i class="fas fa-terminal"></i>
+            </button>
+            <button class="header-btn" onclick="startDebug()" data-tooltip="Debug Mode (Step Through)">
+                <i class="fas fa-bug"></i>
             </button>
             <button class="header-btn" onclick="showInputDialog()" data-tooltip="Add Input (cho cin/scanf)">
                 <i class="fas fa-keyboard"></i>
@@ -1215,6 +1457,9 @@
             </button>
             <button class="header-btn" onclick="downloadCode()" data-tooltip="Download Code">
                 <i class="fas fa-download"></i>
+            </button>
+            <button class="header-btn" onclick="handleFileUpload()" data-tooltip="Upload File">
+                <i class="fas fa-file-arrow-up"></i>
             </button>
             <button class="header-btn" onclick="copyCodeToClipboard()" data-tooltip="Copy Code">
                 <i class="fas fa-copy"></i>
@@ -1238,6 +1483,10 @@
                 <i class="fas fa-circle"></i>
                 <span>Piston API Ready</span>
             </div>
+            <div class="api-status collab-status off" id="collab-status" onclick="toggleCollab()">
+                <i class="fas fa-users"></i>
+                <span>Collab Off</span>
+            </div>
         </div>
     </div>
 
@@ -1251,15 +1500,13 @@
 
         <div class="editor-area">
             <div class="editor-tabs">
-                <div class="file-tab active">
-                    <i class="fas fa-file-code"></i>
-                    <span id="current-file">main.py</span>
-                </div>
+                <div class="tabs-list" id="tabs-list"></div>
             </div>
             
             <div class="editor-container">
                 <div class="line-numbers" id="line-numbers">1</div>
                 <div class="code-editor-wrapper">
+                    <pre class="code-highlight" id="code-highlight" aria-hidden="true"><code class="language-python"></code></pre>
                     <textarea 
                         class="code-editor" 
                         id="code-editor"
@@ -1267,6 +1514,10 @@
                         placeholder="// Start coding..."
                     ></textarea>
                     <div id="autocomplete" class="autocomplete"></div>
+                </div>
+                <div class="debug-controls" id="debug-controls">
+                    <button class="debug-btn" onclick="stepThrough()">Step</button>
+                    <button class="debug-btn" onclick="stopDebug()">Stop</button>
                 </div>
             </div>
         </div>
@@ -1312,7 +1563,7 @@
                 <div class="panel-resize-handle side" onmousedown="startPanelWidthResize(event)"></div>
             </div>
             <div class="live-stdin">
-                <input id="live-stdin-input" type="text" placeholder="Nhp mt dng stdin v Enter  chy tip...">
+                <input id="live-stdin-input" type="text" placeholder="Nhập một dòng stdin và Enter để chạy tiếp...">
                 <button onclick="appendInputAndRun()">Send & Run</button>
             </div>
         </div>
@@ -1321,8 +1572,8 @@
             <div class="panel-input">
                 <div class="stdin-bar">input</div>
                 <label for="quick-stdin">Program Input (stdin)</label>
-                <textarea id="quick-stdin" class="stdin-field" placeholder="Nhp d liu cho cin/scanf/input()..."></textarea>
-                <div class="stdin-hint">Ni dung ny s c gi vo stdin khi chy code (mi ngn ng).</div>
+                <textarea id="quick-stdin" class="stdin-field" placeholder="Nhập dữ liệu cho cin/scanf/input()..."></textarea>
+                <div class="stdin-hint">Nội dung này sẽ được ghi vào stdin khi chạy code (mọi ngôn ngữ).</div>
                 <div class="stdin-presets">
                     <div class="preset-row">
                         <select id="preset-select"></select>
@@ -1341,8 +1592,8 @@
             <div class="panel-input" style="border-bottom: none;">
                 <div class="output-line info"><i class="fas fa-rocket"></i><span id="engine-info-secondary"><strong>Engine:</strong> Piston API | Pyodide WASM (Python offline) | Live Server (HTML/CSS)</span></div>
                 <div class="output-line info"><i class="fas fa-keyboard"></i><span><strong>Shortcuts:</strong> Ctrl+Enter (Run) | Ctrl+S (Save) | Ctrl+N (New) | Ctrl+Shift+F (Format) | Ctrl+K (Clear) | Ctrl+B (Toggle Sidebar) | Ctrl+/ (AI)</span></div>
-                <div class="output-line info"><i class="fas fa-lightbulb"></i><span><strong>Tip:</strong> Dng preset input  test nhanh nhiu b d liu.</span></div>
-                <div class="output-line info"><i class="fas fa-magic"></i><span><strong>UI:</strong> Ko mp panel  i kch thc chiu cao/rng.</span></div>
+                <div class="output-line info"><i class="fas fa-lightbulb"></i><span><strong>Tip:</strong> Dùng preset input để test nhanh nhiều bộ dữ liệu.</span></div>
+                <div class="output-line info"><i class="fas fa-magic"></i><span><strong>UI:</strong> Kéo mép panel để đổi kích thước chiều cao/rộng.</span></div>
             </div>
         </div>
     </div>
@@ -1362,19 +1613,19 @@
             
             <div class="ai-quick-actions">
                 <button class="quick-action-btn" onclick="aiQuickAction('explain')">
-                    <i class="fas fa-question-circle"></i> Gii thch
+                    <i class="fas fa-question-circle"></i> Giải thích
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('debug')">
                     <i class="fas fa-bug"></i> Debug
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('optimize')">
-                    <i class="fas fa-tachometer-alt"></i> Ti u
+                    <i class="fas fa-tachometer-alt"></i> Tối ưu
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('fix')">
-                    <i class="fas fa-wrench"></i> Fix li
+                    <i class="fas fa-wrench"></i> Sửa lỗi
                 </button>
                 <button class="quick-action-btn" onclick="aiQuickAction('comment')">
-                    <i class="fas fa-comment"></i> Thm comment
+                    <i class="fas fa-comment"></i> Thêm comment
                 </button>
             </div>
             
@@ -1385,7 +1636,7 @@
                     type="text" 
                     class="ai-input" 
                     id="ai-input" 
-                    placeholder="Hi AI bt c iu g..."
+                    placeholder="Hỏi AI bất cứ điều gì..."
                     onkeypress="handleAIEnter(event)"
                 >
                 <button class="ai-send-btn" onclick="sendAIMessage()">
@@ -1444,6 +1695,7 @@ John
         <div class="loading-text" id="loading-text">Executing code...</div>
     </div>
 
+    <script src="db.js"></script>
     <script>
         // ==================== CONFIGURATION ====================
         const LANGUAGES = {
@@ -2018,10 +2270,27 @@ John
             css: ['body {', 'color: ', 'background: ', 'display: flex;', 'margin: 0;', 'padding: 0;', '.class {', '#id {', 'font-family: ', 'font-size: ', 'align-items: center;', 'justify-content: center;'],
             java: ['public static void main(String[] args)', 'System.out.println()', 'import java.util.*;', 'class ', 'public ', 'private ', 'protected ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
             csharp: ['using System;', 'Console.WriteLine();', 'static void Main(string[] args)', 'class ', 'public ', 'private ', 'return ', 'for (int i = 0; i < ; i++) {', 'while (', 'if (', 'else'],
+            ruby: [
+                { text: 'puts', type: 'function', icon: '🖨️' },
+                { text: 'gets', type: 'function', icon: '⌨️' },
+                { text: 'def', type: 'keyword', icon: '⚡' },
+                { text: 'class', type: 'keyword', icon: '📦' },
+                { text: 'end', type: 'keyword', icon: '🔚' }
+            ],
             default: ['for (', 'while (', 'if (', 'else', 'return ', 'class ', 'import ', 'function ']
+        };
+        const AUTOCOMPLETE = COMPLETIONS;
+
+        const SNIPPETS = {
+            cpp: {
+                'Fast I/O': 'ios_base::sync_with_stdio(false);\\ncin.tie(NULL);',
+                'Vector Loop': 'for(auto& x : vec) {\\n    // code\\n}',
+                'Binary Search': 'int l = 0, r = n-1;\\nwhile(l <= r) {\\n    int mid = (l+r)/2;\\n    // check\\n}'
+            }
         };
 
         // ==================== STATE ====================
+        let db = null;
         let currentLang = 'python';
         let programInput = '';
         let apiKey = '';
@@ -2031,28 +2300,51 @@ John
         let aiChatOpen = false;
         let completionIndex = -1;
         let completionItems = [];
-        let outputPanelHeight = parseInt(localStorage.getItem('output_panel_height') || '260', 10);
-        let outputPanelWidth = parseInt(localStorage.getItem('output_panel_width') || '0', 10);
+        let outputPanelHeight = 260;
+        let outputPanelWidth = 0;
         let inputPresets = [];
         const EXERCISE_PAGE_SIZE = 8;
         const exercisePageByLang = {};
         const OUTPUT_TRUNCATE = 100000;
-        const AUTOSAVE_MS = 5000;
+        const AUTOSAVE_MS = 2000;
         let aiRateLimitedUntil = 0;
+        let autoSaveTimeout = null;
+        let lastSavedCode = '';
+        let panelTab = 'output';
+        let sidebarHidden = false;
+        let collabUrl = '';
+        let openFiles = {};
+        let openFileOrder = [];
+        let activeFile = '';
+        let breakpoints = new Set();
+        let breakpointsByFile = {};
+        let debugMode = false;
+        let currentDebugLine = 0;
+        let pendingInputResolve = null;
+        let interactiveWaiting = false;
+        let collabSocket = null;
+        let collabReady = false;
+        let suppressCollabSend = false;
+        let highlightScheduled = false;
 
         // ==================== INITIALIZATION ====================
         window.onload = async function() {
-            cleanupCorruptedStorage();
             resetOutputPanel();
             cleanupLeakedDump();
             startLeakGuard();
-            loadSettings();
-            loadInputPresets();
-            loadCode();
+            db = new CodeIDEDatabase('CodeIDE', 1);
+            await db.init();
+            await migrateData();
+            await loadSettings();
+            await cleanupCorruptedStorage();
+            await loadCode();
             renderLanguageList();
+            renderSnippets(currentLang);
             setupKeyboardShortcuts();
             setupLineNumbers();
             setupAutocomplete();
+            setupSyntaxHighlight();
+            setupAutoSave();
             initInputSync();
             syncInputFields();
             renderExercises(currentLang);
@@ -2061,17 +2353,16 @@ John
             applyOutputPanelSize();
             setupResizablePanel();
             updateLanguageCount();
-            selectPanelTab(localStorage.getItem('panel_tab') || 'output');
+            selectPanelTab(panelTab || 'output');
             await initPyodide();
 
-            const sidebarHidden = localStorage.getItem('sidebar_hidden') === '1';
             if (sidebarHidden) {
                 const sidebar = document.querySelector('.sidebar');
                 sidebar.classList.add('hidden');
             }
             
             setTimeout(() => {
-                addAIMessage('ai', ' <strong>Xin cho! Ti l AI Assistant</strong><br><br> Ti c th:<br> Gii thch code<br> Debug v fix li<br> Ti u code<br> Vit code mi<br> Thm comment chi tit<br><br> <strong>Tip:</strong> Nhn nt <i class="fas fa-keyboard"></i>  thm input cho cin/scanf/input()!<br><br>Hy hi ti bt c iu g!');
+                addAIMessage('ai', ' <strong>Xin chào! Tôi là AI Assistant</strong><br><br> Tôi có thể:<br> Giải thích code<br> Debug và sửa lỗi<br> Tối ưu code<br> Viết code mới<br> Thêm comment chi tiết<br><br> <strong>Tip:</strong> Nhấn nút <i class="fas fa-keyboard"></i> để thêm input cho cin/scanf/input()!<br><br>Hãy hỏi tôi bất cứ điều gì!');
             }, 500);
         };
 
@@ -2093,7 +2384,7 @@ John
             } catch (error) {
                 console.error('Failed to load Pyodide:', error);
                 hideLoading();
-                showNotification(' Khng ti c Pyodide (Python offline). Ch chy qua Piston.', 'error');
+                showNotification(' Không tải được Pyodide (Python offline). Chỉ chạy qua Piston.', 'error');
             }
         }
 
@@ -2159,9 +2450,9 @@ John
             renderExercises(currentLang);
         }
 
-        function changeExerciseLang() {
+        async function changeExerciseLang() {
             const lang = document.getElementById('exercise-lang-select').value;
-            selectLanguage(lang);
+            await selectLanguage(lang);
             exercisePageByLang[lang] = 1;
             renderExercises(lang);
         }
@@ -2172,14 +2463,16 @@ John
             const pager = document.getElementById('exercise-pagination');
             if (!container) return;
             if (!list || !list.length) {
-                container.innerHTML = '<div class="exercise-item">Cha c bi tp cho ngn ng ny.</div>';
+                container.innerHTML = '<div class="exercise-item">Chưa có bài tập cho ngôn ngữ này.</div>';
                 if (pager) pager.innerHTML = '';
                 return;
             }
             const totalPages = Math.max(1, Math.ceil(list.length / EXERCISE_PAGE_SIZE));
             const currentPage = Math.min(exercisePageByLang[lang] || 1, totalPages);
             exercisePageByLang[lang] = currentPage;
-            localStorage.setItem('exercise_pages', JSON.stringify(exercisePageByLang));
+            if (db) {
+                db.saveSetting('exercise_pages', exercisePageByLang);
+            }
 
             const pageItems = list.slice((currentPage - 1) * EXERCISE_PAGE_SIZE, currentPage * EXERCISE_PAGE_SIZE);
             container.innerHTML = pageItems.map(ex => `
@@ -2223,25 +2516,78 @@ John
             }
         }
 
-        function chooseExercise(lang, id) {
+        function toggleSnippetsDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('snippets-dropdown');
+            dropdown.classList.toggle('open');
+            if (dropdown.classList.contains('open')) {
+                renderSnippets(currentLang);
+            }
+        }
+
+        function renderSnippets(lang) {
+            const container = document.getElementById('snippet-list');
+            if (!container) return;
+            const snippets = SNIPPETS[lang] || {};
+            const names = Object.keys(snippets);
+            if (!names.length) {
+                container.innerHTML = '<div class="snippet-empty">Chưa có snippet cho ngôn ngữ này.</div>';
+                return;
+            }
+            container.innerHTML = names.map(name => `
+                <div class="snippet-item" data-name="${name}">${name}</div>
+            `).join('');
+            container.querySelectorAll('.snippet-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    insertSnippet(item.dataset.name);
+                });
+            });
+        }
+
+        function insertSnippet(name) {
+            const snippets = SNIPPETS[currentLang] || {};
+            const snippet = snippets[name];
+            if (!snippet) return;
+            const editor = document.getElementById('code-editor');
+            const pos = editor.selectionStart;
+            const value = editor.value;
+            editor.value = value.slice(0, pos) + snippet + value.slice(pos);
+            editor.selectionStart = editor.selectionEnd = pos + snippet.length;
+            syncActiveFileContent();
+            updateLineNumbers();
+            updateSyntaxHighlight(true);
+            broadcastCollabChange();
+            const dropdown = document.getElementById('snippets-dropdown');
+            if (dropdown) dropdown.classList.remove('open');
+            editor.focus();
+        }
+
+        async function chooseExercise(lang, id) {
             const list = (EXERCISES[lang] && Array.isArray(EXERCISES[lang]) && EXERCISES[lang].length) ? EXERCISES[lang] : EXERCISES.default;
             if (!list || !list.length) return;
             const ex = list.find(e => e.id === id) || list[0];
             if (!ex) return;
             if (currentLang !== lang) {
-                selectLanguage(lang);
+                await selectLanguage(lang);
             }
             const editor = document.getElementById('code-editor');
             editor.value = ex.starter;
+            syncActiveFileContent();
             updateLineNumbers();
+            updateSyntaxHighlight(true);
+            broadcastCollabChange();
             clearOutput();
-            addOutput('info', `Bi tp: ${ex.title} (${ex.difficulty})`);
+            addOutput('info', `Bài tập: ${ex.title} (${ex.difficulty})`);
             addOutput('info', ex.description);
             const dropdown = document.getElementById('exercise-dropdown');
             dropdown.classList.remove('open');
         }
 
-        function selectLanguage(lang) {
+        async function selectLanguage(lang, options = {}) {
+            if (!LANGUAGES[lang]) return;
+            if (!options.skipPersist) {
+                await persistTabsState();
+            }
             const selector = document.getElementById('language-selector');
             currentLang = lang;
             if (selector && selector.value !== lang) {
@@ -2252,37 +2598,38 @@ John
                 item.classList.toggle('active', item.dataset.lang === lang);
             });
             
-            const config = LANGUAGES[lang];
-            document.getElementById('current-file').textContent = 'main' + config.ext;
             const exerciseSelect = document.getElementById('exercise-lang-select');
             if (exerciseSelect) {
                 exerciseSelect.value = lang;
             }
-            
-            const savedCode = localStorage.getItem(`code_${lang}`);
-            const useSaved = savedCode && !looksLikeAppSource(savedCode);
-            document.getElementById('code-editor').value = useSaved ? savedCode : TEMPLATES[lang];
-            if (savedCode && !useSaved) {
-                localStorage.removeItem(`code_${lang}`);
+
+            await loadTabsState(lang);
+            renderTabs();
+            setActiveFile(activeFile, { skipSync: true, skipPersist: true });
+            renderSnippets(lang);
+
+            if (!options.silent) {
+                const config = LANGUAGES[lang];
+                showNotification(`Switched to ${config.name}`, 'info');
             }
-            
-            updateLineNumbers();
-            showNotification(`Switched to ${config.name}`, 'info');
             // Persist language selection
-            localStorage.setItem('current_lang', lang);
+            if (db) {
+                await db.saveSetting('current_lang', lang);
+            }
         }
 
-        function switchLanguage() {
+        async function switchLanguage() {
             const lang = document.getElementById('language-selector').value;
-            selectLanguage(lang);
+            await selectLanguage(lang);
         }
 
         // ==================== CODE EXECUTION ====================
-        async function runCode() {
+        async function runCode(options = {}) {
             if (isRunning) return;
             isRunning = true;
             
-            const code = document.getElementById('code-editor').value.trim();
+            const editor = document.getElementById('code-editor');
+            const code = (options.code !== undefined ? options.code : editor.value).trim();
             if (!code) {
                 showNotification(' Code is empty!', 'warning');
                 isRunning = false;
@@ -2290,7 +2637,11 @@ John
             }
 
             const quickInput = document.getElementById('quick-stdin');
-            if (quickInput) {
+            if (options.input !== undefined) {
+                programInput = options.input;
+                localStorage.setItem('program_input', programInput);
+                if (quickInput) quickInput.value = programInput;
+            } else if (quickInput) {
                 programInput = quickInput.value;
                 localStorage.setItem('program_input', programInput);
             }
@@ -2750,11 +3101,11 @@ Answer concisely in Vietnamese (100-200 words).`;
 
         async function aiQuickAction(action) {
             const actions = {
-                'explain': 'Gii thch chi tit code ny cho ti.',
-                'debug': 'Kim tra v ch ra li trong code ny.',
-                'optimize': 'Gi  cch ti u code ny.',
-                'fix': 'Sa tt c li trong code ny v a ra code  fix.',
-                'comment': 'Thm comment chi tit vo code ny.'
+                'explain': 'Giải thích chi tiết code này cho tôi.',
+                'debug': 'Kiểm tra và chỉ ra lỗi trong code này.',
+                'optimize': 'Gợi ý cách tối ưu code này.',
+                'fix': 'Sửa tất cả lỗi trong code này và đưa ra code đã fix.',
+                'comment': 'Thêm comment chi tiết vào code này.'
             };
             
             document.getElementById('ai-input').value = actions[action];
@@ -2773,12 +3124,26 @@ Answer concisely in Vietnamese (100-200 words).`;
             return { word: value.slice(start, end), start, end };
         }
 
+        function normalizeCompletion(item) {
+            if (typeof item === 'string') {
+                return { text: item, type: 'snippet', icon: '' };
+            }
+            if (item && typeof item === 'object') {
+                return {
+                    text: String(item.text || ''),
+                    type: String(item.type || 'snippet'),
+                    icon: String(item.icon || '')
+                };
+            }
+            return { text: String(item || ''), type: 'snippet', icon: '' };
+        }
+
         function buildCompletionList(word) {
-            const list = COMPLETIONS[currentLang] || COMPLETIONS.default;
+            const list = (AUTOCOMPLETE[currentLang] || AUTOCOMPLETE.default).map(normalizeCompletion).filter(item => item.text);
             if (!word) return list.slice(0, 8);
             const lower = word.toLowerCase();
-            const starts = list.filter(item => item.toLowerCase().startsWith(lower));
-            const includes = list.filter(item => !item.toLowerCase().startsWith(lower) && item.toLowerCase().includes(lower));
+            const starts = list.filter(item => item.text.toLowerCase().startsWith(lower));
+            const includes = list.filter(item => !item.text.toLowerCase().startsWith(lower) && item.text.toLowerCase().includes(lower));
             return [...starts, ...includes].slice(0, 8);
         }
 
@@ -2826,7 +3191,16 @@ Answer concisely in Vietnamese (100-200 words).`;
             const editor = document.getElementById('code-editor');
             const coords = getCaretCoordinates(editor);
             box.innerHTML = list.map((item, idx) => `
-                <div class="autocomplete-item ${idx === 0 ? 'active' : ''}" data-index="${idx}">${item}<span>${currentLang.toUpperCase()}</span></div>
+                <div class="autocomplete-item ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                    <div class="autocomplete-left">
+                        <span class="autocomplete-icon ${item.icon ? '' : 'empty'}">${item.icon || '·'}</span>
+                        <span class="autocomplete-text">${item.text}</span>
+                    </div>
+                    <div class="autocomplete-meta">
+                        <span class="autocomplete-type">${item.type || 'snippet'}</span>
+                        <span class="autocomplete-lang">${currentLang.toUpperCase()}</span>
+                    </div>
+                </div>
             `).join('');
             box.style.left = `${Math.min(coords.left + 20, editor.clientWidth - 240)}px`;
             box.style.top = `${coords.top + 28}px`;
@@ -2861,8 +3235,8 @@ Answer concisely in Vietnamese (100-200 words).`;
         function chooseCompletion(index) {
             const list = completionItems;
             if (!list.length) return;
-            const text = list[index] || list[0];
-            insertCompletion(text);
+            const item = list[index] || list[0];
+            insertCompletion(item.text);
             hideCompletions();
         }
 
@@ -2892,15 +3266,22 @@ Answer concisely in Vietnamese (100-200 words).`;
             });
             editor.addEventListener('click', hideCompletions);
             editor.addEventListener('scroll', hideCompletions);
-        document.addEventListener('click', (e) => {
-            const box = document.getElementById('autocomplete');
-            if (box && !box.contains(e.target) && !editor.contains(e.target)) {
-                hideCompletions();
-            }
-            const dropdown = document.getElementById('exercise-dropdown');
-            const btn = document.getElementById('exercise-btn');
-                if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && e.target !== btn) {
+            document.addEventListener('click', (e) => {
+                const box = document.getElementById('autocomplete');
+                if (box && !box.contains(e.target) && !editor.contains(e.target)) {
+                    hideCompletions();
+                }
+                const dropdown = document.getElementById('exercise-dropdown');
+                const btn = document.getElementById('exercise-btn');
+                const clickedExerciseBtn = btn && btn.contains(e.target);
+                if (dropdown && dropdown.classList.contains('open') && !dropdown.contains(e.target) && !clickedExerciseBtn) {
                     dropdown.classList.remove('open');
+                }
+                const snippetDropdown = document.getElementById('snippets-dropdown');
+                const snippetBtn = document.getElementById('snippets-btn');
+                const clickedSnippetBtn = snippetBtn && snippetBtn.contains(e.target);
+                if (snippetDropdown && snippetDropdown.classList.contains('open') && !snippetDropdown.contains(e.target) && !clickedSnippetBtn) {
+                    snippetDropdown.classList.remove('open');
                 }
             });
         }
@@ -2986,8 +3367,24 @@ Answer concisely in Vietnamese (100-200 words).`;
         // ==================== UI HELPERS ====================
         function setupLineNumbers() {
             const editor = document.getElementById('code-editor');
-            editor.addEventListener('input', updateLineNumbers);
+            editor.addEventListener('input', () => {
+                updateLineNumbers();
+                syncActiveFileContent();
+                scheduleHighlight();
+                broadcastCollabChange();
+            });
             editor.addEventListener('scroll', syncScroll);
+            const lineNumbers = document.getElementById('line-numbers');
+            if (lineNumbers) {
+                lineNumbers.addEventListener('click', (e) => {
+                    const target = e.target;
+                    if (!target || !target.dataset) return;
+                    const line = parseInt(target.dataset.line, 10);
+                    if (!Number.isNaN(line)) {
+                        toggleBreakpoint(line);
+                    }
+                });
+            }
             updateLineNumbers();
         }
 
@@ -2996,13 +3393,300 @@ Answer concisely in Vietnamese (100-200 words).`;
             const lineNumbers = document.getElementById('line-numbers');
             if (!editor || !lineNumbers) return;
             const lines = editor.value.split('\n').length;
-            lineNumbers.textContent = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+            if (debugMode && currentDebugLine > lines) {
+                currentDebugLine = lines;
+            }
+            const scrollTop = lineNumbers.scrollTop;
+            const fragment = document.createDocumentFragment();
+            for (let i = 1; i <= lines; i++) {
+                const div = document.createElement('div');
+                div.className = 'line-number';
+                if (breakpoints.has(i)) div.classList.add('breakpoint');
+                if (debugMode && currentDebugLine === i) div.classList.add('current');
+                div.dataset.line = i;
+                div.textContent = i;
+                fragment.appendChild(div);
+            }
+            [...breakpoints].forEach((bp) => {
+                if (bp > lines) breakpoints.delete(bp);
+            });
+            lineNumbers.innerHTML = '';
+            lineNumbers.appendChild(fragment);
+            lineNumbers.scrollTop = scrollTop;
         }
 
         function syncScroll() {
             const editor = document.getElementById('code-editor');
             const lineNumbers = document.getElementById('line-numbers');
             if (lineNumbers && editor) lineNumbers.scrollTop = editor.scrollTop;
+            const highlight = document.getElementById('code-highlight');
+            if (highlight && editor) {
+                highlight.scrollTop = editor.scrollTop;
+                highlight.scrollLeft = editor.scrollLeft;
+            }
+        }
+
+        // ==================== SYNTAX HIGHLIGHT ====================
+        const PRISM_LANG_MAP = {
+            cpp: 'cpp',
+            c: 'c',
+            python: 'python',
+            javascript: 'javascript',
+            typescript: 'typescript',
+            html: 'markup',
+            css: 'css',
+            java: 'java',
+            csharp: 'csharp',
+            ruby: 'ruby',
+            go: 'go',
+            rust: 'rust',
+            php: 'php',
+            swift: 'swift',
+            kotlin: 'kotlin',
+            bash: 'bash',
+            dart: 'dart',
+            lua: 'lua',
+            perl: 'perl',
+            r: 'r',
+            scala: 'scala',
+            julia: 'julia',
+            haskell: 'haskell'
+        };
+
+        function escapeHtml(input) {
+            return String(input || '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[c]));
+        }
+
+        function getPrismLanguage(lang) {
+            return PRISM_LANG_MAP[lang] || 'clike';
+        }
+
+        function updateSyntaxHighlight() {
+            const editor = document.getElementById('code-editor');
+            const highlight = document.getElementById('code-highlight');
+            const wrapper = document.querySelector('.code-editor-wrapper');
+            if (!editor || !highlight || typeof Prism === 'undefined') return;
+            const codeEl = highlight.querySelector('code');
+            if (!codeEl) return;
+            const code = editor.value || '';
+            const prismLang = getPrismLanguage(currentLang);
+            const langAtStart = currentLang;
+            const applyHighlight = () => {
+                if (langAtStart !== currentLang) return;
+                codeEl.className = `language-${prismLang}`;
+                const grammar = Prism.languages[prismLang] || Prism.languages.clike || Prism.languages.javascript;
+                codeEl.innerHTML = grammar ? Prism.highlight(code, grammar, prismLang) : escapeHtml(code);
+                if (wrapper) wrapper.classList.add('syntax-active');
+                syncScroll();
+            };
+            if (Prism.plugins && Prism.plugins.autoloader && Prism.plugins.autoloader.loadLanguages) {
+                Prism.plugins.autoloader.loadLanguages([prismLang], applyHighlight);
+            } else {
+                applyHighlight();
+            }
+        }
+
+        function scheduleHighlight() {
+            if (highlightScheduled) return;
+            highlightScheduled = true;
+            requestAnimationFrame(() => {
+                highlightScheduled = false;
+                updateSyntaxHighlight();
+            });
+        }
+
+        function setupSyntaxHighlight() {
+            updateSyntaxHighlight();
+        }
+
+        // ==================== DEBUG MODE ====================
+        function setDebugControlsVisible(visible) {
+            const controls = document.getElementById('debug-controls');
+            if (controls) controls.classList.toggle('show', !!visible);
+        }
+
+        function addBreakpoint(lineNumber) {
+            if (!lineNumber) return;
+            breakpoints.add(lineNumber);
+            if (activeFile) {
+                breakpointsByFile[activeFile] = new Set(breakpoints);
+            }
+            updateLineNumbers();
+        }
+
+        function toggleBreakpoint(lineNumber) {
+            if (!lineNumber) return;
+            if (breakpoints.has(lineNumber)) {
+                breakpoints.delete(lineNumber);
+                addTerminalLine(` Breakpoint removed at line ${lineNumber}`, 'debug');
+            } else {
+                breakpoints.add(lineNumber);
+                addTerminalLine(` Breakpoint set at line ${lineNumber}`, 'debug');
+            }
+            if (activeFile) {
+                breakpointsByFile[activeFile] = new Set(breakpoints);
+            }
+            updateLineNumbers();
+        }
+
+        function startDebug() {
+            if (debugMode) {
+                stopDebug();
+                return;
+            }
+            const editor = document.getElementById('code-editor');
+            if (!editor || !editor.value.trim()) {
+                showNotification(' Code is empty!', 'warning');
+                return;
+            }
+            debugMode = true;
+            currentDebugLine = 1;
+            updateLineNumbers();
+            setDebugControlsVisible(true);
+            addTerminalLine(' Debug mode started', 'debug');
+        }
+
+        function stopDebug() {
+            debugMode = false;
+            currentDebugLine = 0;
+            updateLineNumbers();
+            setDebugControlsVisible(false);
+            addTerminalLine(' Debug mode stopped', 'info');
+        }
+
+        function stepThrough() {
+            if (!debugMode) return;
+            const editor = document.getElementById('code-editor');
+            const total = editor ? editor.value.split('\n').length : 0;
+            if (currentDebugLine >= total) {
+                addTerminalLine(' Debug finished', 'success');
+                stopDebug();
+                return;
+            }
+            currentDebugLine += 1;
+            updateLineNumbers();
+            if (breakpoints.has(currentDebugLine)) {
+                addTerminalLine(` Hit breakpoint at line ${currentDebugLine}`, 'warning');
+            } else {
+                addTerminalLine(` Stepped to line ${currentDebugLine}`, 'debug');
+            }
+        }
+
+        // ==================== COLLAB ====================
+        function updateCollabStatus(state) {
+            const status = document.getElementById('collab-status');
+            if (!status) return;
+            const label = status.querySelector('span');
+            if (state === 'on') {
+                status.classList.remove('off');
+                if (label) label.textContent = 'Collab On';
+            } else if (state === 'connecting') {
+                status.classList.add('off');
+                if (label) label.textContent = 'Collab Connecting';
+            } else {
+                status.classList.add('off');
+                if (label) label.textContent = 'Collab Off';
+            }
+        }
+
+        function toggleCollab() {
+            if (collabSocket && collabSocket.readyState === WebSocket.OPEN) {
+                collabSocket.close();
+                return;
+            }
+            const saved = localStorage.getItem('collab_url') || '';
+            const url = prompt('Enter WebSocket URL', saved || 'wss://your-server.com/collab');
+            if (!url) return;
+            initCollab(url);
+        }
+
+        function initCollab(url) {
+            if (!url) return;
+            if (collabSocket) {
+                try { collabSocket.close(); } catch (_) {}
+            }
+            updateCollabStatus('connecting');
+            collabSocket = new WebSocket(url);
+            collabSocket.onopen = () => {
+                collabReady = true;
+                localStorage.setItem('collab_url', url);
+                updateCollabStatus('on');
+                addTerminalLine(' Collaboration connected', 'success');
+            };
+            collabSocket.onclose = () => {
+                collabReady = false;
+                updateCollabStatus('off');
+                addTerminalLine(' Collaboration disconnected', 'warning');
+                collabSocket = null;
+            };
+            collabSocket.onerror = () => {
+                collabReady = false;
+                updateCollabStatus('off');
+                addTerminalLine(' Collaboration error', 'error');
+                collabSocket = null;
+            };
+            collabSocket.onmessage = (event) => {
+                let data;
+                try {
+                    data = JSON.parse(event.data);
+                } catch (_) {
+                    return;
+                }
+                if (data.type === 'code_update') {
+                    applyRemoteChanges(data);
+                }
+            };
+        }
+
+        function getChanges() {
+            const editor = document.getElementById('code-editor');
+            return editor ? editor.value : '';
+        }
+
+        function broadcastCollabChange() {
+            if (!collabReady || !collabSocket || collabSocket.readyState !== WebSocket.OPEN) return;
+            if (suppressCollabSend) return;
+            const payload = {
+                type: 'code_update',
+                changes: getChanges(),
+                lang: currentLang,
+                file: activeFile
+            };
+            try {
+                collabSocket.send(JSON.stringify(payload));
+            } catch (_) {}
+        }
+
+        async function applyRemoteChanges(data) {
+            const editor = document.getElementById('code-editor');
+            if (!editor || !data) return;
+            const content = typeof data.changes === 'string' ? data.changes : '';
+            const lang = data.lang && LANGUAGES[data.lang] ? data.lang : currentLang;
+            const filename = data.file || activeFile;
+            suppressCollabSend = true;
+            if (lang !== currentLang) {
+                await selectLanguage(lang, { silent: true });
+            }
+            if (filename) {
+                if (!openFiles[filename]) {
+                    openFiles[filename] = { content };
+                    openFileOrder.push(filename);
+                } else {
+                    openFiles[filename].content = content;
+                }
+                activeFile = filename;
+                renderTabs();
+            }
+            editor.value = content;
+            updateLineNumbers();
+            updateSyntaxHighlight();
+            suppressCollabSend = false;
         }
 
         function addOutput(type, message) {
@@ -3011,8 +3695,22 @@ Answer concisely in Vietnamese (100-200 words).`;
             if (looksLikeAppSource(String(message || ''))) return;
             const line = document.createElement('div');
             line.className = `output-line ${type}`;
-            const icons = { success: 'check-circle', error: 'times-circle', info: 'info-circle', warning: 'exclamation-triangle' };
-            line.innerHTML = `<i class="fas fa-${icons[type]}"></i><span>${message}</span>`;
+            const icons = { success: 'check-circle', error: 'times-circle', info: 'info-circle', warning: 'exclamation-triangle', debug: 'bug' };
+            const icon = icons[type] || icons.info;
+            line.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
+            panel.appendChild(line);
+            panel.scrollTop = panel.scrollHeight;
+        }
+
+        function addTerminalLine(message, type = 'info') {
+            const panel = document.getElementById('output-panel');
+            if (!panel) return;
+            if (looksLikeAppSource(String(message || ''))) return;
+            const line = document.createElement('div');
+            line.className = `output-line terminal-line ${type}`;
+            const icons = { success: 'check-circle', error: 'times-circle', info: 'info-circle', warning: 'exclamation-triangle', debug: 'bug' };
+            const icon = icons[type] || icons.info;
+            line.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
             panel.appendChild(line);
             panel.scrollTop = panel.scrollHeight;
         }
@@ -3038,7 +3736,10 @@ Answer concisely in Vietnamese (100-200 words).`;
             }
             
             editor.value = code;
+            syncActiveFileContent();
             updateLineNumbers();
+            updateSyntaxHighlight(true);
+            broadcastCollabChange();
             showNotification(' Code formatted!', 'success');
         }
 
@@ -3050,8 +3751,7 @@ Answer concisely in Vietnamese (100-200 words).`;
 
         function downloadCode() {
             const code = document.getElementById('code-editor').value;
-            const config = LANGUAGES[currentLang];
-            const filename = 'main' + config.ext;
+            const filename = activeFile || ('main' + LANGUAGES[currentLang].ext);
             
             const blob = new Blob([code], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -3064,6 +3764,30 @@ Answer concisely in Vietnamese (100-200 words).`;
             showNotification(` Downloaded ${filename}`, 'success');
         }
 
+        function handleFileUpload() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.cpp,.c,.py,.js,.java,.rb,.go,.rs,.php,.ts,.html,.css,.cs,.kt,.swift,.dart,.lua,.pl,.r,.scala,.jl,.hs,.sh';
+            input.onchange = (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const content = String(event.target.result || '');
+                    const lang = getLanguageFromFilename(file.name);
+                    if (lang !== currentLang) {
+                        await selectLanguage(lang, { silent: true });
+                    }
+                    createNewTab(file.name, content);
+                    updateLineNumbers();
+                    updateSyntaxHighlight();
+                    showNotification(` Loaded ${file.name}`, 'success');
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
         function copyCodeToClipboard() {
             const code = document.getElementById('code-editor').value;
             navigator.clipboard.writeText(code).then(() => {
@@ -3074,12 +3798,10 @@ Answer concisely in Vietnamese (100-200 words).`;
         }
 
         function newFile() {
-            if (confirm('Create new file? Current unsaved changes will be lost.')) {
-                document.getElementById('code-editor').value = TEMPLATES[currentLang];
-                updateLineNumbers();
-                clearOutput();
-                showNotification(' New file created', 'success');
-            }
+            const filename = generateUntitledName();
+            createNewTab(filename, TEMPLATES[currentLang]);
+            clearOutput();
+            showNotification(` New file created: ${filename}`, 'success');
         }
 
         function showNotification(message, type) {
@@ -3149,7 +3871,7 @@ Answer concisely in Vietnamese (100-200 words).`;
             if (!select) return;
             select.innerHTML = inputPresets.length
                 ? inputPresets.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('')
-                : '<option value="">(Cha c preset)</option>';
+                : '<option value="">(Chưa có preset)</option>';
         }
 
         function saveInputPreset() {
@@ -3158,40 +3880,40 @@ Answer concisely in Vietnamese (100-200 words).`;
             const name = ((nameInput && nameInput.value) || '').trim() || `Preset ${inputPresets.length + 1}`;
             const value = (quickInput && quickInput.value) || '';
             if (!value) {
-                showNotification(' Khng c d liu  lu preset.', 'warning');
+                showNotification(' Không có dữ liệu để lưu preset.', 'warning');
                 return;
             }
             inputPresets.push({ name, value });
             localStorage.setItem('input_presets', JSON.stringify(inputPresets));
             renderInputPresets();
-            showNotification(`  lu preset "${name}"`, 'success');
+            showNotification(`  lưu preset "${name}"`, 'success');
         }
 
         function applyInputPreset() {
             const select = document.getElementById('preset-select');
             const idx = parseInt(select && select.value ? select.value : '-1', 10);
             if (Number.isNaN(idx) || !inputPresets[idx]) {
-                showNotification(' Chn preset hp l trc khi p dng.', 'warning');
+                showNotification(' Chọn preset hợp lệ trước khi áp dụng.', 'warning');
                 return;
             }
             const value = inputPresets[idx].value;
             programInput = value;
             localStorage.setItem('program_input', programInput);
             syncInputFields();
-            showNotification(`  p dng preset "${inputPresets[idx].name}"`, 'success');
+            showNotification(`  áp dụng preset "${inputPresets[idx].name}"`, 'success');
         }
 
         function deleteInputPreset() {
             const select = document.getElementById('preset-select');
             const idx = parseInt(select && select.value ? select.value : '-1', 10);
             if (Number.isNaN(idx) || !inputPresets[idx]) {
-                showNotification(' Khng c preset  xa.', 'warning');
+                showNotification(' Không có preset để xóa.', 'warning');
                 return;
             }
             const [removed] = inputPresets.splice(idx, 1);
             localStorage.setItem('input_presets', JSON.stringify(inputPresets));
             renderInputPresets();
-            showNotification(`  xa preset "${removed.name}"`, 'success');
+            showNotification(`  xóa preset "${removed.name}"`, 'success');
         }
 
         function showInputDialog() {
@@ -3216,7 +3938,14 @@ Answer concisely in Vietnamese (100-200 words).`;
             if (!live) return;
             const line = live.value.trimEnd();
             if (!line) {
-                showNotification(' Nhp mt dng trc khi chy.', 'warning');
+                showNotification(' Nhập một dòng trước khi chạy.', 'warning');
+                return;
+            }
+            if (pendingInputResolve) {
+                const resolve = pendingInputResolve;
+                pendingInputResolve = null;
+                live.value = '';
+                resolve(line);
                 return;
             }
             programInput = (programInput ? programInput + '\n' : '') + line;
@@ -3224,6 +3953,54 @@ Answer concisely in Vietnamese (100-200 words).`;
             syncInputFields();
             live.value = '';
             runCode();
+        }
+
+        function enableTerminalInput() {
+            const liveWrap = document.querySelector('.live-stdin');
+            const live = document.getElementById('live-stdin-input');
+            if (liveWrap) liveWrap.classList.add('active');
+            if (live) {
+                live.disabled = false;
+                live.focus();
+            }
+        }
+
+        function disableTerminalInput() {
+            const liveWrap = document.querySelector('.live-stdin');
+            if (liveWrap) liveWrap.classList.remove('active');
+        }
+
+        function waitForInput() {
+            return new Promise((resolve) => {
+                pendingInputResolve = resolve;
+            });
+        }
+
+        async function runWithInteractiveInput(code) {
+            if (interactiveWaiting) return;
+            interactiveWaiting = true;
+            enableTerminalInput();
+            addTerminalLine(' Nhập input để tiếp tục...', 'debug');
+            const userInput = await waitForInput();
+            disableTerminalInput();
+            interactiveWaiting = false;
+            if (userInput === undefined || userInput === null) return;
+            executeWithInput(code, userInput);
+        }
+
+        function executeWithInput(code, userInput) {
+            runCode({ code, input: userInput });
+        }
+
+        function runInteractive() {
+            if (isRunning || interactiveWaiting) return;
+            const editor = document.getElementById('code-editor');
+            const code = editor.value.trim();
+            if (!code) {
+                showNotification(' Code is empty!', 'warning');
+                return;
+            }
+            runWithInteractiveInput(code);
         }
 
         function showSettings() {
@@ -3235,9 +4012,11 @@ Answer concisely in Vietnamese (100-200 words).`;
             document.getElementById('settings-modal').classList.remove('show');
         }
 
-        function saveSettings() {
+        async function saveSettings() {
             apiKey = document.getElementById('api-key-input').value;
-            localStorage.setItem('api_key', apiKey);
+            if (db) {
+                await db.saveSetting('api_key', apiKey);
+            }
             closeSettings();
             showNotification(' Settings saved!', 'success');
         }
@@ -3252,20 +4031,99 @@ Answer concisely in Vietnamese (100-200 words).`;
         }
 
         // ==================== STORAGE ====================
-        function loadSettings() {
-            const savedLang = localStorage.getItem('current_lang') || 'python';
+        async function loadSettings() {
+            const savedLang = await db.loadSetting('current_lang', 'python');
             currentLang = LANGUAGES[savedLang] ? savedLang : 'python';
-            programInput = localStorage.getItem('program_input') || '';
+            programInput = await db.loadSetting('program_input', '');
             if (looksLikeAppSource(programInput)) {
                 programInput = '';
-                localStorage.removeItem('program_input');
+                await db.saveSetting('program_input', programInput);
             }
-            apiKey = localStorage.getItem('api_key') || '';
-            try {
-                Object.assign(exercisePageByLang, JSON.parse(localStorage.getItem('exercise_pages') || '{}'));
-            } catch (e) {
-                Object.keys(exercisePageByLang).forEach(k => delete exercisePageByLang[k]);
+            apiKey = await db.loadSetting('api_key', '');
+            inputPresets = await db.loadSetting('input_presets', []);
+            const pages = await db.loadSetting('exercise_pages', {});
+            Object.keys(exercisePageByLang).forEach(k => delete exercisePageByLang[k]);
+            if (pages && typeof pages === 'object') {
+                Object.assign(exercisePageByLang, pages);
             }
+            outputPanelHeight = parseInt(await db.loadSetting('output_panel_height', '260'), 10);
+            outputPanelHeight = Number.isFinite(outputPanelHeight) ? outputPanelHeight : 260;
+            outputPanelWidth = parseInt(await db.loadSetting('output_panel_width', '0'), 10);
+            outputPanelWidth = Number.isFinite(outputPanelWidth) ? outputPanelWidth : 0;
+            panelTab = await db.loadSetting('panel_tab', 'output');
+            sidebarHidden = (await db.loadSetting('sidebar_hidden', '0')) === '1';
+            collabUrl = await db.loadSetting('collab_url', '');
+        }
+
+        async function migrateData() {
+            if (!db) return;
+            const migrated = await db.loadSetting('migration_completed', false);
+            if (migrated) return;
+            if (!window.localStorage) {
+                await db.saveSetting('migration_completed', true);
+                return;
+            }
+            const languages = Object.keys(LANGUAGES);
+            for (const lang of languages) {
+                const oldKey = `code_${lang}`;
+                const code = localStorage.getItem(oldKey);
+                if (code && !looksLikeAppSource(code)) {
+                    await db.saveCode(lang, code, {
+                        filename: `main${LANGUAGES[lang].ext}`,
+                        description: 'Migrated',
+                        saveHistory: false,
+                        skipIfUnchanged: false
+                    });
+                    localStorage.removeItem(oldKey);
+                }
+            }
+            const settingsKeys = [
+                'current_lang',
+                'api_key',
+                'theme',
+                'program_input',
+                'input_presets',
+                'exercise_pages',
+                'sidebar_hidden',
+                'panel_tab',
+                'output_panel_height',
+                'output_panel_width',
+                'collab_url'
+            ];
+            for (const key of settingsKeys) {
+                const value = localStorage.getItem(key);
+                if (value !== null && value !== undefined) {
+                    let parsedValue = value;
+                    if (['input_presets', 'exercise_pages'].includes(key)) {
+                        try {
+                            parsedValue = JSON.parse(value);
+                        } catch (_) {
+                            parsedValue = value;
+                        }
+                    }
+                    await db.saveSetting(key, parsedValue);
+                    localStorage.removeItem(key);
+                }
+            }
+            const keys = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key) keys.push(key);
+            }
+            for (const key of keys) {
+                if (key.startsWith('tabs_')) {
+                    const value = localStorage.getItem(key);
+                    if (value) {
+                        try {
+                            await db.saveSetting(key, JSON.parse(value));
+                        } catch (_) {
+                            await db.saveSetting(key, value);
+                        }
+                        localStorage.removeItem(key);
+                    }
+                }
+            }
+            await db.saveSetting('migration_completed', true);
         }
 
         const OUTPUT_PANEL_TEMPLATE = (() => {
@@ -3308,19 +4166,25 @@ Answer concisely in Vietnamese (100-200 words).`;
             });
         }
 
-        function cleanupCorruptedStorage() {
+        async function cleanupCorruptedStorage() {
+            if (!db) return;
             try {
-                const keys = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key) keys.push(key);
-                }
-                keys.forEach((key) => {
-                    const value = localStorage.getItem(key);
-                    if (looksLikeAppSource(value)) {
-                        localStorage.removeItem(key);
+                const settings = await db.getAll(db.stores.settings);
+                for (const item of settings) {
+                    if (typeof item.value === 'string' && looksLikeAppSource(item.value)) {
+                        await db.saveSetting(item.key, '');
                     }
-                });
+                }
+                const codes = await db.getAll(db.stores.code);
+                for (const record of codes) {
+                    if (record && typeof record.code === 'string' && looksLikeAppSource(record.code)) {
+                        await db.saveCode(record.lang, '', {
+                            filename: record.filename,
+                            saveHistory: false,
+                            skipIfUnchanged: false
+                        });
+                    }
+                }
             } catch (_) {}
         }
 
@@ -3363,31 +4227,193 @@ Answer concisely in Vietnamese (100-200 words).`;
             observer.observe(body, { childList: true, subtree: true });
         }
 
-        function loadCode() {
-            const savedCode = localStorage.getItem(`code_${currentLang}`);
-            const useSaved = savedCode && !looksLikeAppSource(savedCode);
-            document.getElementById('code-editor').value = useSaved ? savedCode : TEMPLATES[currentLang];
-            if (savedCode && !useSaved) {
-                localStorage.removeItem(`code_${currentLang}`);
+        // ==================== FILE TABS ====================
+        function getTabsStorageKey(lang) {
+            return `tabs_${lang}`;
+        }
+
+        function syncActiveFileContent() {
+            const editor = document.getElementById('code-editor');
+            if (!editor || !activeFile || !openFiles[activeFile]) return;
+            openFiles[activeFile].content = editor.value;
+        }
+
+        function loadTabsState(lang) {
+            openFiles = {};
+            openFileOrder = [];
+            activeFile = '';
+            breakpointsByFile = {};
+            breakpoints = new Set();
+            let state = null;
+            try {
+                state = JSON.parse(localStorage.getItem(getTabsStorageKey(lang)) || '');
+            } catch (_) {
+                state = null;
             }
+
+            if (state && state.order && state.files) {
+                state.order.forEach((filename) => {
+                    const content = state.files[filename];
+                    if (typeof content === 'string' && !looksLikeAppSource(content)) {
+                        openFiles[filename] = { content };
+                        openFileOrder.push(filename);
+                    }
+                });
+                activeFile = state.active && openFiles[state.active] ? state.active : (openFileOrder[0] || '');
+            }
+
+            if (!openFileOrder.length) {
+                const config = LANGUAGES[lang];
+                const filename = `main${config.ext}`;
+                const savedCode = localStorage.getItem(`code_${lang}`);
+                const useSaved = savedCode && !looksLikeAppSource(savedCode);
+                openFiles[filename] = { content: useSaved ? savedCode : TEMPLATES[lang] };
+                openFileOrder.push(filename);
+                activeFile = filename;
+                if (savedCode && !useSaved) {
+                    localStorage.removeItem(`code_${lang}`);
+                }
+            }
+        }
+
+        function persistTabsState() {
+            const editor = document.getElementById('code-editor');
+            if (editor && activeFile && openFiles[activeFile]) {
+                openFiles[activeFile].content = editor.value;
+            }
+            const files = {};
+            openFileOrder.forEach((filename) => {
+                files[filename] = openFiles[filename] ? openFiles[filename].content : '';
+            });
+            const state = { order: openFileOrder, files, active: activeFile };
+            localStorage.setItem(getTabsStorageKey(currentLang), JSON.stringify(state));
+            localStorage.setItem('current_lang', currentLang);
+        }
+
+        function renderTabs() {
+            const container = document.getElementById('tabs-list');
+            if (!container) return;
+            container.innerHTML = '';
+            openFileOrder.forEach((filename) => {
+                const tab = document.createElement('div');
+                tab.className = `file-tab ${filename === activeFile ? 'active' : ''}`;
+                tab.dataset.filename = filename;
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-file-code';
+                const label = document.createElement('span');
+                label.className = 'file-name';
+                label.textContent = filename;
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-tab';
+                closeBtn.title = 'Close';
+                closeBtn.textContent = '×';
+                tab.appendChild(icon);
+                tab.appendChild(label);
+                tab.appendChild(closeBtn);
+                tab.addEventListener('click', (e) => {
+                    if (e.target && e.target.classList.contains('close-tab')) {
+                        e.stopPropagation();
+                        closeTab(filename);
+                        return;
+                    }
+                    setActiveFile(filename);
+                });
+                container.appendChild(tab);
+            });
+        }
+
+        function setActiveFile(filename, options = {}) {
+            const editor = document.getElementById('code-editor');
+            if (!editor || !openFiles[filename]) return;
+            if (!options.skipSync && activeFile && openFiles[activeFile]) {
+                openFiles[activeFile].content = editor.value;
+            }
+            if (activeFile) {
+                breakpointsByFile[activeFile] = new Set(breakpoints);
+            }
+            activeFile = filename;
+            breakpoints = breakpointsByFile[activeFile] ? new Set(breakpointsByFile[activeFile]) : new Set();
+            editor.value = openFiles[filename].content || '';
             updateLineNumbers();
-            document.getElementById('current-file').textContent = 'main' + LANGUAGES[currentLang].ext;
+            updateSyntaxHighlight(true);
+            renderTabs();
+            if (!options.skipPersist) {
+                persistTabsState();
+            }
+        }
+
+        function generateUntitledName() {
+            const ext = LANGUAGES[currentLang].ext;
+            let index = 1;
+            let name = `untitled-${index}${ext}`;
+            while (openFiles[name]) {
+                index += 1;
+                name = `untitled-${index}${ext}`;
+            }
+            return name;
+        }
+
+        function createNewTab(filename, content) {
+            const name = filename || generateUntitledName();
+            if (openFiles[name]) {
+                if (content !== undefined) {
+                    openFiles[name].content = content;
+                }
+                setActiveFile(name);
+                return;
+            }
+            openFiles[name] = { content: content || '' };
+            breakpointsByFile[name] = new Set();
+            openFileOrder.push(name);
+            setActiveFile(name, { skipPersist: true });
+            persistTabsState();
+        }
+
+        function closeTab(filename) {
+            if (!openFiles[filename]) return;
+            const idx = openFileOrder.indexOf(filename);
+            if (idx !== -1) {
+                openFileOrder.splice(idx, 1);
+            }
+            delete openFiles[filename];
+            if (breakpointsByFile[filename]) delete breakpointsByFile[filename];
+            if (!openFileOrder.length) {
+                createNewTab(generateUntitledName(), TEMPLATES[currentLang]);
+                return;
+            }
+            if (activeFile === filename) {
+                const next = openFileOrder[Math.max(0, idx - 1)] || openFileOrder[0];
+                setActiveFile(next, { skipPersist: true });
+            }
+            persistTabsState();
+        }
+
+        function getLanguageFromFilename(filename) {
+            const lower = String(filename || '').toLowerCase();
+            const idx = lower.lastIndexOf('.');
+            if (idx === -1) return currentLang;
+            const ext = lower.slice(idx);
+            const match = Object.keys(LANGUAGES).find(key => LANGUAGES[key].ext === ext);
+            return match || currentLang;
+        }
+
+        function loadCode() {
+            loadTabsState(currentLang);
+            renderTabs();
+            setActiveFile(activeFile, { skipSync: true, skipPersist: true });
             const selector = document.getElementById('language-selector');
             if (selector && selector.value !== currentLang) {
                 selector.value = currentLang;
             }
             if (window.__autosaveTimer) clearInterval(window.__autosaveTimer);
             window.__autosaveTimer = setInterval(() => {
-                const code = document.getElementById('code-editor').value;
-                localStorage.setItem(`code_${currentLang}`, code);
+                persistTabsState();
             }, AUTOSAVE_MS);
             window.addEventListener('beforeunload', () => window.__autosaveTimer && clearInterval(window.__autosaveTimer), { once: true });
         }
 
         function saveCode() {
-            const code = document.getElementById('code-editor').value;
-            localStorage.setItem(`code_${currentLang}`, code);
-            localStorage.setItem('current_lang', currentLang);
+            persistTabsState();
             showNotification(' Code saved!', 'success');
         }
 
@@ -3474,6 +4500,9 @@ Answer concisely in Vietnamese (100-200 words).`;
                     this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
                     this.selectionStart = this.selectionEnd = start + 4;
                     updateLineNumbers();
+                    syncActiveFileContent();
+                    scheduleHighlight();
+                    broadcastCollabChange();
                 }
             });
         }
